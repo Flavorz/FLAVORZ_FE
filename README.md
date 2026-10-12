@@ -88,6 +88,34 @@ Then drop in `public/brands/acme/logo.svg` and `favicon.svg`.
 
 ---
 
+## Pulling tokens from Figma
+
+`scripts/figma-pull.mjs` reads a Figma file and maps its colour tokens onto a
+tenant's theme.
+
+```bash
+cp .env.example .env          # then fill in FIGMA_TOKEN and FIGMA_FILE_KEY
+
+node scripts/figma-pull.mjs --inspect              # what does the file have?
+node scripts/figma-pull.mjs --tenant flavorz --dry # preview the change
+node scripts/figma-pull.mjs --tenant flavorz       # write it
+pnpm run theme:build                               # recompile
+```
+
+It tries **Figma Variables** first — typed variables with modes, so Light/Dark
+map straight onto our `[light, dark]` pairs. That endpoint is gated to Figma
+Org/Enterprise plans; on Professional it returns 403 and the script falls back
+to **published styles**, which work on any plan but carry no mode information.
+
+The accent is chosen by name: a variable matching `accent`, `brand` or
+`primary` wins. Override with `--accent-name "<exact name>"`.
+
+> **The token grants read access to every file in your Figma account.** It
+> lives only in `.env`, which is gitignored. Never commit it, and never paste
+> it into a chat or an issue.
+
+---
+
 ## Moving brand config to the backend
 
 Today tenants are JSON files compiled into the bundle. The contract is already
