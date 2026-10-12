@@ -153,6 +153,27 @@ resolve from the tenant.
 | `SiteFooter` | Legal line and support contact |
 | `TokenSwatches` | Live token documentation |
 
+### App surface
+
+`src/components/react/app/` holds the interactive, authenticated blocks.
+
+| Block | Purpose |
+| --- | --- |
+| `AppShell` | Collapsible side nav, header, content slot |
+| `DataTable` | Sortable + selectable table with a selection toolbar |
+| `FormPanel` | Validated form; errors on blur and submit |
+
+Demo at `/app/<tenant>/`.
+
+Two Astryx details worth knowing:
+
+- **Table columns opt IN to sorting** with `sortable: true`. The
+  `useTableSortable` plugin alone renders no sort control and no `aria-sort` —
+  the table looks correct and silently does nothing.
+- **`IconButton.icon` takes a ReactNode** (`<Icon icon="menu" />`), while
+  `SideNavItem.icon` takes a name string (`icon="calendar"`). Passing a string
+  to `IconButton` renders the literal word.
+
 ### Living documentation
 
 `/design/<tenant>/` renders every block under that brand — the same components,

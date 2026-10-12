@@ -1,0 +1,24 @@
+---
+/**
+ * App-surface demo, one route per brand.
+ *
+ * Shows the interactive blocks — shell, sortable/selectable table, validated
+ * form — under each tenant's theme.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AppDemo from '../../components/react/AppDemo.tsx';
+import { allTenants } from '../../lib/tenant/resolve';
+
+export function getStaticPaths() {
+  return [...allTenants().values()].map((tenant) => ({
+    params: { tenant: tenant.id },
+    props: { tenant },
+  }));
+}
+
+const { tenant } = Astro.props;
+---
+
+<BaseLayout title={`App · ${tenant.name}`} tenantId={tenant.id}>
+  <AppDemo tenant={tenant} client:load />
+</BaseLayout>
