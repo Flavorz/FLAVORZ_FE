@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/react/Hero.tsx';
+import { resolveTenantByHost } from '../lib/tenant/resolve';
+
+// At build time this is the default tenant; the inline script in BaseLayout
+// re-resolves per hostname before paint.
+const tenant = resolveTenantByHost(Astro.url.hostname);
+---
+
+<BaseLayout title="Home" description={`${tenant.name} — white-label template`}>
+  <main>
+    {/*
+      client:load because the hero is the first thing a visitor sees and it
+      animates on mount. Islands further down the page should use
+      client:visible instead.
+    */}
+    <Hero tenant={tenant} client:load />
+  </main>
+</BaseLayout>

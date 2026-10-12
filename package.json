@@ -1,0 +1,58 @@
+{
+  "name": "flavorz",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "theme:build": "node scripts/build-tenant-themes.mjs",
+    "theme:watch": "astryx theme build --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "astryx": "astryx",
+    "build:all": "node scripts/build-tenant-themes.mjs && astro build",
+    "test:e2e": "playwright test",
+    "theme:check": "node scripts/build-tenant-themes.mjs --check"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.0.1",
+    "@astrojs/sitemap": "^3.7.4",
+    "@astryxdesign/core": "^0.6.8",
+    "@astryxdesign/theme-neutral": "^0.6.8",
+    "@stylexjs/stylex": "^0.19.0",
+    "astro": "^7.3.8",
+    "motion": "^14.1.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astryxdesign/cli": "^0.6.8",
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "playwright": "1.64.0",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@astryxdesign/cli",
+      "@astryxdesign/core",
+      "esbuild"
+    ]
+  }
+}

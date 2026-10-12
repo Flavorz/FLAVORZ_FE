@@ -1,0 +1,24 @@
+{
+  "id": "flavorz",
+  "name": "Flavorz",
+  "hosts": ["localhost", "127.0.0.1", "flavorz.example.com", "*.flavorz.example.com"],
+  "theme": {
+    "accent": ["#D6452B", "#FF7A5C"],
+    "neutralStyle": "warm",
+    "contrast": "standard",
+    "radius": "soft",
+    "tokens": {}
+  },
+  "assets": {
+    "logo": "/brands/flavorz/logo.svg",
+    "favicon": "/brands/flavorz/favicon.svg"
+  },
+  "copy": {
+    "hero.title": "Food that tastes like somewhere",
+    "hero.subtitle": "Seasonal plates, open kitchen, no fuss.",
+    "nav.cta": "Book a table"
+  },
+  "runtime": {
+    "supportEmail": "hello@flavorz.example.com"
+  }
+}

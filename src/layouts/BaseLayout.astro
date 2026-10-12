@@ -1,0 +1,145 @@
+---
+/**
+ * The white-label page shell.
+ *
+ * Static build + runtime tenant resolution means the HTML cannot be
+ * pre-rendered per brand. The sequence that avoids a flash of the wrong brand:
+ *
+ *  1. At build time we know every tenant, so we emit a <link> for each
+ *     tenant stylesheet, all but one disabled.
+ *  2. A small BLOCKING inline script resolves the hostname before first paint,
+ *     sets `data-astryx-theme` on <html>, and enables that tenant's sheet.
+ *  3. Astryx's theme CSS is scoped to `[data-astryx-theme="<id>"]`, so setting
+ *     the attribute is what activates the brand.
+ *
+ * The script is deliberately inline and synchronous: an async fetch here would
+ * paint unbranded first. When the backend is ready it should be consulted
+ * *after* paint to refresh a cached value, never on the critical path.
+ */
+import '../styles/global.css';
+import { DEFAULT_TENANT_ID, allTenants, resolveTenantByHost } from '../lib/tenant/resolve';
+import type { TenantConfig } from '../lib/tenant/schema';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Force a tenant (used by preview routes and tests). */
+  tenantId?: string;
+}
+
+const { title, description, tenantId } = Astro.props;
+
+const tenants = [...allTenants().values()];
+
+// During the static build there is no request host. We render with the default
+// tenant's metadata and let the inline script correct the theme at runtime.
+const buildTenant: TenantConfig = tenantId
+  ? (allTenants().get(tenantId) ?? resolveTenantByHost(''))
+  : resolveTenantByHost(Astro.url.hostname);
+
+const hostMap = Object.fromEntries(
+  tenants.map((t) => [t.id, t.hosts.map((h) => h.toLowerCase())]),
+);
+
+const pageTitle = title ? `${title} · ${buildTenant.name}` : buildTenant.name;
+// Served from public/themes/, written by scripts/build-tenant-themes.mjs.
+const themeBase = import.meta.env.PUBLIC_THEME_BASE ?? '/themes';
+---
+
+<!doctype html>
+<html lang="en" data-astryx-theme={buildTenant.id}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" href={buildTenant.assets.favicon} />
+
+    {/*
+      One stylesheet per tenant. Astryx scopes each to its own
+      [data-astryx-theme] selector, so loading several is safe — only the one
+      matching the attribute on <html> applies. `media="print"` parks the
+      non-active sheets so they do not block rendering; the inline script
+      promotes the right one to `all`.
+    */}
+    {
+      tenants.map((t) => (
+        <link
+          rel="stylesheet"
+          href={`${themeBase}/${t.id}.css`}
+          data-tenant-theme={t.id}
+          media={t.id === buildTenant.id ? 'all' : 'print'}
+        />
+      ))
+    }
+
+    <script
+      is:inline
+      define:vars={{ hostMap, fallback: DEFAULT_TENANT_ID, tenants, forcedTenant: tenantId ?? null }}
+    >
+      // Runs before first paint. Keep it small and synchronous.
+      (function () {
+        function normalize(h) {
+          return String(h || '')
+            .trim()
+            .toLowerCase()
+            .replace(/\.$/, '')
+            .split(':')[0];
+        }
+        function matches(pattern, host) {
+          var p = normalize(pattern);
+          var h = normalize(host);
+          if (!p || !h) return false;
+          if (p === h) return true;
+          if (p.indexOf('*.') === 0) {
+            var suffix = p.slice(1);
+            return h.length > suffix.length && h.slice(-suffix.length) === suffix;
+          }
+          return false;
+        }
+
+        // A preview route pins the tenant explicitly; hostname resolution
+        // would otherwise send /preview/verdant/ back to the default brand.
+        var active;
+        if (forcedTenant) {
+          active = forcedTenant;
+        } else {
+          var host = normalize(window.location.hostname);
+          var resolved = null;
+          var wildcard = null;
+
+          for (var id in hostMap) {
+            var patterns = hostMap[id];
+            for (var i = 0; i < patterns.length; i += 1) {
+              if (normalize(patterns[i]) === host) {
+                resolved = id;
+                break;
+              }
+              if (!wildcard && matches(patterns[i], host)) wildcard = id;
+            }
+            if (resolved) break;
+          }
+          active = resolved || wildcard || fallback;
+        }
+        document.documentElement.setAttribute('data-astryx-theme', active);
+
+        // Promote the active tenant's stylesheet, park the rest.
+        var links = document.querySelectorAll('link[data-tenant-theme]');
+        for (var j = 0; j < links.length; j += 1) {
+          links[j].media = links[j].getAttribute('data-tenant-theme') === active ? 'all' : 'print';
+        }
+
+        // Expose the resolved tenant to React islands.
+        for (var k = 0; k < tenants.length; k += 1) {
+          if (tenants[k].id === active) {
+            window['__FLAVORZ_TENANT__'] = tenants[k];
+            break;
+          }
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

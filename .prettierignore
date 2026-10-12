@@ -1,0 +1,7 @@
+dist/
+.astro/
+pnpm-lock.yaml
+src/generated/
+src/astryx-themes.js
+public/themes/
+theme.template.ts

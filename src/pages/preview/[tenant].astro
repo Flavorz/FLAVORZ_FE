@@ -1,0 +1,27 @@
+---
+/**
+ * Per-tenant preview route.
+ *
+ * Lets the team review any brand without owning its hostname or editing
+ * /etc/hosts — /preview/verdant/ renders the Verdant brand on any domain.
+ * Generated statically for every known tenant.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/react/Hero.tsx';
+import { allTenants } from '../../lib/tenant/resolve';
+
+export function getStaticPaths() {
+  return [...allTenants().values()].map((tenant) => ({
+    params: { tenant: tenant.id },
+    props: { tenant },
+  }));
+}
+
+const { tenant } = Astro.props;
+---
+
+<BaseLayout title={`Preview · ${tenant.name}`} tenantId={tenant.id}>
+  <main>
+    <Hero tenant={tenant} client:load />
+  </main>
+</BaseLayout>

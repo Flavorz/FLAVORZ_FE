@@ -1,0 +1,24 @@
+{
+  "id": "verdant",
+  "name": "Verdant",
+  "hosts": ["verdant.example.com", "verdant.localhost"],
+  "theme": {
+    "accent": ["#2F7D4F", "#5FCB85"],
+    "neutralStyle": "cool",
+    "contrast": "high",
+    "radius": "round",
+    "tokens": {}
+  },
+  "assets": {
+    "logo": "/brands/verdant/logo.svg",
+    "favicon": "/brands/verdant/favicon.svg"
+  },
+  "copy": {
+    "hero.title": "Plant-forward, every plate",
+    "hero.subtitle": "Vegetables with the main-character treatment.",
+    "nav.cta": "Reserve"
+  },
+  "runtime": {
+    "supportEmail": "hello@verdant.example.com"
+  }
+}
