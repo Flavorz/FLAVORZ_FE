@@ -7,7 +7,8 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 const run = promisify(execFile);
 const ROOT = resolve(import.meta.dirname, '..');
-const themeDir = resolve(ROOT, 'dist/themes');
+const themeDir = resolve(ROOT, 'src/generated/themes');
+const publicThemeDir = resolve(ROOT, 'public/themes');
 
 /**
  * These tests guard the white-label mechanism itself: that a tenant's brand
@@ -70,5 +71,40 @@ describe('tenant theme build', () => {
     ]) {
       expect(tokens.has(required)).toBe(true);
     }
+  });
+});
+
+describe('per-brand typography and motion', () => {
+  it('gives each brand its own font family', async () => {
+    const flavorz = await readFile(resolve(themeDir, 'flavorz.css'), 'utf8');
+    const verdant = await readFile(resolve(themeDir, 'verdant.css'), 'utf8');
+    const familyOf = (css: string) =>
+      css.match(/--font-family-body:\s*([^;]+)/)?.[1]?.trim() ?? null;
+
+    expect(familyOf(flavorz)).toContain('Fraunces');
+    expect(familyOf(verdant)).toContain('DM Sans');
+  });
+
+  it('derives a different type scale per brand', async () => {
+    const flavorz = await readFile(resolve(themeDir, 'flavorz.css'), 'utf8');
+    const verdant = await readFile(resolve(themeDir, 'verdant.css'), 'utf8');
+    const baseOf = (css: string) => css.match(/--font-size-base:\s*([^;]+)/)?.[1]?.trim() ?? null;
+    expect(baseOf(flavorz)).not.toBe(baseOf(verdant));
+  });
+
+  it('gives each brand its own motion tempo', async () => {
+    const flavorz = await readFile(resolve(themeDir, 'flavorz.css'), 'utf8');
+    const verdant = await readFile(resolve(themeDir, 'verdant.css'), 'utf8');
+    const durOf = (css: string) => css.match(/--duration-medium:\s*([^;]+)/)?.[1]?.trim() ?? null;
+    expect(durOf(flavorz)).toBe('500ms');
+    expect(durOf(verdant)).toBe('250ms');
+  });
+
+  it('emits font-loading CSS for a declared family', async () => {
+    // Astryx sets the stack but never loads a file; without this the brand
+    // silently renders its fallback.
+    const fonts = await readFile(resolve(publicThemeDir, 'flavorz.fonts.css'), 'utf8');
+    expect(fonts).toContain('fonts.googleapis.com');
+    expect(fonts).toContain('Fraunces');
   });
 });

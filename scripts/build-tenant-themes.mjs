@@ -62,6 +62,66 @@ const RADIUS_PRESETS = {
 };
 
 /**
+ * Build the CSS that actually LOADS a brand's fonts.
+ *
+ * Astryx sets the font stack but never fetches a file: a named family with no
+ * source loads nothing and warns about nothing, so the fallback silently
+ * becomes the brand's typeface. Emitting this alongside the theme makes the
+ * declared family real.
+ */
+function renderFontCss(tenant) {
+  const typography = tenant.theme?.typography;
+  if (!typography) return '';
+
+  const roles = [typography.body, typography.heading, typography.code].filter(
+    (r) => r && r.family && r.source,
+  );
+
+  const googleFamilies = [];
+  const faces = [];
+  const seen = new Set();
+
+  for (const role of roles) {
+    const key = `${role.family}:${role.source.type}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    if (role.source.type === 'google') {
+      const family = role.family.replace(/ /g, '+');
+      googleFamilies.push(`family=${family}:${role.source.axes}`);
+    } else if (role.source.type === 'self') {
+      const src = role.source.files
+        .map((f) => {
+          const ext = f.split('.').pop()?.toLowerCase();
+          const format = ext === 'woff2' ? 'woff2' : ext === 'woff' ? 'woff' : 'opentype';
+          return `url('/fonts/${tenant.id}/${f}') format('${format}')`;
+        })
+        .join(', ');
+      faces.push(
+        `@font-face {\n` +
+          `  font-family: '${role.family}';\n` +
+          `  src: ${src};\n` +
+          `  font-weight: ${role.source.weight};\n` +
+          `  font-style: ${role.source.style};\n` +
+          `  font-display: swap;\n` +
+          `}`,
+      );
+    }
+  }
+
+  const parts = [];
+  if (googleFamilies.length > 0) {
+    parts.push(
+      `@import url('https://fonts.googleapis.com/css2?${googleFamilies.join('&')}&display=swap');`,
+    );
+  }
+  if (faces.length > 0) parts.push(faces.join('\n\n'));
+  if (parts.length === 0) return '';
+
+  return `/* @generated font loading for ${tenant.id} — do not edit. */\n${parts.join('\n\n')}\n`;
+}
+
+/**
  * Render a tenant config as Astryx theme source.
  *
  * `extends: neutralTheme` inherits the base design decisions, then the brand's
@@ -86,7 +146,40 @@ function renderThemeSource(tenant) {
     contrast: theme.contrast ?? 'standard',
   };
 
-  const radius = theme.radius ? RADIUS_PRESETS[theme.radius] : null;
+  // Radius: a preset word, or an explicit {base, multiplier} scale.
+  const radius =
+    typeof theme.radius === 'string' ? RADIUS_PRESETS[theme.radius] : (theme.radius ?? null);
+
+  // Typography: strip our `source` field — it drives font LOADING (see
+  // renderFontCss), not the theme. Astryx only wants family/fallbacks/weight.
+  let typography = null;
+  if (theme.typography) {
+    const t = theme.typography;
+    const role = (r) => {
+      if (!r) return undefined;
+      const { source: _source, ...rest } = r;
+      return Object.keys(rest).length > 0 ? rest : undefined;
+    };
+    typography = {
+      ...(t.scale ? { scale: t.scale } : {}),
+      ...(role(t.body) ? { body: role(t.body) } : {}),
+      ...(role(t.heading) ? { heading: role(t.heading) } : {}),
+      ...(role(t.code) ? { code: role(t.code) } : {}),
+    };
+    if (Object.keys(typography).length === 0) typography = null;
+  }
+
+  const motion = theme.motion ?? null;
+
+  const lines = [
+    `  name: ${JSON.stringify(id)},`,
+    `  extends: neutralTheme,`,
+    `  color: ${JSON.stringify(colorAxis)},`,
+  ];
+  if (radius) lines.push(`  radius: ${JSON.stringify(radius)},`);
+  if (typography) lines.push(`  typography: ${JSON.stringify(typography)},`);
+  if (motion) lines.push(`  motion: ${JSON.stringify(motion)},`);
+  lines.push(`  tokens: {\n${tokenLines}\n  },`);
 
   return `// @generated from config/tenants/${id}.json by scripts/build-tenant-themes.mjs
 // Do not edit. Change the tenant JSON (or its backend record) and rebuild.
@@ -94,12 +187,7 @@ import {defineTheme} from '@astryxdesign/core/theme';
 import {neutralTheme} from '@astryxdesign/theme-neutral';
 
 export const ${toIdent(id)}Theme = defineTheme({
-  name: ${JSON.stringify(id)},
-  extends: neutralTheme,
-  color: ${JSON.stringify(colorAxis)},${radius ? `\n  radius: ${JSON.stringify(radius)},` : ''}
-  tokens: {
-${tokenLines}
-  },
+${lines.join('\n')}
 });
 
 export default ${toIdent(id)}Theme;
@@ -184,6 +272,11 @@ async function main() {
         await run('pnpm', ['exec', ...cliArgs], { cwd: ROOT });
         if (!args.check) {
           await copyFile(outFile, join(publicDir, `${tenant.id}.css`));
+          // Font loading is ours, not Astryx's — emit it as a sibling file.
+          const fontCss = renderFontCss(tenant);
+          if (fontCss) {
+            await writeFile(join(publicDir, `${tenant.id}.fonts.css`), fontCss, 'utf8');
+          }
         }
         console.log(`[themes] ${args.check ? 'checked' : 'built'} ${tenant.id} -> ${outFile}`);
       } catch (err) {

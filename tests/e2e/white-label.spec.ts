@@ -86,3 +86,71 @@ test('the active tenant stylesheet is the only one applied', async ({ page }) =>
   expect(active?.media).toBe('all');
   for (const other of inactive) expect(other.media).toBe('print');
 });
+
+test('the composed page renders every block', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('img', { name: 'Flavorz' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What to expect' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Seasonal menu' })).toBeVisible();
+  await expect(page.getByText(/© \d{4} Flavorz/)).toBeVisible();
+});
+
+test('each brand loads its own typeface, not a fallback', async ({ page }) => {
+  // Astryx sets the stack but never loads a file, so a missing source would
+  // silently render the fallback. Assert the real font arrived.
+  await page.goto('/');
+  await page.evaluate(() => document.fonts.ready);
+  const flavorz = await page.evaluate(() => ({
+    family: getComputedStyle(document.querySelector('h1')!).fontFamily,
+    loaded: [...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family),
+  }));
+  expect(flavorz.family).toContain('Fraunces');
+  expect(flavorz.loaded).toContain('Fraunces');
+
+  await page.goto('/preview/verdant/');
+  await page.evaluate(() => document.fonts.ready);
+  const verdant = await page.evaluate(() => ({
+    family: getComputedStyle(document.querySelector('h1')!).fontFamily,
+    loaded: [...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family),
+  }));
+  expect(verdant.family).toContain('DM Sans');
+  expect(verdant.loaded).toContain('DM Sans');
+});
+
+test('brands differ in type scale, not just colour', async ({ page }) => {
+  await page.goto('/');
+  const a = await page.evaluate(() => getComputedStyle(document.querySelector('h1')!).fontSize);
+  await page.goto('/preview/verdant/');
+  const b = await page.evaluate(() => getComputedStyle(document.querySelector('h1')!).fontSize);
+  expect(a).not.toBe(b);
+});
+
+test('the design system gallery renders every block in-brand', async ({ page }) => {
+  await page.goto('/design/flavorz/');
+  await expect(page.getByRole('heading', { name: 'Design system' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Colour tokens' })).toBeVisible();
+
+  for (const block of ['SiteHeader', 'HeroBlock', 'FeatureGrid', 'SiteFooter']) {
+    await expect(page.getByRole('heading', { name: block })).toBeVisible();
+  }
+
+  // A block preview must have real height. Wrapping these in a bare <div>
+  // collapsed the SiteHeader preview to 2px; Card gives it layout context.
+  const headerPreview = page.getByRole('img', { name: 'Flavorz' });
+  await expect(headerPreview).toBeVisible();
+  const box = await headerPreview.boundingBox();
+  expect(box?.height ?? 0).toBeGreaterThan(10);
+});
+
+test('the gallery re-skins for another brand', async ({ page }) => {
+  await page.goto('/design/verdant/');
+  const accent = await page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim(),
+  );
+  await page.goto('/design/flavorz/');
+  const other = await page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim(),
+  );
+  expect(accent).not.toBe(other);
+});

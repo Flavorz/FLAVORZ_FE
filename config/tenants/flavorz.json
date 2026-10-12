@@ -1,13 +1,48 @@
 {
   "id": "flavorz",
   "name": "Flavorz",
-  "hosts": ["localhost", "127.0.0.1", "flavorz.example.com", "*.flavorz.example.com"],
+  "hosts": [
+    "localhost",
+    "127.0.0.1",
+    "flavorz.example.com",
+    "*.flavorz.example.com"
+  ],
   "theme": {
-    "accent": ["#D6452B", "#FF7A5C"],
+    "accent": [
+      "#D6452B",
+      "#FF7A5C"
+    ],
     "neutralStyle": "warm",
     "contrast": "standard",
     "radius": "soft",
-    "tokens": {}
+    "tokens": {},
+    "typography": {
+      "scale": {
+        "base": 17,
+        "ratio": 1.25
+      },
+      "body": {
+        "family": "Fraunces",
+        "fallbacks": "Georgia, \"Times New Roman\", serif",
+        "source": {
+          "type": "google",
+          "axes": "wght@400;500;600"
+        }
+      },
+      "heading": {
+        "weight": "bold",
+        "weights": {
+          "1": "bold",
+          "2": "bold"
+        }
+      }
+    },
+    "motion": {
+      "fast": 200,
+      "medium": 500,
+      "slow": 1200,
+      "ratio": 0.75
+    }
   },
   "assets": {
     "logo": "/brands/flavorz/logo.svg",

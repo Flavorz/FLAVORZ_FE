@@ -111,6 +111,47 @@ and base URLs only.
 
 ---
 
+## The component library
+
+Blocks in `src/components/react/blocks/` are thin compositions of Astryx
+primitives. None of them names a brand: logo, copy, colour, type and motion all
+resolve from the tenant.
+
+| Block | Purpose |
+| --- | --- |
+| `SiteHeader` | Brand mark, nav, primary CTA |
+| `HeroBlock` | Headline with staggered entrance |
+| `FeatureGrid` | Responsive card grid, reflows on width |
+| `SiteFooter` | Legal line and support contact |
+| `TokenSwatches` | Live token documentation |
+
+### Living documentation
+
+`/design/<tenant>/` renders every block under that brand — the same components,
+re-skinned. Because it renders the real implementation it cannot drift from the
+code the way a written spec does.
+
+```
+/design/flavorz/     serif, warm, soft corners
+/design/verdant/     sans, cool, pill buttons
+```
+
+### House rules
+
+From `.claude/CLAUDE.md`, and worth repeating because breaking the first one
+cost a real bug:
+
+- **No raw `<div>` for layout.** A bare `div` wrapping a `Section` gave it no
+  layout context and the preview collapsed to 2px. Use `Card`, `Section`,
+  `Stack` or `Grid`.
+- **No raw hex or px.** Style through component props first, then tokens
+  (`var(--color-*)`, `var(--spacing-*)`, `var(--radius-*)`).
+- **Read the component before using it.** `astryx component <Name>` — the props
+  are not guessable (`Text` uses `type`, not `variant`; `Badge` has `neutral`,
+  not `gray`; `Stack` direction is `horizontal`, not `row`).
+
+---
+
 ## Layout
 
 ```
@@ -123,6 +164,7 @@ src/
   layouts/BaseLayout.astro  tenant resolution + no-flash theming
   lib/tenant/               schema (Zod), hostname resolver, island context
   components/react/         React islands (Astryx + Motion)
+    blocks/                 brand-agnostic building blocks
   generated/themes/         compiled per-tenant themes (generated)
   pages/                    routes, incl. /preview/[tenant]
 tests/                      unit (vitest) + e2e (playwright)

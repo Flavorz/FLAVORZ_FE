@@ -28,6 +28,82 @@ const tokenValue = z.union([hexColor, z.tuple([hexColor, hexColor])]);
  * icons, borders, hover/pressed overlays — for light and dark, holding
  * >= 4.5:1 for generated text. Most tenants should only need `accent`.
  */
+/**
+ * How a brand's font is delivered to the browser.
+ *
+ * Astryx sets the font *stack* but never loads a file. A named family with no
+ * source loads nothing and warns about nothing — the fallback silently becomes
+ * the brand's typeface. So a family must declare where it comes from.
+ *
+ *   'system'  — no loading; the family must be a system/UI stack
+ *   'google'  — emit a Google Fonts <link> for this family
+ *   'self'    — emit @font-face against files under /fonts/<brand>/
+ */
+const fontSourceSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('system') }),
+  z.object({
+    type: z.literal('google'),
+    /** Axis/weight spec, e.g. 'wght@400;600;700' or 'wght@100..900'. */
+    axes: z.string().default('wght@400;500;600;700'),
+  }),
+  z.object({
+    type: z.literal('self'),
+    /** Files relative to /fonts/<tenant id>/, e.g. ['Brand.woff2']. */
+    files: z.array(z.string().min(1)).min(1),
+    weight: z.string().default('400 700'),
+    style: z.enum(['normal', 'italic']).default('normal'),
+  }),
+]);
+
+const fontRoleSchema = z.object({
+  /** Family name, exactly as the font declares it. */
+  family: z.string().min(1),
+  /**
+   * Fallback stack. Required: if the family fails to load this is what the
+   * brand actually renders as, so it should be a deliberate choice.
+   */
+  fallbacks: z.string().min(1),
+  source: fontSourceSchema.default({ type: 'system' }),
+});
+
+/**
+ * Per-brand typography.
+ *
+ * `scale.ratio` drives the whole type scale geometrically:
+ * 1.125 dense · 1.2 default · 1.333 dramatic.
+ */
+export const brandTypographySchema = z.object({
+  scale: z
+    .object({
+      /** Body size in px. */
+      base: z.number().int().min(12).max(24).default(16),
+      /** Step between sizes. */
+      ratio: z.number().min(1.05).max(1.5).default(1.2),
+    })
+    .default({ base: 16, ratio: 1.2 }),
+  body: fontRoleSchema.optional(),
+  /** Inherits family and fallbacks from `body` when omitted. */
+  heading: fontRoleSchema
+    .partial({ family: true, fallbacks: true })
+    .extend({
+      weight: z.enum(['normal', 'medium', 'semibold', 'bold']).default('semibold'),
+      /** Per-level overrides for headings 1-6. */
+      weights: z.record(z.string(), z.enum(['normal', 'medium', 'semibold', 'bold'])).optional(),
+    })
+    .optional(),
+  code: fontRoleSchema.optional(),
+});
+
+/** Motion tempo, in ms. Lower = snappier. */
+export const brandMotionSchema = z.object({
+  fast: z.number().int().min(50).max(400).default(175),
+  medium: z.number().int().min(100).max(900).default(410),
+  slow: z.number().int().min(200).max(2000).default(975),
+  ratio: z.number().min(0.4).max(1).default(0.75),
+  /** Overrides --ease-standard. */
+  easing: z.string().optional(),
+});
+
 export const brandThemeSchema = z.object({
   /** Seed color. One hex, or [light, dark] to seed each scheme separately. */
   accent: tokenValue,
@@ -35,6 +111,8 @@ export const brandThemeSchema = z.object({
   neutralStyle: z.enum(['warm', 'cool', 'neutral']).default('neutral'),
   /** 'high' widens the text/surface tone gap for dense or clinical UI. */
   contrast: z.enum(['standard', 'high']).default('standard'),
+  typography: brandTypographySchema.optional(),
+  motion: brandMotionSchema.optional(),
   /**
    * Escape hatch for explicit token overrides, applied after generation.
    *
@@ -44,8 +122,20 @@ export const brandThemeSchema = z.object({
    * here and check contrast in both modes.
    */
   tokens: z.record(z.string().startsWith('--'), tokenValue).default({}),
-  /** Optional radius scale override: 'sharp' | 'soft' | 'round'. */
-  radius: z.enum(['sharp', 'soft', 'round']).optional(),
+  /**
+   * Corner style: a preset word, or an explicit scale.
+   * `base` is the unit in px; `multiplier` scales every step
+   * (0 = square/brutalist, 2 = very soft).
+   */
+  radius: z
+    .union([
+      z.enum(['sharp', 'soft', 'round']),
+      z.object({
+        base: z.number().min(0).max(16).default(4),
+        multiplier: z.number().min(0).max(3).default(1),
+      }),
+    ])
+    .optional(),
 });
 
 export const brandAssetsSchema = z.object({
@@ -80,6 +170,8 @@ export const tenantConfigSchema = z.object({
     .default({}),
 });
 
+export type BrandTypography = z.infer<typeof brandTypographySchema>;
+export type BrandMotion = z.infer<typeof brandMotionSchema>;
 export type BrandTheme = z.infer<typeof brandThemeSchema>;
 export type BrandAssets = z.infer<typeof brandAssetsSchema>;
 export type TenantConfig = z.infer<typeof tenantConfigSchema>;

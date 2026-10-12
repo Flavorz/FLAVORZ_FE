@@ -7,7 +7,7 @@
  * Generated statically for every known tenant.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Hero from '../../components/react/Hero.tsx';
+import LandingPage from '../../components/react/LandingPage.tsx';
 import { allTenants } from '../../lib/tenant/resolve';
 
 export function getStaticPaths() {
@@ -22,6 +22,6 @@ const { tenant } = Astro.props;
 
 <BaseLayout title={`Preview · ${tenant.name}`} tenantId={tenant.id}>
   <main>
-    <Hero tenant={tenant} client:load />
+    <LandingPage tenant={tenant} client:load />
   </main>
 </BaseLayout>

@@ -1,0 +1,26 @@
+---
+/**
+ * Living design-system documentation, one page per brand.
+ *
+ * /design/flavorz/ and /design/verdant/ render identical components under
+ * different themes — the clearest demonstration of what the system does.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DesignSystemGallery from '../../components/react/DesignSystemGallery.tsx';
+import { allTenants } from '../../lib/tenant/resolve';
+
+export function getStaticPaths() {
+  return [...allTenants().values()].map((tenant) => ({
+    params: { tenant: tenant.id },
+    props: { tenant },
+  }));
+}
+
+const { tenant } = Astro.props;
+---
+
+<BaseLayout title={`Design system · ${tenant.name}`} tenantId={tenant.id}>
+  <main>
+    <DesignSystemGallery tenant={tenant} client:load />
+  </main>
+</BaseLayout>
