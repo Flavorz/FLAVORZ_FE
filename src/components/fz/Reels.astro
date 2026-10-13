@@ -13,7 +13,7 @@ const reels = [
   <SectionHead title="Reels" action="See all reels" />
   <div class="fz-reels">
     {reels.map((r) => (
-      <article class="fz-reel">
+      <article class="fz-reel fz-reveal fz-lift">
         <div class="fz-reel__media" style={shot(r.img)}>
           <span class="fz-reel__kind">{r.kind}</span>
           <div class="fz-reel__who">
@@ -45,8 +45,10 @@ const reels = [
   }
 
   .fz-reel {
-    border: 1px solid #e9e4e5;
-    border-radius: var(--fz-radius-lg); /* 10px in the frames */
+    /* Frame 57: r=10 with shadow 0,14 blur30 black 15% — and no stroke. */
+    border-radius: var(--fz-radius-lg);
+    box-shadow: var(--fz-card-shadow);
+    background: var(--fz-site-bg);
     overflow: hidden;
   }
 
@@ -71,7 +73,9 @@ const reels = [
 
   .fz-reel__kind {
     align-self: flex-start;
-    background: rgba(255, 255, 255, 0.78);
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
+    border-radius: var(--fz-radius-md);
     font-size: var(--fz-capital-size);
     line-height: var(--fz-capital-lh);
     font-weight: 500;

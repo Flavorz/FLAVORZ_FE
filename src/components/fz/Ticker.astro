@@ -23,8 +23,8 @@ const items = [
   .fz-ticker__row {
     display: flex;
     align-items: center;
-    gap: 18px;
-    padding-block: 7px;
+    gap: 20px;
+    padding-block: 10px;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -54,10 +54,13 @@ const items = [
   }
 
   .fz-ticker__item {
-    /* Body text: 14px/18 */
+    /* Each item is a white pill (r=8) on the blush strip. */
     font-size: var(--fz-body-size);
     line-height: var(--fz-body-lh);
     white-space: nowrap;
     flex: 0 0 auto;
+    background: var(--fz-site-bg);
+    border-radius: var(--fz-radius-md);
+    padding: 4px 6px;
   }
 </style>

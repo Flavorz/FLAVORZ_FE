@@ -40,7 +40,7 @@ const boards: Array<{ title: string; rows: Row[] }> = [
   <SectionHead title="Community leaders" note="This week. Placeholder, scoring rules to come." action="See full leaderboard" />
   <div class="fz-boards">
     {boards.map((b) => (
-      <article class="fz-board">
+      <article class="fz-board fz-reveal">
         <p class="fz-board__title"><i aria-hidden="true"></i>{b.title}</p>
         <ul>
           {b.rows.map((row) => (

@@ -13,7 +13,7 @@ const items = [
   <SectionHead title="What's fresh today" note="Live from the community" action="→" />
   <div class="fz-fresh">
     {items.map((p) => (
-      <article class="fz-prod">
+      <article class="fz-prod fz-reveal fz-lift">
         <div class="fz-prod__media" style={shot(p.img)}>
           <span class="fz-prod__tag">{p.tag}</span>
           <button type="button" class="fz-btn fz-btn--primary fz-btn--sm fz-prod__buy">Buy</button>
@@ -43,8 +43,10 @@ const items = [
   }
 
   .fz-prod {
-    border: 1px solid #e9e4e5;
-    border-radius: var(--fz-radius-lg); /* 10px in the frames */
+    /* Frame 57: r=10 with shadow 0,14 blur30 black 15% — and no stroke. */
+    border-radius: var(--fz-radius-lg);
+    box-shadow: var(--fz-card-shadow);
+    background: var(--fz-site-bg);
     overflow: hidden;
   }
 
@@ -62,7 +64,10 @@ const items = [
     position: absolute;
     top: 10px;
     left: 10px;
-    background: rgba(255, 255, 255, 0.82);
+    /* Frame 47: fill #433139, text #eceaeb, r=8 */
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
+    border-radius: var(--fz-radius-md);
     /* Capital text: 14px/18 w500 */
     font-size: var(--fz-capital-size);
     line-height: var(--fz-capital-lh);

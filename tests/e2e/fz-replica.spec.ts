@@ -227,3 +227,70 @@ test.describe('matches the Figma spec exactly', () => {
     }
   });
 });
+
+/**
+ * Fills, strokes and shadows read from the frames' own paint data.
+ * These are the values that made the page "not feel like the Figma" even
+ * once type and spacing were right.
+ */
+test.describe('surfaces match the Figma paint data', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  const style = (page: import('@playwright/test').Page, sel: string, prop: string) =>
+    page.evaluate(
+      ([s, p]) => {
+        const el = document.querySelector(s as string);
+        return el ? (getComputedStyle(el) as unknown as Record<string, string>)[p as string] : null;
+      },
+      [sel, prop],
+    );
+
+  test('header controls use the frame fills', async ({ page }) => {
+    await page.goto('/fz/');
+    // Search bar is a blush fill with no stroke, not a white bordered input.
+    expect(await style(page, '.fz-search input', 'backgroundColor')).toBe('rgb(242, 225, 222)');
+    // "User Online" is #776870 with #f1f0f1 text, not a green pill.
+    expect(await style(page, '.fz-online', 'backgroundColor')).toBe('rgb(119, 104, 112)');
+    expect(await style(page, '.fz-online', 'color')).toBe('rgb(241, 240, 241)');
+    expect(await style(page, '.fz-header', 'borderBottomColor')).toBe('rgb(245, 233, 230)');
+  });
+
+  test('ticker is a blush strip of white pills', async ({ page }) => {
+    await page.goto('/fz/');
+    expect(await style(page, '.fz-ticker', 'backgroundColor')).toBe('rgb(242, 225, 222)');
+    expect(await style(page, '.fz-ticker__item', 'backgroundColor')).toBe('rgb(255, 255, 255)');
+  });
+
+  test('cards carry the drop shadow and no border', async ({ page }) => {
+    await page.goto('/fz/');
+    // Frame 57: 0,14 blur 30, black 15%.
+    expect(await style(page, '.fz-prod', 'boxShadow')).toBe(
+      'rgba(0, 0, 0, 0.15) 0px 14px 30px 0px',
+    );
+    expect(await style(page, '.fz-prod', 'borderTopWidth')).toBe('0px');
+  });
+
+  test('promo cards use the three frame fills', async ({ page }) => {
+    await page.goto('/fz/');
+    expect(await style(page, '.fz-promo--panel', 'backgroundColor')).toBe('rgb(242, 225, 222)');
+    expect(await style(page, '.fz-promo--dark', 'backgroundColor')).toBe('rgb(67, 49, 57)');
+    expect(await style(page, '.fz-promo--mid', 'backgroundColor')).toBe('rgb(119, 104, 112)');
+  });
+
+  test('tags are dark pills, not translucent white', async ({ page }) => {
+    await page.goto('/fz/');
+    expect(await style(page, '.fz-prod__tag', 'backgroundColor')).toBe('rgb(67, 49, 57)');
+    expect(await style(page, '.fz-prod__tag', 'color')).toBe('rgb(236, 234, 235)');
+  });
+
+  test('cards lift on hover without the reveal animation blocking it', async ({ page }) => {
+    await page.goto('/fz/');
+    const card = page.locator('.fz-reel').first();
+    await card.scrollIntoViewIfNeeded();
+    expect(await card.evaluate((e) => getComputedStyle(e).translate)).toBe('0px');
+    await card.hover();
+    await expect
+      .poll(async () => card.evaluate((e) => getComputedStyle(e).translate))
+      .toBe('0px -3px');
+  });
+});

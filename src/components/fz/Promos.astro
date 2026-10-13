@@ -8,7 +8,7 @@ const promos = [
 
 <section class="fz-shell fz-promos">
   {promos.map((p) => (
-    <article class:list={['fz-promo', `fz-promo--${p.tone}`]}>
+    <article class:list={['fz-promo', 'fz-reveal', 'fz-lift', `fz-promo--${p.tone}`]}>
       <p class="fz-promo__tag">{p.tag}</p>
       <h3 class="fz-promo__title">{p.title}</h3>
       {p.body && <p class="fz-promo__body">{p.body}</p>}

@@ -79,6 +79,7 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
 <style>
   .fz-header {
     background: var(--fz-site-bg);
+    border-bottom: 1px solid var(--fz-header-border);
   }
 
   .fz-header__top {
@@ -128,8 +129,8 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
 
   .fz-search__icon {
     position: absolute;
-    left: 12px;
-    color: var(--fz-subheading);
+    left: 14px;
+    color: var(--fz-panel-text);
     pointer-events: none;
   }
 
@@ -139,16 +140,18 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     font-size: var(--fz-body-size);
     line-height: var(--fz-body-lh);
     color: var(--fz-text);
-    /* Search bar 442x36, r=10, pad 8/20 */
+    /* Search bar 442x36, r=10, fill #f2e1de, no stroke */
     height: var(--fz-search-h);
     padding: 8px 40px 8px 38px;
-    border: 1px solid #ded7d9;
+    border: 0;
     border-radius: var(--fz-radius-lg);
-    background: var(--fz-site-bg);
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
   }
 
   .fz-search input::placeholder {
-    color: var(--fz-subheading);
+    color: var(--fz-panel-text);
+    opacity: 0.75;
   }
 
   .fz-search input {
@@ -162,7 +165,7 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
 
   .fz-search__mic {
     position: absolute;
-    right: 10px;
+    right: 12px;
     display: grid;
     place-items: center;
     border: 0;
@@ -184,8 +187,9 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #d9f2e4;
-    color: #17633d;
+    /* "User Online" 128x22, fill #776870, text #f1f0f1, r=10 */
+    background: var(--fz-online-fill);
+    color: var(--fz-online-text);
     /* 14px/18 w400 */
     font-size: var(--fz-body-size);
     line-height: var(--fz-body-lh);
@@ -205,12 +209,12 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    /* Language 103x40, r=10, pad 0/16 */
+    /* Language 103x40, r=10, 0.5px #433139 stroke */
     height: var(--fz-lang-h);
-    border: 1px solid #ded7d9;
+    border: 0.5px solid var(--fz-text);
     border-radius: var(--fz-radius-lg);
     padding: 0 16px;
-    color: var(--fz-subheading);
+    color: var(--fz-text);
     font-size: var(--fz-button-size);
     font-weight: 600;
   }
@@ -233,17 +237,22 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     line-height: 1;
+    /* The avatar ring is drawn with box-shadow spread, which is outside the
+       box: reserve the space so it cannot collide with the online pill. */
+    padding: 4px;
   }
 
   .fz-avatar {
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: var(--fz-panel-footer);
-    color: var(--fz-panel-text);
+    /* Inner circle #433139 with a 2px ring in the frame. */
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
     font-weight: 600;
+    box-shadow: 0 0 0 2px var(--fz-site-bg), 0 0 0 4px var(--fz-primary);
   }
 
   .fz-avatar--sm {
@@ -253,9 +262,13 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
   }
 
   .fz-profile__tier {
+    /* Badge 99x26, fill #776870, text #f1f0f1, r=100 */
     font-size: var(--fz-body-size);
-    letter-spacing: 0.06em;
-    color: var(--fz-subheading);
+    line-height: var(--fz-body-lh);
+    background: var(--fz-secondary);
+    color: var(--fz-secondary-text);
+    padding: 2px 12px;
+    border-radius: var(--fz-radius-pill);
   }
 
   .fz-header__nav {
