@@ -123,6 +123,13 @@ export const brandThemeSchema = z.object({
    */
   tokens: z.record(z.string().startsWith('--'), tokenValue).default({}),
   /**
+   * Astryx component style overrides, keyed by theming target
+   * (`astryx theme targets`). Use this when a component reads an internal
+   * base-theme variable that `tokens` cannot reach — defineTheme silently
+   * ignores unknown token names, so such an override looks applied but is not.
+   */
+  components: z.record(z.string(), z.record(z.string(), z.unknown())).default({}),
+  /**
    * Corner style: a preset word, or an explicit scale.
    * `base` is the unit in px; `multiplier` scales every step
    * (0 = square/brutalist, 2 = very soft).

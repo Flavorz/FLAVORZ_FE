@@ -170,6 +170,8 @@ function renderThemeSource(tenant) {
   }
 
   const motion = theme.motion ?? null;
+  const components =
+    theme.components && Object.keys(theme.components).length > 0 ? theme.components : null;
 
   const lines = [
     `  name: ${JSON.stringify(id)},`,
@@ -179,6 +181,7 @@ function renderThemeSource(tenant) {
   if (radius) lines.push(`  radius: ${JSON.stringify(radius)},`);
   if (typography) lines.push(`  typography: ${JSON.stringify(typography)},`);
   if (motion) lines.push(`  motion: ${JSON.stringify(motion)},`);
+  if (components) lines.push(`  components: ${JSON.stringify(components)},`);
   lines.push(`  tokens: {\n${tokenLines}\n  },`);
 
   return `// @generated from config/tenants/${id}.json by scripts/build-tenant-themes.mjs

@@ -81,7 +81,7 @@ describe('per-brand typography and motion', () => {
     const familyOf = (css: string) =>
       css.match(/--font-family-body:\s*([^;]+)/)?.[1]?.trim() ?? null;
 
-    expect(familyOf(flavorz)).toContain('Fraunces');
+    expect(familyOf(flavorz)).toContain('DM Sans');
     expect(familyOf(verdant)).toContain('DM Sans');
   });
 
@@ -105,6 +105,7 @@ describe('per-brand typography and motion', () => {
     // silently renders its fallback.
     const fonts = await readFile(resolve(publicThemeDir, 'flavorz.fonts.css'), 'utf8');
     expect(fonts).toContain('fonts.googleapis.com');
-    expect(fonts).toContain('Fraunces');
+    // Google Fonts encodes spaces as '+' in the family query.
+    expect(fonts).toContain('DM+Sans');
   });
 });

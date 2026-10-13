@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import LandingPage from '../components/react/LandingPage.tsx';
+import FlavorzHome from '../components/react/FlavorzHome.tsx';
 import { resolveTenantByHost } from '../lib/tenant/resolve';
 
 // At build time this is the default tenant; the inline script in BaseLayout
@@ -15,6 +15,6 @@ const tenant = resolveTenantByHost(Astro.url.hostname);
       animates on mount. Islands further down the page should use
       client:visible instead.
     */}
-    <LandingPage tenant={tenant} client:load />
+    <FlavorzHome tenant={tenant} client:load />
   </main>
 </BaseLayout>

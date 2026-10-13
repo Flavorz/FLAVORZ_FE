@@ -16,3 +16,4 @@ test-results/
 # Generated tenant themes — rebuilt by scripts/build-tenant-themes.mjs
 src/generated/
 public/themes/
+.figma-cache.json

@@ -12,7 +12,9 @@ import { expect, test } from '@playwright/test';
 async function themeState(page: import('@playwright/test').Page) {
   return page.evaluate(() => {
     const cs = getComputedStyle(document.documentElement);
-    const btn = document.querySelector('button');
+    const btn =
+      document.querySelector('button.astryx-button[data-variant="primary"]') ??
+      document.querySelector('button');
     return {
       htmlTheme: document.documentElement.getAttribute('data-astryx-theme'),
       accent: cs.getPropertyValue('--color-accent').trim(),
@@ -26,12 +28,12 @@ async function themeState(page: import('@playwright/test').Page) {
 
 test('default host resolves to the default tenant and paints its brand', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('h1')).toHaveText('Food that tastes like somewhere');
+  await expect(page.locator('h1')).toContainText('Welcome back');
   const s = await themeState(page);
   expect(s.htmlTheme).toBe('flavorz');
   expect(s.tenantGlobal).toBe('flavorz');
-  // Terracotta, not the Astryx default blue.
-  expect(s.btnBg).toBe('rgb(181, 38, 19)');
+  // The brand plum from Figma (#433139), not a placeholder.
+  expect(s.btnBg).toBe('rgb(67, 49, 57)');
 });
 
 test('a preview route pins its tenant regardless of hostname', async ({ page }) => {
@@ -60,7 +62,7 @@ test('dark mode resolves the dark half of each token pair', async ({ browser }) 
   await page.goto('/');
   const dark = await themeState(page);
   // Flavorz dark accent, not the light one.
-  expect(dark.btnBg).toBe('rgb(255, 180, 160)');
+  expect(dark.btnBg).toBe('rgb(217, 198, 204)');
   await ctx.close();
 });
 
@@ -89,11 +91,9 @@ test('the active tenant stylesheet is the only one applied', async ({ page }) =>
 
 test('the composed page renders every block', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('img', { name: 'Flavorz' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'What to expect' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Seasonal menu' })).toBeVisible();
-  await expect(page.getByText(/© \d{4} Flavorz/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Reels' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Meet the makers' })).toBeVisible();
 });
 
 test('each brand loads its own typeface, not a fallback', async ({ page }) => {
@@ -105,8 +105,8 @@ test('each brand loads its own typeface, not a fallback', async ({ page }) => {
     family: getComputedStyle(document.querySelector('h1')!).fontFamily,
     loaded: [...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family),
   }));
-  expect(flavorz.family).toContain('Fraunces');
-  expect(flavorz.loaded).toContain('Fraunces');
+  expect(flavorz.family).toContain('DM Serif Display');
+  expect(flavorz.loaded).toContain('DM Serif Display');
 
   await page.goto('/preview/verdant/');
   await page.evaluate(() => document.fonts.ready);

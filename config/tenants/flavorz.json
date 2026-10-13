@@ -9,31 +9,69 @@
   ],
   "theme": {
     "accent": [
-      "#D6452B",
-      "#FF7A5C"
+      "#433139",
+      "#D9C6CC"
     ],
     "neutralStyle": "warm",
     "contrast": "standard",
-    "radius": "soft",
-    "tokens": {},
+    "radius": {
+      "base": 4,
+      "multiplier": 1.5
+    },
+    "tokens": {
+      "--color-on-accent": [
+        "#eceaeb",
+        "#2A2328"
+      ],
+      "--color-text-primary": [
+        "#433139",
+        "#F1F0F1"
+      ],
+      "--color-text-secondary": [
+        "#94918f",
+        "#A9A4A6"
+      ],
+      "--color-background-body": [
+        "#ffffff",
+        "#1A1518"
+      ],
+      "--color-background-surface": [
+        "#ffffff",
+        "#231D21"
+      ],
+      "--color-background-muted": [
+        "#f2e1de",
+        "#2A2328"
+      ],
+      "--color-accent": [
+        "#433139",
+        "#D9C6CC"
+      ],
+      "--color-icon-accent": [
+        "#433139",
+        "#D9C6CC"
+      ]
+    },
     "typography": {
       "scale": {
-        "base": 17,
+        "base": 16,
         "ratio": 1.25
       },
       "body": {
-        "family": "Fraunces",
-        "fallbacks": "Georgia, \"Times New Roman\", serif",
+        "family": "DM Sans",
+        "fallbacks": "-apple-system, system-ui, sans-serif",
         "source": {
           "type": "google",
-          "axes": "wght@400;500;600"
+          "axes": "wght@400;500;600;700"
         }
       },
       "heading": {
-        "weight": "bold",
-        "weights": {
-          "1": "bold",
-          "2": "bold"
+        "family": "DM Serif Display",
+        "fallbacks": "Georgia, serif",
+        "weight": "normal",
+        "source": {
+          "type": "google",
+          "axes": "wght@400"
         }
       }
     },
@@ -49,9 +87,9 @@
     "favicon": "/brands/flavorz/favicon.svg"
   },
   "copy": {
-    "hero.title": "Food that tastes like somewhere",
-    "hero.subtitle": "Seasonal plates, open kitchen, no fuss.",
-    "nav.cta": "Book a table"
+    "hero.title": "Food with a face behind it",
+    "hero.subtitle": "100% of the price goes to the maker.",
+    "nav.cta": "Shop"
   },
   "runtime": {
     "supportEmail": "hello@flavorz.example.com"
