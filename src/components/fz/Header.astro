@@ -86,7 +86,8 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     display: flex;
     align-items: center;
     gap: 16px;
-    padding-block: 12px;
+    /* Header frame is 88 tall overall: this row 52, the nav row 36. */
+    height: 52px;
   }
 
   .fz-brand {
@@ -275,7 +276,7 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     display: flex;
     align-items: center;
     gap: 24px;
-    padding-bottom: 10px;
+    height: 36px;
   }
 
   .fz-loc {
@@ -292,8 +293,10 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
 
   .fz-header__nav nav {
     display: flex;
-    gap: 24px;
-    margin-inline-start: auto;
+    /* Offers x=639, Community 719, Orders 842, Shop 928 — spacing ~32px,
+       starting after the location rather than flush right. */
+    gap: 32px;
+    margin-inline-start: 150px;
   }
 
   .fz-header__nav a {

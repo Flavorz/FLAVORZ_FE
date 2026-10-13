@@ -99,6 +99,13 @@ console.log(`\n${which.toUpperCase()}  figma texts=${figma.length}  matched=${ma
 console.log(`font-size mismatches : ${badSize.length}`);
 console.log(`font-family mismatches: ${badFam.length}`);
 console.log(`x off by >8px        : ${offX.length}`);
+const offY = matched.filter((r) => Math.abs(r.dy) > 10);
+console.log(`y off by >10px       : ${offY.length}`);
+if (offY.length) {
+  console.log('\n-- vertical drift (ours - figma) --');
+  for (const r of offY.slice(0, 16))
+    console.log(`  ${String(r.text).padEnd(32)} dy=${r.dy > 0 ? '+' : ''}${r.dy}`);
+}
 
 if (badSize.length) {
   console.log('\n-- wrong font size (figma -> ours) --');

@@ -12,7 +12,7 @@ const videos = [
   <SectionHead title="Videos from the Kitchens" action="See all videos" />
   <div class="fz-videos">
     {videos.map((v) => (
-      <article class="fz-video fz-reveal fz-lift">
+      <article class="fz-video fz-lift">
         <div class="fz-video__media" style={shot(v.img)}>
           <span class="fz-video__kind">{v.kind}</span>
           <button type="button" class="fz-btn fz-btn--secondary fz-btn--sm fz-video__watch">Watch</button>
@@ -38,6 +38,9 @@ const videos = [
   }
 
   .fz-video {
+    height: var(--fz-video-h);
+    display: flex;
+    flex-direction: column;
     /* Frame 57: r=10 with shadow 0,14 blur30 black 15% — and no stroke. */
     border-radius: var(--fz-radius-lg);
     box-shadow: var(--fz-card-shadow);
@@ -47,7 +50,8 @@ const videos = [
 
   .fz-video__media {
     position: relative;
-    aspect-ratio: 384 / 230;
+    flex: 1 1 auto;
+    min-height: 0;
     padding: 10px;
     background-color: var(--fz-panel);
     background-image: var(--fz-shot);

@@ -13,7 +13,7 @@ const items = [
   <SectionHead title="What's fresh today" note="Live from the community" action="→" />
   <div class="fz-fresh">
     {items.map((p) => (
-      <article class="fz-prod fz-reveal fz-lift">
+      <article class="fz-prod fz-lift">
         <div class="fz-prod__media" style={shot(p.img)}>
           <span class="fz-prod__tag">{p.tag}</span>
           <button type="button" class="fz-btn fz-btn--primary fz-btn--sm fz-prod__buy">Buy</button>
@@ -43,6 +43,9 @@ const items = [
   }
 
   .fz-prod {
+    height: var(--fz-prod-h);
+    display: flex;
+    flex-direction: column;
     /* Frame 57: r=10 with shadow 0,14 blur30 black 15% — and no stroke. */
     border-radius: var(--fz-radius-lg);
     box-shadow: var(--fz-card-shadow);
@@ -52,7 +55,9 @@ const items = [
 
   .fz-prod__media {
     position: relative;
-    aspect-ratio: 282 / 150;
+    /* Rectangle 5: 282x125 */
+    height: 125px;
+    flex: 0 0 125px;
     padding: 10px;
     background-color: var(--fz-panel);
     background-image: var(--fz-shot);
@@ -83,7 +88,7 @@ const items = [
   }
 
   .fz-prod__body {
-    padding: 10px 12px 12px;
+    padding: 14px 20px 16px;
     display: flex;
     flex-direction: column;
     gap: 3px;

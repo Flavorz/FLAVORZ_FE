@@ -283,7 +283,7 @@ test.describe('surfaces match the Figma paint data', () => {
     expect(await style(page, '.fz-prod__tag', 'color')).toBe('rgb(236, 234, 235)');
   });
 
-  test('cards lift on hover without the reveal animation blocking it', async ({ page }) => {
+  test('cards lift on hover', async ({ page }) => {
     await page.goto('/fz/');
     const card = page.locator('.fz-reel').first();
     await card.scrollIntoViewIfNeeded();
@@ -293,4 +293,49 @@ test.describe('surfaces match the Figma paint data', () => {
       .poll(async () => card.evaluate((e) => getComputedStyle(e).translate))
       .toBe('0px -3px');
   });
+});
+
+
+test('no section is left invisible by an animation', async ({ page }) => {
+  // A scroll-driven reveal once left products, videos and leaderboards at
+  // opacity 0 on load. Content must never need an animation to be seen.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/fz/');
+  await page.waitForLoadState('networkidle');
+  const hidden = await page.evaluate(() =>
+    ['.fz-reel', '.fz-prod', '.fz-video', '.fz-board', '.fz-promo']
+      .map((s) => ({ s, op: getComputedStyle(document.querySelector(s)!).opacity }))
+      .filter((r) => Number(r.op) < 0.99)
+      .map((r) => r.s),
+  );
+  expect(hidden).toEqual([]);
+});
+
+test('section rhythm matches the frame', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/fz/');
+  await page.evaluate(() => document.fonts.ready);
+
+  const tops = await page.evaluate(() =>
+    Object.fromEntries(
+      [...document.querySelectorAll('h2')].map((h) => [
+        h.textContent?.trim(),
+        Math.round(h.getBoundingClientRect().top + scrollY),
+      ]),
+    ),
+  );
+
+  // Figma frame positions. The tolerance covers text-metric differences
+  // between Figma's layout engine and the browser's, which accumulate down
+  // the page; card and section heights themselves are exact.
+  const want: Record<string, number> = {
+    Reels: 753,
+    'Shop the pantry': 1201,
+    "What's fresh today": 1467,
+    'Videos from the Kitchens': 1886,
+    'Community leaders': 2395,
+  };
+  for (const [name, y] of Object.entries(want)) {
+    expect(Math.abs((tops[name] ?? 0) - y), `${name} at ${tops[name]} want ~${y}`).toBeLessThan(20);
+  }
 });

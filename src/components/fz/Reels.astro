@@ -13,7 +13,7 @@ const reels = [
   <SectionHead title="Reels" action="See all reels" />
   <div class="fz-reels">
     {reels.map((r) => (
-      <article class="fz-reel fz-reveal fz-lift">
+      <article class="fz-reel fz-lift">
         <div class="fz-reel__media" style={shot(r.img)}>
           <span class="fz-reel__kind">{r.kind}</span>
           <div class="fz-reel__who">
@@ -34,10 +34,6 @@ const reels = [
 </section>
 
 <style>
-  .fz-section {
-    margin-top: 34px;
-  }
-
   .fz-reels {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -45,6 +41,9 @@ const reels = [
   }
 
   .fz-reel {
+    height: var(--fz-reel-h);
+    display: flex;
+    flex-direction: column;
     /* Frame 57: r=10 with shadow 0,14 blur30 black 15% — and no stroke. */
     border-radius: var(--fz-radius-lg);
     box-shadow: var(--fz-card-shadow);
@@ -60,7 +59,9 @@ const reels = [
    */
   .fz-reel__media {
     position: relative;
-    aspect-ratio: 282 / 240;
+    /* 326 total card height minus the buy row. */
+    flex: 1 1 auto;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     padding: 10px;

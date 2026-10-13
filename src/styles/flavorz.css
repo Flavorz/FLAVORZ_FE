@@ -99,6 +99,19 @@
   --fz-search-h: 36px; /* Search bar 442x36, r=10, pad 8/20 */
   --fz-lang-h: 40px; /* Language 103x40, r=10, pad 0/16 */
   --fz-card-grid-gap: 20px;
+
+  /* ---- Vertical rhythm, derived from the frame's band positions ----
+   * heading top -> card top is 62px; a section's last row to the next
+   * heading is ~60px. The page is 3549 tall and these are what make it so. */
+  --fz-section-gap: 60px; /* last row of a section -> next heading */
+  --fz-head-gap: 62px; /* heading top -> its content top */
+
+  /* Card heights from the frames. */
+  --fz-reel-h: 326px; /* Frame 38: 282x326 */
+  --fz-prod-h: 301px; /* Frame 57: 282x301 */
+  --fz-video-h: 387px; /* Frame 40: 384x387 */
+  --fz-disc: 102px; /* pantry circle */
+  --fz-maker-photo: 120px;
 }
 
 /* Mobile type styles — the file has a dedicated Mobile/* set. */
@@ -286,6 +299,15 @@ body.fz {
   border-radius: var(--fz-radius-lg);
 }
 
+/*
+ * Section rhythm. This lives in the global sheet, not a component's scoped
+ * <style>: Astro scopes component CSS, so a shared class defined in one
+ * component silently applies to nothing else.
+ */
+.fz-section {
+  margin-top: var(--fz-section-gap);
+}
+
 /* A media placeholder until real photography lands. */
 .fz-media {
   background: var(--fz-panel);
@@ -295,44 +317,17 @@ body.fz {
 /* ---- Motion ----
  * Short, token-driven transitions. Everything here is disabled wholesale by
  * the prefers-reduced-motion rule further up. */
-@keyframes fz-rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 /*
- * Scroll-driven reveal. The shorthand resets animation-timeline, so the
- * longhands must come after it — declaring `animation: ... ; animation-timeline:`
- * in the wrong order silently leaves the element unanimated.
+ * Scroll-driven reveal was removed deliberately.
  *
- * Gated behind @supports so browsers without scroll-driven animation render
- * the finished state rather than a stuck opacity: 0.
+ * A view() timeline leaves the element in the animation's from-state whenever
+ * it is outside the entry range, which rendered whole sections at opacity 0 —
+ * products, videos and leaderboards were invisible on load. Content must never
+ * need an animation to run in order to be seen.
+ *
+ * The hover lift below is safe: it only ever adds to a fully visible element.
  */
-@supports (animation-timeline: view()) {
-  .fz-reveal {
-    animation-name: fz-rise;
-    animation-duration: 1ms; /* overridden by the timeline */
-    animation-fill-mode: both;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-    animation-timeline: view();
-    animation-range: entry 0% entry 60%;
-  }
-}
 
-/*
- * Hover lift.
- *
- * An element that also carries .fz-reveal cannot animate `transform` on hover:
- * the reveal animation owns that property with fill-mode both, and animations
- * win over regular declarations. So the lift is applied through a separate
- * custom property that the reveal does not touch.
- */
 .fz-lift {
   --fz-lift-y: 0px;
   translate: 0 var(--fz-lift-y);

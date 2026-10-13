@@ -40,7 +40,7 @@ const boards: Array<{ title: string; rows: Row[] }> = [
   <SectionHead title="Community leaders" note="This week. Placeholder, scoring rules to come." action="See full leaderboard" />
   <div class="fz-boards">
     {boards.map((b) => (
-      <article class="fz-board fz-reveal">
+      <article class="fz-board">
         <p class="fz-board__title"><i aria-hidden="true"></i>{b.title}</p>
         <ul>
           {b.rows.map((row) => (
@@ -67,7 +67,9 @@ const boards: Array<{ title: string; rows: Row[] }> = [
   .fz-board {
     background: var(--fz-panel);
     border-radius: var(--fz-radius-lg);
-    padding: 14px 16px;
+    /* Frame 210 is 234 tall. */
+    min-height: 234px;
+    padding: 20px 24px;
   }
 
   .fz-board__title {
@@ -77,7 +79,7 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     font-size: var(--fz-body-size);
     line-height: var(--fz-body-lh);
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 18px;
   }
 
   .fz-board__title i {
@@ -93,7 +95,7 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 9px;
+    gap: 16px;
   }
 
   .fz-board li {

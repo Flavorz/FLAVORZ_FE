@@ -3,9 +3,13 @@ const { title, note, action } = Astro.props;
 ---
 
 <div class="fz-head">
-  <h2>{title}</h2>
-  {note && <span class="fz-head__note">{note}</span>}
-  {action && <a class="fz-head__action" href="#">{action}</a>}
+  <div class="fz-head__main">
+    <h2>{title}</h2>
+    {note && <span class="fz-head__note">{note}</span>}
+  </div>
+  {action && (
+    <a class="fz-head__action" href="#">{action}</a>
+  )}
 </div>
 
 <style>
@@ -13,7 +17,8 @@ const { title, note, action } = Astro.props;
     display: flex;
     align-items: baseline;
     gap: 12px;
-    margin-bottom: 14px;
+    /* 62px from heading top to content top; the heading box is 38 tall. */
+    margin-bottom: calc(var(--fz-head-gap) - 38px);
   }
 
   .fz-head h2 {
