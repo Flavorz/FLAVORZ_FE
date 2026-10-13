@@ -9,7 +9,7 @@ import type { Leaderboard } from './types';
 /** Community leaderboards. The viewer's own row is marked, not hidden. */
 export function Leaderboards({ boards }: { boards: ReadonlyArray<Leaderboard> }) {
   return (
-    <Grid columns={{ minWidth: 260, max: 3 }} gap={4}>
+    <Grid columns={{ minWidth: 240, max: 3 }} gap={3} data-flavorz="leaderboards">
       {boards.map((board) => (
         <Card key={board.title} padding={4} variant="muted" height="100%">
           <Stack direction="vertical" gap={3}>

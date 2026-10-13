@@ -32,7 +32,14 @@ export function SiteHeader({
     <Section variant="transparent" paddingBlock={0} paddingInline={0}>
       <Stack direction="vertical" gap={0}>
         <Section variant="transparent" paddingBlock={2} paddingInline={6} dividers={['bottom']}>
-          <Stack direction="horizontal" gap={4} align="center" maxWidth={1400} width="100%">
+          <Stack
+            direction="horizontal"
+            gap={4}
+            align="center"
+            maxWidth={1400}
+            width="100%"
+            data-flavorz="header-top"
+          >
             <Stack direction="horizontal" gap={1.5} align="center">
               <span
                 aria-hidden="true"
@@ -55,7 +62,7 @@ export function SiteHeader({
               </Text>
             </Stack>
 
-            <StackItem size="fill">
+            <StackItem size="fill" data-flavorz="header-search">
               <TextInput
                 label="Search"
                 isLabelHidden
@@ -85,7 +92,7 @@ export function SiteHeader({
           <Stack direction="horizontal" gap={4} align="center" maxWidth={1400} width="100%">
             <Text type="supporting">{location}</Text>
             <StackItem size="fill">
-              <Stack direction="horizontal" gap={4} justify="end">
+              <Stack direction="horizontal" gap={4} justify="end" data-flavorz="header-nav">
                 {NAV.map((item) => (
                   <a key={item} href={`#${item.toLowerCase()}`} style={{ textDecoration: 'none' }}>
                     <Text type="label" color="primary">

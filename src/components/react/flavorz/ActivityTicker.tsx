@@ -13,10 +13,16 @@ import type { ActivityItem } from './types';
 export function ActivityTicker({ items }: { items: ReadonlyArray<ActivityItem> }) {
   return (
     <Section variant="muted" paddingBlock={1.5} paddingInline={6}>
-      <Stack direction="horizontal" gap={3} align="center" isScrollable>
+      <Stack
+        direction="horizontal"
+        gap={3}
+        align="center"
+        isScrollable
+        data-flavorz="ticker"
+      >
         <Badge label="Live" variant="error" />
         {items.map((item) => (
-          <Text key={item.id} type="supporting">
+          <Text key={item.id} type="supporting" style={{ whiteSpace: 'nowrap' }}>
             {item.text}
           </Text>
         ))}

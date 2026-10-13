@@ -6,14 +6,15 @@ import type { Category } from './types';
 /** "Shop the pantry" — round category tiles. */
 export function CategoryRow({ categories }: { categories: ReadonlyArray<Category> }) {
   return (
-    <Grid columns={{ minWidth: 110, max: 8 }} gap={3}>
+    <Grid columns={{ minWidth: 76, max: 8 }} gap={3}>
       {categories.map((c) => (
         <Stack key={c.id} direction="vertical" gap={1.5} align="center">
           <span
             aria-hidden="true"
             style={{
-              width: 92,
-              height: 92,
+              width: '100%',
+              aspectRatio: '1',
+              maxWidth: 92,
               borderRadius: '50%',
               backgroundColor: 'var(--color-background-muted)',
             }}

@@ -18,7 +18,7 @@ export function TierPanel({ name, tier }: { name: string; tier: ShopperTier }) {
 
   return (
     <Card padding={5} width="100%">
-      <Stack direction="horizontal" gap={5} align="center">
+      <Stack direction="horizontal" gap={5} align="center" data-flavorz="tier-panel">
         <Stack direction="vertical" gap={1.5} align="center">
           <Avatar name={name} size="xl" />
           <Badge label={`${tier.name} shopper`} variant="neutral" />

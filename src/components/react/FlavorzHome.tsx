@@ -34,15 +34,21 @@ import type { TenantConfig } from '../../lib/tenant/schema';
 /** Section heading with an optional trailing link. */
 function SectionHead({ title, note, action }: { title: string; note?: string; action?: string }) {
   return (
-    <Stack direction="horizontal" gap={3} align="center">
-      <Heading level={2}>{title}</Heading>
-      {note && <Text type="supporting">{note}</Text>}
+    <Stack direction="horizontal" gap={3} align="center" data-flavorz="section-head">
+      <StackItem size="fill">
+        {/*
+          Title and note stack on narrow screens rather than competing for one
+          line — at 402px the note was squeezing the heading into a wrap.
+        */}
+        <Stack direction="horizontal" gap={2} align="center" data-flavorz="section-title">
+          <Heading level={2}>{title}</Heading>
+          {note && <Text type="supporting">{note}</Text>}
+        </Stack>
+      </StackItem>
       {action && (
-        <StackItem size="fill">
-          <Stack direction="horizontal" justify="end">
-            <Text type="supporting">{action}</Text>
-          </Stack>
-        </StackItem>
+        <Text type="supporting" style={{ whiteSpace: 'nowrap' }}>
+          {action}
+        </Text>
       )}
     </Stack>
   );
@@ -68,7 +74,7 @@ function HomeInner({ tenant }: { tenant: TenantConfig }) {
         <Stack direction="vertical" gap={6} maxWidth={1240} width="100%">
           <TierPanel name="Sarath R" tier={TIER} />
 
-          <Grid columns={{ minWidth: 260, max: 3 }} gap={4}>
+          <Grid columns={{ minWidth: 170, max: 3 }} gap={3}>
             {PROMOS.map((p, i) => (
               <Card key={p.tag} padding={4} variant={i === 0 ? 'muted' : 'default'} height="100%">
                 <Stack direction="vertical" gap={2}>
@@ -91,7 +97,7 @@ function HomeInner({ tenant }: { tenant: TenantConfig }) {
 
           <Stack direction="vertical" gap={4}>
             <SectionHead title="Reels" action="See all reels" />
-            <Grid columns={{ minWidth: 240, max: 4 }} gap={4}>
+            <Grid columns={{ minWidth: 150, max: 4 }} gap={3}>
               {REELS.map((reel) => (
                 <ReelCard key={reel.id} reel={reel} />
               ))}
@@ -105,7 +111,7 @@ function HomeInner({ tenant }: { tenant: TenantConfig }) {
 
           <Stack direction="vertical" gap={4}>
             <SectionHead title="What's fresh today" note="Live from the community" />
-            <Grid columns={{ minWidth: 240, max: 4 }} gap={4}>
+            <Grid columns={{ minWidth: 150, max: 4 }} gap={3}>
               {FRESH.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -114,7 +120,7 @@ function HomeInner({ tenant }: { tenant: TenantConfig }) {
 
           <Stack direction="vertical" gap={4}>
             <SectionHead title="Videos from the Kitchens" action="See all videos" />
-            <Grid columns={{ minWidth: 300, max: 3 }} gap={4}>
+            <Grid columns={{ minWidth: 165, max: 3 }} gap={3}>
               {VIDEOS.map((v) => (
                 <Card key={v.id} padding={0} height="100%">
                   <Stack direction="vertical" gap={0} height="100%">
@@ -139,15 +145,18 @@ function HomeInner({ tenant }: { tenant: TenantConfig }) {
                       <Text type="supporting">
                         {v.maker.name} · {v.watchMinutes} min watch · {v.cheered} cheered
                       </Text>
-                      <Stack direction="horizontal" gap={2} align="center">
-                        <Text type="supporting">
-                          {v.product.name} · {v.product.size} · {formatInr(v.product.priceInr)}
-                        </Text>
+                      <Stack
+                        direction="horizontal"
+                        gap={2}
+                        align="center"
+                        data-flavorz="video-buy"
+                      >
                         <StackItem size="fill">
-                          <Stack direction="horizontal" justify="end">
-                            <Button label="Buy" variant="primary" size="sm" />
-                          </Stack>
+                          <Text type="supporting">
+                            {v.product.name} · {v.product.size} · {formatInr(v.product.priceInr)}
+                          </Text>
                         </StackItem>
+                        <Button label="Buy" variant="primary" size="sm" />
                       </Stack>
                     </Stack>
                   </Stack>
@@ -171,7 +180,7 @@ function HomeInner({ tenant }: { tenant: TenantConfig }) {
           </Stack>
 
           <Card padding={5} variant="muted" width="100%">
-            <Stack direction="horizontal" gap={4} align="center">
+            <Stack direction="horizontal" gap={4} align="center" data-flavorz="commission">
               <StackItem size="fill">
                 <Stack direction="vertical" gap={2}>
                   <Heading level={3}>Zero commission. 100% of the price goes to the maker.</Heading>

@@ -38,3 +38,85 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/*
+ * Mobile layout (matches the 402px Figma frame).
+ *
+ * Done in CSS rather than JS so the server-rendered HTML is already correct —
+ * a width check in React would flash the desktop layout before hydrating.
+ * Astryx's own tokens still drive every colour and size.
+ */
+@media (max-width: 640px) {
+  /* Header: brand row and search stack instead of sharing a line. */
+  [data-flavorz="header-top"] {
+    flex-wrap: wrap;
+    row-gap: var(--spacing-2);
+  }
+  [data-flavorz="header-search"] {
+    order: 10;
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  /* Nav sits left under the header, scrolling if it runs out of room. */
+  [data-flavorz="header-nav"] {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  [data-flavorz="header-nav"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Tier panel: avatar above the text, not beside it. */
+  [data-flavorz="tier-panel"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Leaderboards scroll horizontally, as the design shows. */
+  [data-flavorz="leaderboards"] {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  [data-flavorz="leaderboards"] > * {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+  [data-flavorz="leaderboards"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The live ticker stays one scrolling row instead of wrapping to a block. */
+  [data-flavorz="ticker"] {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  [data-flavorz="ticker"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Section title and its note stack when the line is tight. */
+  [data-flavorz="section-title"] {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  /*
+   * In a 2-up card the product line and its Buy button cannot share a row —
+   * the button label truncated to "B...". Wrap instead of squeezing.
+   */
+  [data-flavorz="video-buy"] {
+    flex-wrap: wrap;
+    row-gap: var(--spacing-2);
+  }
+
+  /* The zero-commission banner stacks its two halves. */
+  [data-flavorz="commission"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
