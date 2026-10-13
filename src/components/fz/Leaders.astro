@@ -1,9 +1,38 @@
 ---
 import SectionHead from './SectionHead.astro';
-const boards = [
-  { title:'Super shoppers', rows:[['1','Meena','Platinum'],['2','Rekha K','Gold'],['3','You','Silver']] },
-  { title:'Leading comments', rows:[['1','Meena','48 comments'],['2','Ganesh M','31 comments'],['3','Rekha K','22 comments']] },
-  { title:'Content leaders', rows:[['1','Lakshmi amma','12 posts'],['2','Savitri Rao','9 posts'],['3','Radha Devi','7 posts']] },
+interface Row {
+  rank: string;
+  name: string;
+  detail: string;
+  /** Tier names render as a filled pill; metrics render as plain text. */
+  isTier?: boolean;
+}
+
+const boards: Array<{ title: string; rows: Row[] }> = [
+  {
+    title: 'Super shoppers',
+    rows: [
+      { rank: '1', name: 'Meena', detail: 'Platinum', isTier: true },
+      { rank: '2', name: 'Rekha K', detail: 'Gold', isTier: true },
+      { rank: '3', name: 'You', detail: 'Silver', isTier: true },
+    ],
+  },
+  {
+    title: 'Leading comments',
+    rows: [
+      { rank: '1', name: 'Meena', detail: '48 comments' },
+      { rank: '2', name: 'Ganesh M', detail: '31 comments' },
+      { rank: '3', name: 'Rekha K', detail: '22 comments' },
+    ],
+  },
+  {
+    title: 'Content leaders',
+    rows: [
+      { rank: '1', name: 'Lakshmi amma', detail: '12 posts' },
+      { rank: '2', name: 'Savitri Rao', detail: '9 posts' },
+      { rank: '3', name: 'Radha Devi', detail: '7 posts' },
+    ],
+  },
 ];
 ---
 
@@ -14,12 +43,12 @@ const boards = [
       <article class="fz-board">
         <p class="fz-board__title"><i aria-hidden="true"></i>{b.title}</p>
         <ul>
-          {b.rows.map(([rank, name, detail]) => (
+          {b.rows.map((row) => (
             <li>
-              <span class="fz-board__rank">{rank}</span>
+              <span class="fz-board__rank">{row.rank}</span>
               <span class="fz-avatar fz-avatar--xs" aria-hidden="true"></span>
-              <span class="fz-board__name">{name}</span>
-              <span class:list={['fz-board__detail', detail.includes(' ') ? '' : 'is-pill']}>{detail}</span>
+              <span class="fz-board__name">{row.name}</span>
+              <span class:list={['fz-board__detail', row.isTier && 'is-pill']}>{row.detail}</span>
             </li>
           ))}
         </ul>
