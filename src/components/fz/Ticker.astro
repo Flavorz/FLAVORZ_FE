@@ -39,9 +39,9 @@ const items = [
     gap: 5px;
     background: #e8384f;
     color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 9px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    padding: 2px 9px;
     border-radius: var(--fz-radius-pill);
     flex: 0 0 auto;
   }
@@ -54,8 +54,9 @@ const items = [
   }
 
   .fz-ticker__item {
-    font-size: 12px;
-    line-height: 16px;
+    /* Body text: 14px/18 */
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
     white-space: nowrap;
     flex: 0 0 auto;
   }

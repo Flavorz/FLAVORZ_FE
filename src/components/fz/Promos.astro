@@ -50,8 +50,11 @@ const promos = [
   }
 
   .fz-promo__tag {
-    font-size: 10px;
-    letter-spacing: 0.08em;
+    /* Capital text: 14px/18 w500 */
+    font-size: var(--fz-capital-size);
+    line-height: var(--fz-capital-lh);
+    font-weight: 500;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     opacity: 0.85;
   }
@@ -65,8 +68,9 @@ const promos = [
   }
 
   .fz-promo__body {
-    font-size: 12px;
-    line-height: 17px;
+    /* Para text: 16px/21 */
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
     opacity: 0.9;
   }
 

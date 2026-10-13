@@ -38,8 +38,16 @@ test.describe('desktop (1440 frame)', () => {
       return { h1Family: h1.fontFamily, h1Size: h1.fontSize, bodyFamily: body.fontFamily };
     });
     expect(type.h1Family).toContain('DM Serif Display');
-    expect(type.h1Size).toBe('28px'); // H1 style
+    // The welcome heading is the H2 style (18px/25) in the frame; the 28px H1
+    // style is used by the section headings.
+    expect(type.h1Size).toBe('18px');
     expect(type.bodyFamily).toContain('DM Sans');
+
+    const sectionSize = await page.evaluate(() => {
+      const h = [...document.querySelectorAll('h2')].find((e) => e.textContent?.trim() === 'Reels');
+      return h ? getComputedStyle(h).fontSize : null;
+    });
+    expect(sectionSize).toBe('28px');
   });
 
   test('loads both typefaces, not fallbacks', async ({ page }) => {
@@ -107,7 +115,8 @@ test.describe('mobile (402 frame)', () => {
     const size = await page.evaluate(
       () => getComputedStyle(document.querySelector('h1')!).fontSize,
     );
-    expect(size).toBe('18px'); // Mobile/Logo font H1
+    // Mobile/H2 is 16px/22; the welcome heading uses it on the 402 frame.
+    expect(size).toBe('16px');
   });
 
   test('matches the mobile frame column counts', async ({ page }) => {

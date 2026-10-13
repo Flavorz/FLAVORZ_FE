@@ -75,6 +75,7 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     align-items: center;
     gap: 7px;
     font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
     font-weight: 600;
     margin-bottom: 10px;
   }
@@ -99,7 +100,8 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
   }
 
   .fz-board__rank {
@@ -121,7 +123,7 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     color: var(--fz-primary-text);
     padding: 2px 9px;
     border-radius: var(--fz-radius-pill);
-    font-size: 10px;
+    font-size: var(--fz-body-size);
   }
 
   @media (max-width: 860px) {

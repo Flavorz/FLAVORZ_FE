@@ -72,9 +72,10 @@ const reels = [
   .fz-reel__kind {
     align-self: flex-start;
     background: rgba(255, 255, 255, 0.78);
-    font-size: 10px;
+    font-size: var(--fz-capital-size);
+    line-height: var(--fz-capital-lh);
     font-weight: 500;
-    padding: 3px 8px;
+    padding: 4px 6px;
     border-radius: var(--fz-radius-sm);
   }
 
@@ -85,14 +86,16 @@ const reels = [
   }
 
   .fz-reel__maker {
-    font-size: var(--fz-name-size);
-    line-height: var(--fz-name-lh);
-    font-weight: 600;
+    /* Product names: 16px/22 Serif Display */
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    font-weight: 400;
   }
 
   .fz-reel__caption {
-    font-size: 12px;
-    line-height: 16px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
     opacity: 0.85;
   }
 
@@ -108,7 +111,9 @@ const reels = [
   }
 
   .fz-reel__product {
-    font-size: 12px;
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
     color: var(--fz-subheading);
     white-space: nowrap;
     overflow: hidden;
@@ -116,7 +121,8 @@ const reels = [
   }
 
   .fz-reel__price {
-    font-size: var(--fz-body-size);
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
     font-weight: 600;
   }
 

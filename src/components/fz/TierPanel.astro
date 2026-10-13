@@ -68,7 +68,7 @@ const tiers = [
     border-radius: 50%;
     background: var(--fz-panel);
     color: var(--fz-panel-text);
-    font-size: 12px;
+    font-size: var(--fz-body-size);
   }
 
   .fz-tier__badge {
@@ -77,8 +77,8 @@ const tiers = [
     gap: 6px;
     background: var(--fz-primary);
     color: var(--fz-primary-text);
-    font-size: 11px;
-    padding: 4px 10px;
+    font-size: var(--fz-body-size);
+    padding: 4px 14px;
     border-radius: var(--fz-radius-pill);
     white-space: nowrap;
   }
@@ -91,19 +91,21 @@ const tiers = [
   }
 
   .fz-tier__main h1 {
-    font-size: var(--fz-h1-size);
-    line-height: var(--fz-h1-lh);
+    /* 18px/25 Serif in the frame — it is not a section heading. */
+    font-size: var(--fz-h2-size);
+    line-height: var(--fz-h2-lh);
   }
 
   .fz-tier__sub {
     color: var(--fz-subheading);
-    font-size: 12px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
     margin-top: 2px;
   }
 
   .fz-tier__spend {
-    font-size: var(--fz-body-size);
-    line-height: var(--fz-body-lh);
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
     margin-top: 10px;
   }
 
@@ -145,7 +147,8 @@ const tiers = [
   .fz-tier__scale li {
     display: flex;
     flex-direction: column;
-    font-size: 12px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
   }
 
   .fz-tier__scale li:nth-child(2) {
@@ -164,13 +167,13 @@ const tiers = [
     background: var(--fz-panel);
     border-radius: var(--fz-radius-md);
     padding: 14px 16px;
-    font-size: 12px;
-    line-height: 19px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
     color: var(--fz-panel-text);
   }
 
   .fz-tier__perksHead {
-    font-size: 10px;
+    font-size: var(--fz-body-size);
     letter-spacing: 0.06em;
     color: var(--fz-subheading);
     margin-bottom: 6px;

@@ -24,13 +24,13 @@ const { title, note, action } = Astro.props;
   }
 
   .fz-head__note {
-    font-size: 12px;
+    font-size: var(--fz-body-size);
     color: var(--fz-subheading);
   }
 
   .fz-head__action {
     margin-inline-start: auto;
-    font-size: 12px;
+    font-size: var(--fz-body-size);
     color: var(--fz-subheading);
     text-decoration: none;
     white-space: nowrap;

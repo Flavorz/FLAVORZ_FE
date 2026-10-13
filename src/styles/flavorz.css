@@ -243,9 +243,8 @@ body.fz {
 }
 
 .fz-btn--sm {
+  /* Button text is 16px/21 w600 in the frames regardless of size. */
   padding: 4px 12px;
-  font-size: var(--fz-body-size);
-  line-height: var(--fz-body-lh);
 }
 
 /* ---- Tag ---- */

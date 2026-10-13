@@ -63,9 +63,11 @@ const items = [
     top: 10px;
     left: 10px;
     background: rgba(255, 255, 255, 0.82);
-    font-size: 10px;
+    /* Capital text: 14px/18 w500 */
+    font-size: var(--fz-capital-size);
+    line-height: var(--fz-capital-lh);
     font-weight: 500;
-    padding: 3px 8px;
+    padding: 4px 6px;
     border-radius: var(--fz-radius-sm);
   }
 
@@ -83,7 +85,9 @@ const items = [
   }
 
   .fz-prod__size {
-    font-size: 11px;
+    /* Body text: 14px/18 */
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
     color: var(--fz-subheading);
   }
 
@@ -94,7 +98,9 @@ const items = [
   }
 
   .fz-prod__price {
-    font-size: var(--fz-body-size);
+    /* Para text 16px/21 */
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
     font-weight: 600;
     display: flex;
     gap: 6px;
@@ -104,14 +110,17 @@ const items = [
   .fz-prod__price s {
     font-weight: 400;
     color: var(--fz-subheading);
-    font-size: 11px;
+    font-size: var(--fz-body-size);
   }
 
   .fz-prod__maker {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 11px;
+    /* Maker names are Serif Display 16px/22 */
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
     margin-top: 2px;
   }
 
@@ -124,7 +133,8 @@ const items = [
   }
 
   .fz-prod__proof {
-    font-size: 11px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
     color: var(--fz-subheading);
   }
 

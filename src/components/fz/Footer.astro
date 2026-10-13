@@ -41,7 +41,9 @@ const cols = [
 
   .fz-footer__name {
     font-family: var(--fz-font-display);
-    font-size: 24px;
+    /* Logo Font 36px/49 */
+    font-size: var(--fz-logo-size);
+    line-height: var(--fz-logo-lh);
   }
 
   .fz-footer__cols {
@@ -51,14 +53,17 @@ const cols = [
   }
 
   .fz-footer__h {
-    font-size: 12px;
+    /* 16px/21 w600 */
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
     font-weight: 600;
     margin-bottom: 7px;
   }
 
   .fz-footer__l {
-    font-size: 11px;
-    line-height: 17px;
+    /* Para text 16px/21 */
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
   }
 
   @media (max-width: 860px) {
