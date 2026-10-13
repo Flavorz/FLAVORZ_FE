@@ -39,12 +39,12 @@ const items = [
   .fz-fresh {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: var(--fz-card-grid-gap); /* 20 web / 12 mobile */
   }
 
   .fz-prod {
     border: 1px solid #e9e4e5;
-    border-radius: var(--fz-radius-md);
+    border-radius: var(--fz-radius-lg); /* 10px in the frames */
     overflow: hidden;
   }
 

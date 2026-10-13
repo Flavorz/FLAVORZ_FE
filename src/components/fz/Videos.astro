@@ -34,12 +34,12 @@ const videos = [
   .fz-videos {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: var(--fz-card-grid-gap);
   }
 
   .fz-video {
     border: 1px solid #e9e4e5;
-    border-radius: var(--fz-radius-md);
+    border-radius: var(--fz-radius-lg); /* 10px in the frames */
     overflow: hidden;
   }
 

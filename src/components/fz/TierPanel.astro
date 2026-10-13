@@ -45,12 +45,12 @@ const tiers = [
   .fz-tier {
     display: grid;
     grid-template-columns: 150px 1fr 280px;
-    gap: 28px;
+    gap: var(--fz-gap-40); /* Frame 180 gap=40 */
     align-items: center;
     border: 1px solid #e9e4e5;
     border-radius: var(--fz-radius-lg);
-    padding: 22px 26px;
-    margin-top: 20px;
+    padding: var(--fz-gap-40); /* Frame 180 pad=40 all round */
+    margin-top: var(--fz-gap-20);
   }
 
   .fz-tier__who {
@@ -110,7 +110,7 @@ const tiers = [
   .fz-tier__track {
     position: relative;
     height: 4px;
-    border-radius: 2px;
+    border-radius: var(--fz-radius-pill);
     background: #e4dcde;
     margin-top: 16px;
   }
@@ -119,7 +119,7 @@ const tiers = [
     position: absolute;
     inset: 0 auto 0 0;
     width: 50%;
-    border-radius: 2px;
+    border-radius: var(--fz-radius-pill);
     background: var(--fz-primary);
   }
 
@@ -184,7 +184,9 @@ const tiers = [
   @media (max-width: 860px) {
     .fz-tier {
       grid-template-columns: 1fr;
-      gap: 18px;
+      /* Mobile Frame 211: pad=18,12 gap=14 */
+      gap: 14px;
+      padding: 18px 12px;
     }
     .fz-tier__who {
       flex-direction: row;

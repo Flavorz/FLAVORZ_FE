@@ -21,14 +21,14 @@ const promos = [
   .fz-promos {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 22px;
+    gap: var(--fz-gap-20);
+    margin-top: var(--fz-gap-20);
   }
 
   .fz-promo {
-    border-radius: var(--fz-radius-md);
+    border-radius: var(--fz-radius-md); /* r=8 in the frame */
     padding: 18px 20px;
-    min-height: 152px;
+    min-height: 152px; /* 385x152 */
     display: flex;
     flex-direction: column;
     gap: 8px;

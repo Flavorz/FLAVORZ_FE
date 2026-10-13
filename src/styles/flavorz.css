@@ -63,16 +63,34 @@
   --fz-name-size: 18px;
   --fz-name-lh: 23px;
 
-  /* ---- Layout ---- */
+  /* ---- Layout (read from the 1440 frame) ---- */
   --fz-page-width: 1440px;
   --fz-content-width: 1200px;
-  --fz-gutter: 120px;
+  --fz-gutter: 80px; /* Frame 158: pad=10,80,10,80 */
 
-  /* ---- Radii (measured from the frames) ---- */
+  /* ---- Radii: the design uses exactly these four ---- */
   --fz-radius-sm: 4px;
   --fz-radius-md: 8px;
-  --fz-radius-lg: 12px;
-  --fz-radius-pill: 999px;
+  --fz-radius-lg: 10px;
+  --fz-radius-pill: 100px;
+
+  /* ---- Spacing scale, from the frames' itemSpacing values ---- */
+  --fz-gap-2: 2px;
+  --fz-gap-4: 4px;
+  --fz-gap-5: 5px;
+  --fz-gap-6: 6px;
+  --fz-gap-8: 8px;
+  --fz-gap-10: 10px;
+  --fz-gap-12: 12px;
+  --fz-gap-16: 16px;
+  --fz-gap-20: 20px; /* card grids on web */
+  --fz-gap-24: 24px; /* leaderboards */
+  --fz-gap-40: 40px; /* tier panel */
+
+  /* ---- Component sizes read from the frames ---- */
+  --fz-search-h: 36px; /* Search bar 442x36, r=10, pad 8/20 */
+  --fz-lang-h: 40px; /* Language 103x40, r=10, pad 0/16 */
+  --fz-card-grid-gap: 20px;
 }
 
 /* Mobile type styles — the file has a dedicated Mobile/* set. */
@@ -94,11 +112,20 @@
     --fz-button-lh: 17px;
     --fz-name-size: 13px;
     --fz-name-lh: 17px;
+    /* Mobile frame is 402 wide with a 370 content column. */
     --fz-gutter: 16px;
+    --fz-content-width: 370px;
+    --fz-card-grid-gap: 12px;
   }
 }
 
 /* ---- Base ---- */
+/* The UA stylesheet gives body an 8px margin, which shrank the content
+   column by 16px and made every width measurement wrong. */
+body.fz {
+  margin: 0;
+}
+
 .fz {
   font-family: var(--fz-font-body);
   font-size: var(--fz-body-size);
@@ -141,11 +168,32 @@
 }
 
 /* The content column: 1200px centred inside a 1440px page. */
+/*
+ * The content column: 1200px centred in a 1440px page, i.e. an 80px gutter.
+ * On mobile the frame is 402 wide with a 370 column, so a 16px gutter.
+ */
 .fz-shell {
   width: 100%;
   max-width: var(--fz-content-width);
   margin-inline: auto;
-  padding-inline: 16px;
+  padding-inline: 0;
+}
+
+@media (max-width: 1360px) {
+  .fz-shell {
+    padding-inline: var(--fz-gutter);
+  }
+}
+
+@media (max-width: 860px) {
+  .fz-shell {
+    /* 402 frame has a 370 column: 16px each side. max-width alone does it —
+       adding a width calc on top subtracted the gutter twice. */
+    max-width: var(--fz-content-width);
+    width: auto;
+    margin-inline: var(--fz-gutter);
+    padding-inline: 0;
+  }
 }
 
 /* ---- Buttons, to the file's Primary/Secondary specs ---- */
@@ -160,7 +208,7 @@
   font-size: var(--fz-button-size);
   line-height: var(--fz-button-lh);
   font-weight: 600;
-  padding: 9px 16px;
+  padding: 8px 16px;
   border-radius: var(--fz-radius-md);
   transition: background-color 120ms ease;
 }
@@ -195,7 +243,7 @@
 }
 
 .fz-btn--sm {
-  padding: 6px 12px;
+  padding: 4px 12px;
   font-size: var(--fz-body-size);
   line-height: var(--fz-body-lh);
 }
@@ -220,7 +268,7 @@
 .fz-card {
   background: var(--fz-site-bg);
   border: 1px solid #e9e4e5;
-  border-radius: var(--fz-radius-lg);
+  border-radius: var(--fz-radius-lg); /* 10px */
   overflow: hidden;
 }
 

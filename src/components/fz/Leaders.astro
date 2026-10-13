@@ -61,12 +61,12 @@ const boards: Array<{ title: string; rows: Row[] }> = [
   .fz-boards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: var(--fz-gap-24); /* Frame 210 gap=24 */
   }
 
   .fz-board {
     background: var(--fz-panel);
-    border-radius: var(--fz-radius-md);
+    border-radius: var(--fz-radius-lg);
     padding: 14px 16px;
   }
 

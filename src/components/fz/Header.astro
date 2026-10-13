@@ -102,7 +102,7 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     place-items: center;
     width: 28px;
     height: 28px;
-    border-radius: 6px;
+    border-radius: var(--fz-radius-md);
     background: #e8384f;
     color: #fff;
     font-family: var(--fz-font-display);
@@ -137,9 +137,11 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     font-size: var(--fz-body-size);
     line-height: var(--fz-body-lh);
     color: var(--fz-text);
-    padding: 9px 36px 9px 34px;
+    /* Search bar 442x36, r=10, pad 8/20 */
+    height: var(--fz-search-h);
+    padding: 8px 40px 8px 38px;
     border: 1px solid #ded7d9;
-    border-radius: var(--fz-radius-pill);
+    border-radius: var(--fz-radius-lg);
     background: var(--fz-site-bg);
   }
 
@@ -196,9 +198,11 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    /* Language 103x40, r=10, pad 0/16 */
+    height: var(--fz-lang-h);
     border: 1px solid #ded7d9;
-    border-radius: var(--fz-radius-sm);
-    padding: 4px 8px;
+    border-radius: var(--fz-radius-lg);
+    padding: 0 16px;
     color: var(--fz-subheading);
     font-size: 12px;
   }
