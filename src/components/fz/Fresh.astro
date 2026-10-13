@@ -1,10 +1,11 @@
 ---
+import { shot } from '../../lib/shot';
 import SectionHead from './SectionHead.astro';
 const items = [
-  { tag:'Harvest', size:'3 kg', name:'Badami mangoes', price:'₹899', was:'₹990', maker:'Lakshmi Amma', ago:'2h ago', proof:'12 bought in the last hour' },
-  { tag:'Fresh batch', size:'250 g', name:'Kodubale', price:'₹240', maker:'Savitri Rao', ago:'3h ago', proof:'96 cheered' },
-  { tag:'Harvest', size:'500 g', name:'Avarekalu', price:'₹120', maker:'Ganesh K', ago:'3h ago' },
-  { tag:'15% off', size:'200 g', name:'Idli podi', price:'₹160', was:'₹190', maker:'Radha Devi', proof:'48 neighbours bought this' },
+  { tag:'Harvest', size:'3 kg', name:'Badami mangoes', price:'₹899', was:'₹990', maker:'Lakshmi Amma', ago:'2h ago', proof:'12 bought in the last hour', img:'/img/products/badami-mangoes.jpg' },
+  { tag:'Fresh batch', size:'250 g', name:'Kodubale', price:'₹240', maker:'Savitri Rao', ago:'3h ago', proof:'96 cheered', img:'/img/products/kodubale.jpg' },
+  { tag:'Harvest', size:'500 g', name:'Avarekalu', price:'₹120', maker:'Ganesh K', ago:'3h ago', img:'/img/products/avarekalu.jpg' },
+  { tag:'15% off', size:'200 g', name:'Idli podi', price:'₹160', was:'₹190', maker:'Radha Devi', proof:'48 neighbours bought this', img:'/img/products/idli-podi.jpg' },
 ];
 ---
 
@@ -13,7 +14,7 @@ const items = [
   <div class="fz-fresh">
     {items.map((p) => (
       <article class="fz-prod">
-        <div class="fz-prod__media fz-media">
+        <div class="fz-prod__media" style={shot(p.img)}>
           <span class="fz-prod__tag">{p.tag}</span>
           <button type="button" class="fz-btn fz-btn--primary fz-btn--sm fz-prod__buy">Buy</button>
         </div>
@@ -51,6 +52,10 @@ const items = [
     position: relative;
     aspect-ratio: 282 / 150;
     padding: 10px;
+    background-color: var(--fz-panel);
+    background-image: var(--fz-shot);
+    background-size: cover;
+    background-position: center;
   }
 
   .fz-prod__tag {

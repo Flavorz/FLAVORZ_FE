@@ -1,9 +1,10 @@
 ---
+import { shot } from '../../lib/shot';
 import SectionHead from './SectionHead.astro';
 const videos = [
-  { kind:'Making', title:'How Lakshmi Amma stone-grinds idli podi', meta:'Lakshmi Amma . 2 min watch . 214 cheered', product:'Idli podi . 200g', price:'₹ 120' },
-  { kind:'Harvest', title:'A morning in the avarekalu fields', meta:'Ganesh K . 3 min watch . 141 cheered', product:'Avarekalu . 500g', price:'₹ 120' },
-  { kind:'Packing', title:'Gongura pickle, jar by jar', meta:'Savitri Rao . 2 min watch . 96 cheered', product:'Gongura . 300g', price:'₹ 210' },
+  { kind:'Making', title:'How Lakshmi Amma stone-grinds idli podi', meta:'Lakshmi Amma . 2 min watch . 214 cheered', product:'Idli podi . 200g', price:'₹ 120', img:'/img/videos/idli-podi.jpg' },
+  { kind:'Harvest', title:'A morning in the avarekalu fields', meta:'Ganesh K . 3 min watch . 141 cheered', product:'Avarekalu . 500g', price:'₹ 120', img:'/img/videos/avarekalu-fields.jpg' },
+  { kind:'Packing', title:'Gongura pickle, jar by jar', meta:'Savitri Rao . 2 min watch . 96 cheered', product:'Gongura . 300g', price:'₹ 210', img:'/img/videos/gongura.jpg' },
 ];
 ---
 
@@ -12,7 +13,7 @@ const videos = [
   <div class="fz-videos">
     {videos.map((v) => (
       <article class="fz-video">
-        <div class="fz-video__media fz-media">
+        <div class="fz-video__media" style={shot(v.img)}>
           <span class="fz-video__kind">{v.kind}</span>
           <button type="button" class="fz-btn fz-btn--secondary fz-btn--sm fz-video__watch">Watch</button>
         </div>
@@ -46,6 +47,10 @@ const videos = [
     position: relative;
     aspect-ratio: 384 / 230;
     padding: 10px;
+    background-color: var(--fz-panel);
+    background-image: var(--fz-shot);
+    background-size: cover;
+    background-position: center;
   }
 
   .fz-video__kind {

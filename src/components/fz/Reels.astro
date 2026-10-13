@@ -1,10 +1,11 @@
 ---
+import { shot } from '../../lib/shot';
 import SectionHead from './SectionHead.astro';
 const reels = [
-  { kind: 'Making', maker: 'Lakshmi Amma', caption: 'Grinding idli podi', product: 'Idli podi', price: '₹ 120' },
-  { kind: 'Harvest', maker: 'Ganesh K', caption: 'Avarekalu this morning', product: 'Avarekalu', price: '₹ 160' },
-  { kind: 'Packing', maker: 'Savitri Rao', caption: 'Packing gongura pickle', product: 'Gongura', price: '₹ 210' },
-  { kind: 'Unboxing', maker: 'Rekha K', caption: 'Opening her jaggery order', product: 'Jaggery', price: '₹ 150' },
+  { kind: 'Making', maker: 'Lakshmi Amma', caption: 'Grinding idli podi', product: 'Idli podi', price: '₹ 120', img: '/img/reels/idli-podi.jpg' },
+  { kind: 'Harvest', maker: 'Ganesh K', caption: 'Avarekalu this morning', product: 'Avarekalu', price: '₹ 160', img: '/img/reels/avarekalu.jpg' },
+  { kind: 'Packing', maker: 'Savitri Rao', caption: 'Packing gongura pickle', product: 'Gongura', price: '₹ 210', img: '/img/reels/gongura.jpg' },
+  { kind: 'Unboxing', maker: 'Rekha K', caption: 'Opening her jaggery order', product: 'Jaggery', price: '₹ 150', img: '/img/reels/jaggery.jpg' },
 ];
 ---
 
@@ -13,7 +14,7 @@ const reels = [
   <div class="fz-reels">
     {reels.map((r) => (
       <article class="fz-reel">
-        <div class="fz-reel__media fz-media">
+        <div class="fz-reel__media" style={shot(r.img)}>
           <span class="fz-reel__kind">{r.kind}</span>
           <div class="fz-reel__who">
             <p class="fz-reel__maker">{r.maker}</p>
@@ -49,13 +50,23 @@ const reels = [
     overflow: hidden;
   }
 
+  /*
+   * Text sits ON the photograph here, so the image is a background rather than
+   * an <img>: an image in the flow pushes the overlay content below it.
+   * --fz-shot is set per card; the panel colour shows through until the file
+   * exists, so a missing photo degrades to the design's placeholder.
+   */
   .fz-reel__media {
     position: relative;
     aspect-ratio: 282 / 240;
-    padding: 10px;
     display: flex;
     flex-direction: column;
+    padding: 10px;
     color: var(--fz-panel-text);
+    background-color: var(--fz-panel);
+    background-image: var(--fz-shot);
+    background-size: cover;
+    background-position: center;
   }
 
   .fz-reel__kind {
@@ -69,6 +80,8 @@ const reels = [
 
   .fz-reel__who {
     margin-top: auto;
+    /* Keep the caption legible over photography. */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
   }
 
   .fz-reel__maker {

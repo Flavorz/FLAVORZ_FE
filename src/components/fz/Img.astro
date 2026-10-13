@@ -1,0 +1,66 @@
+---
+/**
+ * Image with a graceful placeholder.
+ *
+ * Real photography is not in the repo yet, so every image falls back to the
+ * design's panel colour rather than a broken-image icon. Dropping a file into
+ * public/img/ is all that is needed to switch one on.
+ *
+ * `ratio` keeps the box reserved before the image loads, so nothing shifts.
+ */
+interface Props {
+  src?: string;
+  alt: string;
+  ratio: string;
+  radius?: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+const {
+  src,
+  alt,
+  ratio,
+  radius = '0',
+  class: className = '',
+  loading = 'lazy',
+} = Astro.props;
+---
+
+<span
+  class:list={['fz-img', className]}
+  style={`--fz-img-ratio:${ratio};--fz-img-radius:${radius}`}
+>
+  {
+    src ? (
+      <img src={src} alt={alt} loading={loading} decoding="async" />
+    ) : (
+      <span class="fz-img__ph" role="img" aria-label={alt} />
+    )
+  }
+</span>
+
+<style>
+  .fz-img {
+    display: block;
+    position: relative;
+    aspect-ratio: var(--fz-img-ratio);
+    border-radius: var(--fz-img-radius);
+    overflow: hidden;
+    background: var(--fz-panel);
+  }
+
+  .fz-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .fz-img__ph {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--fz-panel);
+  }
+</style>

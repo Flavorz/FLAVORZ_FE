@@ -1,10 +1,11 @@
 ---
+import { shot } from '../../lib/shot';
 import SectionHead from './SectionHead.astro';
 const makers = [
-  { name:'Lakshmi Amma', meta:'Madurai · 2.4k' },
-  { name:'Savitri Rao', meta:'Guntur · 1.9k' },
-  { name:'Ganesh K', meta:'Dharwad · 1.2k' },
-  { name:'Radha Devi', meta:'Mysore · 640' },
+  { name:'Lakshmi Amma', meta:'Madurai · 2.4k', img:'/img/makers/lakshmi-amma.jpg' },
+  { name:'Savitri Rao', meta:'Guntur · 1.9k', img:'/img/makers/savitri-rao.jpg' },
+  { name:'Ganesh K', meta:'Dharwad · 1.2k', img:'/img/makers/ganesh-k.jpg' },
+  { name:'Radha Devi', meta:'Mysore · 640', img:'/img/makers/radha-devi.jpg' },
 ];
 ---
 
@@ -13,7 +14,7 @@ const makers = [
   <ul class="fz-makers">
     {makers.map((m) => (
       <li>
-        <span class="fz-makers__photo fz-media" aria-hidden="true"></span>
+        <span class="fz-makers__photo" style={shot(m.img)} aria-hidden="true"></span>
         <p class="fz-makers__name">{m.name}</p>
         <p class="fz-makers__meta">{m.meta}</p>
       </li>
@@ -42,6 +43,10 @@ const makers = [
     width: 120px;
     height: 120px;
     border-radius: 50%;
+    background-color: var(--fz-panel);
+    background-image: var(--fz-shot);
+    background-size: cover;
+    background-position: center;
   }
 
   .fz-makers__name {
