@@ -1,0 +1,309 @@
+---
+/**
+ * Site header, built to the Figma frame.
+ *
+ * Three rows in the design:
+ *   1. wordmark · search · social · online count · language · profile
+ *   2. location · primary nav
+ *   3. live activity ticker (its own component)
+ */
+const nav = ['Offers', 'Community', 'Orders', 'Shop'];
+const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
+---
+
+<header class="fz-header">
+  <div class="fz-shell fz-header__top">
+    <a class="fz-brand" href="/">
+      <span class="fz-brand__mark" aria-hidden="true">f</span>
+      <span class="fz-brand__name">Flavorz</span>
+    </a>
+
+    <form class="fz-search" role="search">
+      <svg class="fz-search__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+        <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        ></path>
+      </svg>
+      <input
+        type="search"
+        aria-label="Search"
+        placeholder='Search "avarekalu", "podi", "Lakshmi Amma"'
+      />
+      <button type="button" class="fz-search__mic" aria-label="Search by voice">
+        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+          <rect x="6" y="2" width="4" height="7" rx="2" fill="currentColor"></rect>
+          <path
+            d="M4 8a4 4 0 0 0 8 0M8 12v2"
+            stroke="currentColor"
+            stroke-width="1.4"
+            fill="none"
+            stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </form>
+
+    <div class="fz-header__meta">
+      <span class="fz-online"><i aria-hidden="true"></i>{online} online now</span>
+
+      <div class="fz-lang" role="group" aria-label="Language">
+        <button type="button" class="is-active">EN</button>
+        <span aria-hidden="true">|</span>
+        <button type="button">ಕನ್ನಡ</button>
+      </div>
+
+      <div class="fz-profile">
+        <span class="fz-avatar fz-avatar--sm" aria-hidden="true">SR</span>
+        <span class="fz-profile__tier">SILVER</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fz-shell fz-header__nav">
+    <span class="fz-loc">
+      <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true">
+        <path
+          d="M8 1.5a4.5 4.5 0 0 1 4.5 4.5c0 3.2-4.5 8.5-4.5 8.5S3.5 9.2 3.5 6A4.5 4.5 0 0 1 8 1.5Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.3"></path>
+        <circle cx="8" cy="6" r="1.6" fill="currentColor"></circle>
+      </svg>
+      Home {location}
+    </span>
+    <nav aria-label="Primary">
+      {nav.map((item) => <a href={`#${item.toLowerCase()}`}>{item}</a>)}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .fz-header {
+    background: var(--fz-site-bg);
+  }
+
+  .fz-header__top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-block: 12px;
+  }
+
+  .fz-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--fz-text);
+    flex: 0 0 auto;
+  }
+
+  .fz-brand__mark {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #e8384f;
+    color: #fff;
+    font-family: var(--fz-font-display);
+    font-size: 19px;
+    line-height: 1;
+  }
+
+  .fz-brand__name {
+    font-family: var(--fz-font-display);
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .fz-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    max-width: 520px;
+  }
+
+  .fz-search__icon {
+    position: absolute;
+    left: 12px;
+    color: var(--fz-subheading);
+    pointer-events: none;
+  }
+
+  .fz-search input {
+    width: 100%;
+    font-family: var(--fz-font-body);
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-text);
+    padding: 9px 36px 9px 34px;
+    border: 1px solid #ded7d9;
+    border-radius: var(--fz-radius-pill);
+    background: var(--fz-site-bg);
+  }
+
+  .fz-search input::placeholder {
+    color: var(--fz-subheading);
+  }
+
+  .fz-search input:focus-visible {
+    outline: 2px solid var(--fz-primary-focus);
+    outline-offset: 1px;
+  }
+
+  .fz-search__mic {
+    position: absolute;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    color: var(--fz-text);
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .fz-header__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 0 0 auto;
+  }
+
+  .fz-online {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #d9f2e4;
+    color: #17633d;
+    font-size: 11px;
+    line-height: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: var(--fz-radius-pill);
+    white-space: nowrap;
+  }
+
+  .fz-online i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .fz-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #ded7d9;
+    border-radius: var(--fz-radius-sm);
+    padding: 4px 8px;
+    color: var(--fz-subheading);
+    font-size: 12px;
+  }
+
+  .fz-lang button {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+  }
+
+  .fz-lang button.is-active {
+    color: var(--fz-text);
+    font-weight: 600;
+  }
+
+  .fz-profile {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .fz-avatar {
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--fz-panel-footer);
+    color: var(--fz-panel-text);
+    font-weight: 600;
+  }
+
+  .fz-avatar--sm {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+
+  .fz-profile__tier {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    color: var(--fz-subheading);
+  }
+
+  .fz-header__nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-bottom: 10px;
+  }
+
+  .fz-loc {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: var(--fz-body-size);
+    color: var(--fz-text);
+    white-space: nowrap;
+  }
+
+  .fz-header__nav nav {
+    display: flex;
+    gap: 24px;
+    margin-inline-start: auto;
+  }
+
+  .fz-header__nav a {
+    color: var(--fz-text);
+    text-decoration: none;
+    font-size: var(--fz-body-size);
+    font-weight: 500;
+  }
+
+  .fz-header__nav a:hover {
+    color: var(--fz-primary-hover);
+  }
+
+  @media (max-width: 640px) {
+    .fz-header__top {
+      flex-wrap: wrap;
+      row-gap: 10px;
+    }
+    .fz-search {
+      order: 10;
+      flex: 1 1 100%;
+      max-width: none;
+    }
+    .fz-header__meta {
+      margin-inline-start: auto;
+    }
+    .fz-online {
+      display: none;
+    }
+    .fz-header__nav {
+      gap: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .fz-header__nav::-webkit-scrollbar {
+      display: none;
+    }
+    .fz-header__nav nav {
+      gap: 16px;
+    }
+  }
+</style>

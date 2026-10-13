@@ -1,0 +1,131 @@
+---
+import SectionHead from './SectionHead.astro';
+const items = [
+  { tag:'Harvest', size:'3 kg', name:'Badami mangoes', price:'₹899', was:'₹990', maker:'Lakshmi Amma', ago:'2h ago', proof:'12 bought in the last hour' },
+  { tag:'Fresh batch', size:'250 g', name:'Kodubale', price:'₹240', maker:'Savitri Rao', ago:'3h ago', proof:'96 cheered' },
+  { tag:'Harvest', size:'500 g', name:'Avarekalu', price:'₹120', maker:'Ganesh K', ago:'3h ago' },
+  { tag:'15% off', size:'200 g', name:'Idli podi', price:'₹160', was:'₹190', maker:'Radha Devi', proof:'48 neighbours bought this' },
+];
+---
+
+<section class="fz-shell fz-section">
+  <SectionHead title="What's fresh today" note="Live from the community" action="→" />
+  <div class="fz-fresh">
+    {items.map((p) => (
+      <article class="fz-prod">
+        <div class="fz-prod__media fz-media">
+          <span class="fz-prod__tag">{p.tag}</span>
+          <button type="button" class="fz-btn fz-btn--primary fz-btn--sm fz-prod__buy">Buy</button>
+        </div>
+        <div class="fz-prod__body">
+          <p class="fz-prod__size">{p.size}</p>
+          <p class="fz-prod__name">{p.name}</p>
+          <p class="fz-prod__price">
+            {p.price}{p.was && <s>{p.was}</s>}
+          </p>
+          <p class="fz-prod__maker">
+            <span class="fz-avatar fz-avatar--xs" aria-hidden="true"></span>
+            {p.maker}{p.ago && ` · ${p.ago}`}
+          </p>
+          {p.proof && <p class="fz-prod__proof">{p.proof}</p>}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .fz-fresh {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .fz-prod {
+    border: 1px solid #e9e4e5;
+    border-radius: var(--fz-radius-md);
+    overflow: hidden;
+  }
+
+  .fz-prod__media {
+    position: relative;
+    aspect-ratio: 282 / 150;
+    padding: 10px;
+  }
+
+  .fz-prod__tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.82);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: var(--fz-radius-sm);
+  }
+
+  .fz-prod__buy {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .fz-prod__body {
+    padding: 10px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .fz-prod__size {
+    font-size: 11px;
+    color: var(--fz-subheading);
+  }
+
+  .fz-prod__name {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+  }
+
+  .fz-prod__price {
+    font-size: var(--fz-body-size);
+    font-weight: 600;
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+  }
+
+  .fz-prod__price s {
+    font-weight: 400;
+    color: var(--fz-subheading);
+    font-size: 11px;
+  }
+
+  .fz-prod__maker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  .fz-avatar--xs {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--fz-panel-footer);
+    display: inline-block;
+  }
+
+  .fz-prod__proof {
+    font-size: 11px;
+    color: var(--fz-subheading);
+  }
+
+  @media (max-width: 860px) {
+    .fz-fresh {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+const items = [
+  'Meena in Mysuru just bought Sambar mix · 2 min ago',
+  'Super shopper · ₹1,580 to Gold',
+  'Leading comments · Meena shared 12 helpful tips',
+  'Delivery by tomorrow · Pay on delivery',
+];
+---
+
+<div class="fz-ticker">
+  <div class="fz-shell fz-ticker__row">
+    <span class="fz-ticker__live"><i aria-hidden="true"></i>Live</span>
+    {items.map((t) => <span class="fz-ticker__item">{t}</span>)}
+  </div>
+</div>
+
+<style>
+  .fz-ticker {
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+  }
+
+  .fz-ticker__row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-block: 7px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .fz-ticker__row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fz-ticker__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #e8384f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: var(--fz-radius-pill);
+    flex: 0 0 auto;
+  }
+
+  .fz-ticker__live i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .fz-ticker__item {
+    font-size: 12px;
+    line-height: 16px;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+const cols = [
+  { h: 'Registered Office:', lines: ['CKGFlavorz FoodTech Pvt Ltd','112, 17th main road, MIG KHB Colony,','5th block, Koramangala,','Bangalore 560095'] },
+  { h: 'Contact Us:', lines: ['info@theflavorz.com','Call: +919742557770'] },
+  { h: 'Quick Links:', lines: ['Privacy Policy','Terms and Conditions'] },
+  { h: 'Other Info:', lines: ['GSTN: 29AALCC8084A1ZH','CIN: U56290KA2024PTC187789','fssai License: 11224999000767'] },
+];
+---
+
+<footer class="fz-footer">
+  <div class="fz-shell">
+    <div class="fz-footer__brand">
+      <span class="fz-brand__mark" aria-hidden="true">f</span>
+      <span class="fz-footer__name">Flavorz</span>
+    </div>
+    <div class="fz-footer__cols">
+      {cols.map((c) => (
+        <div>
+          <p class="fz-footer__h">{c.h}</p>
+          {c.lines.map((l) => <p class="fz-footer__l">{l}</p>)}
+        </div>
+      ))}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .fz-footer {
+    background: var(--fz-panel-footer);
+    color: var(--fz-panel-text);
+    margin-top: 40px;
+    padding-block: 26px 34px;
+  }
+
+  .fz-footer__brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 20px;
+  }
+
+  .fz-footer__name {
+    font-family: var(--fz-font-display);
+    font-size: 24px;
+  }
+
+  .fz-footer__cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .fz-footer__h {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 7px;
+  }
+
+  .fz-footer__l {
+    font-size: 11px;
+    line-height: 17px;
+  }
+
+  @media (max-width: 860px) {
+    .fz-footer__cols {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+</style>

@@ -1,0 +1,237 @@
+/*
+ * Flavorz design tokens, taken from the Dev Flavorz Figma file.
+ *
+ * These are the design's own values, not a framework's scale. Colours and
+ * type come from the file's published styles; spacing and radii are measured
+ * from the 1440 and 402 frames.
+ *
+ * Kept as custom properties (not hardcoded in components) so the per-brand
+ * theming can be reconnected later without touching markup.
+ */
+:root {
+  /* ---- Colour: General & Text ---- */
+  --fz-text: #433139; /* General & Text/Black Text */
+  --fz-subheading: #94918f; /* General & Text/Subheading */
+  --fz-site-bg: #ffffff; /* General & Text/Site bg & White text */
+
+  /* ---- Colour: Accent panel ---- */
+  --fz-panel: #f2e1de; /* Accent Panel/Fill */
+  --fz-panel-text: #29231f; /* Accent Panel/Text, Icon */
+  --fz-panel-footer: #cabbb8; /* Accent Panel/Footer fill */
+
+  /* ---- Colour: Primary button ---- */
+  --fz-primary: #433139;
+  --fz-primary-text: #eceaeb;
+  --fz-primary-hover: #72656b;
+  --fz-primary-focus: #a1989c;
+  --fz-primary-selected: #c7c1c4;
+  --fz-primary-disabled: #eceaeb;
+
+  /* ---- Colour: Secondary button ---- */
+  --fz-secondary: #776870;
+  --fz-secondary-text: #f1f0f1;
+  --fz-secondary-hover: #998e94;
+  --fz-secondary-focus: #bbb4b8;
+  --fz-secondary-selected: #d6d2d4;
+  --fz-secondary-disabled: #f1f0f1;
+
+  /* ---- Colour: Tag ---- */
+  --fz-tag: #eceaeb;
+  --fz-tag-text: #433139;
+
+  /* ---- Type: the design uses two families only ---- */
+  --fz-font-body: 'DM Sans', -apple-system, system-ui, sans-serif;
+  --fz-font-display: 'DM Serif Display', Georgia, serif;
+
+  /* Desktop type styles, straight from the file's text styles. */
+  --fz-logo-size: 36px;
+  --fz-logo-lh: 49px;
+  --fz-h1-size: 28px;
+  --fz-h1-lh: 38px;
+  --fz-h2-size: 18px;
+  --fz-h2-lh: 25px;
+  --fz-product-size: 16px;
+  --fz-product-lh: 22px;
+  --fz-para-size: 16px;
+  --fz-para-lh: 21px;
+  --fz-body-size: 14px;
+  --fz-body-lh: 18px;
+  --fz-button-size: 16px;
+  --fz-button-lh: 21px;
+  --fz-capital-size: 14px;
+  --fz-capital-lh: 18px;
+  --fz-name-size: 18px;
+  --fz-name-lh: 23px;
+
+  /* ---- Layout ---- */
+  --fz-page-width: 1440px;
+  --fz-content-width: 1200px;
+  --fz-gutter: 120px;
+
+  /* ---- Radii (measured from the frames) ---- */
+  --fz-radius-sm: 4px;
+  --fz-radius-md: 8px;
+  --fz-radius-lg: 12px;
+  --fz-radius-pill: 999px;
+}
+
+/* Mobile type styles — the file has a dedicated Mobile/* set. */
+@media (max-width: 640px) {
+  :root {
+    --fz-logo-size: 18px;
+    --fz-logo-lh: 25px;
+    --fz-h1-size: 18px;
+    --fz-h1-lh: 25px;
+    --fz-h2-size: 16px;
+    --fz-h2-lh: 22px;
+    --fz-product-size: 13px;
+    --fz-product-lh: 18px;
+    --fz-para-size: 13px;
+    --fz-para-lh: 17px;
+    --fz-body-size: 13px;
+    --fz-body-lh: 17px;
+    --fz-button-size: 13px;
+    --fz-button-lh: 17px;
+    --fz-name-size: 13px;
+    --fz-name-lh: 17px;
+    --fz-gutter: 16px;
+  }
+}
+
+/* ---- Base ---- */
+.fz {
+  font-family: var(--fz-font-body);
+  font-size: var(--fz-body-size);
+  line-height: var(--fz-body-lh);
+  color: var(--fz-text);
+  background: var(--fz-site-bg);
+}
+
+.fz *,
+.fz *::before,
+.fz *::after {
+  box-sizing: border-box;
+}
+
+.fz h1,
+.fz h2,
+.fz h3 {
+  font-family: var(--fz-font-display);
+  font-weight: 400;
+  margin: 0;
+}
+
+.fz h1 {
+  font-size: var(--fz-h1-size);
+  line-height: var(--fz-h1-lh);
+}
+
+.fz h2 {
+  font-size: var(--fz-h1-size);
+  line-height: var(--fz-h1-lh);
+}
+
+.fz h3 {
+  font-size: var(--fz-h2-size);
+  line-height: var(--fz-h2-lh);
+}
+
+.fz p {
+  margin: 0;
+}
+
+/* The content column: 1200px centred inside a 1440px page. */
+.fz-shell {
+  width: 100%;
+  max-width: var(--fz-content-width);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+/* ---- Buttons, to the file's Primary/Secondary specs ---- */
+.fz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--fz-font-body);
+  font-size: var(--fz-button-size);
+  line-height: var(--fz-button-lh);
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: var(--fz-radius-md);
+  transition: background-color 120ms ease;
+}
+
+.fz-btn--primary {
+  background: var(--fz-primary);
+  color: var(--fz-primary-text);
+}
+.fz-btn--primary:hover {
+  background: var(--fz-primary-hover);
+}
+.fz-btn--primary:focus-visible {
+  outline: 2px solid var(--fz-primary-focus);
+  outline-offset: 2px;
+}
+.fz-btn--primary:disabled {
+  background: var(--fz-primary-disabled);
+  color: var(--fz-subheading);
+  cursor: not-allowed;
+}
+
+.fz-btn--secondary {
+  background: var(--fz-secondary);
+  color: var(--fz-secondary-text);
+}
+.fz-btn--secondary:hover {
+  background: var(--fz-secondary-hover);
+}
+.fz-btn--secondary:focus-visible {
+  outline: 2px solid var(--fz-secondary-focus);
+  outline-offset: 2px;
+}
+
+.fz-btn--sm {
+  padding: 6px 12px;
+  font-size: var(--fz-body-size);
+  line-height: var(--fz-body-lh);
+}
+
+/* ---- Tag ---- */
+.fz-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--fz-radius-sm);
+  background: var(--fz-tag);
+  color: var(--fz-tag-text);
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---- Card ---- */
+.fz-card {
+  background: var(--fz-site-bg);
+  border: 1px solid #e9e4e5;
+  border-radius: var(--fz-radius-lg);
+  overflow: hidden;
+}
+
+.fz-panel {
+  background: var(--fz-panel);
+  color: var(--fz-panel-text);
+  border-radius: var(--fz-radius-lg);
+}
+
+/* A media placeholder until real photography lands. */
+.fz-media {
+  background: var(--fz-panel);
+  position: relative;
+}

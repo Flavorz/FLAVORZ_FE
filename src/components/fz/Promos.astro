@@ -1,0 +1,83 @@
+---
+const promos = [
+  { tag: 'IN SEASON', title: 'Mango season\nis here', cta: 'Shop Mangoes', tone: 'panel' },
+  { tag: 'ZERO COMMISSION', title: '100% of the price\ngoes to the maker', body: 'You pay ₹220, Radha gets ₹220', tone: 'dark' },
+  { tag: 'FESTIVE', title: 'Diwali boxes\npre-order now', tone: 'mid' },
+];
+---
+
+<section class="fz-shell fz-promos">
+  {promos.map((p) => (
+    <article class:list={['fz-promo', `fz-promo--${p.tone}`]}>
+      <p class="fz-promo__tag">{p.tag}</p>
+      <h3 class="fz-promo__title">{p.title}</h3>
+      {p.body && <p class="fz-promo__body">{p.body}</p>}
+      {p.cta && <button type="button" class="fz-btn fz-btn--primary fz-btn--sm">{p.cta}</button>}
+    </article>
+  ))}
+</section>
+
+<style>
+  .fz-promos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 22px;
+  }
+
+  .fz-promo {
+    border-radius: var(--fz-radius-md);
+    padding: 18px 20px;
+    min-height: 152px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .fz-promo--panel {
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+  }
+
+  .fz-promo--dark {
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
+  }
+
+  .fz-promo--mid {
+    background: var(--fz-secondary);
+    color: var(--fz-secondary-text);
+  }
+
+  .fz-promo__tag {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .fz-promo__title {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h2-size);
+    line-height: var(--fz-h2-lh);
+    white-space: pre-line;
+    margin: 0;
+  }
+
+  .fz-promo__body {
+    font-size: 12px;
+    line-height: 17px;
+    opacity: 0.9;
+  }
+
+  .fz-promo .fz-btn {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  @media (max-width: 860px) {
+    .fz-promos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

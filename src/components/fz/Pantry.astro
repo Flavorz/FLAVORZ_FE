@@ -1,0 +1,50 @@
+---
+import SectionHead from './SectionHead.astro';
+const cats = ['Podis','Pickles','Snacks','Millets','Produce','Sweets','Ready mixes','Bundles'];
+---
+
+<section class="fz-shell fz-section">
+  <SectionHead title="Shop the pantry" />
+  <ul class="fz-pantry">
+    {cats.map((c) => (
+      <li>
+        <a href="#"><span class="fz-pantry__disc fz-media" aria-hidden="true"></span>{c}</a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .fz-pantry {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .fz-pantry a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--fz-text);
+    font-size: 12px;
+  }
+
+  .fz-pantry__disc {
+    width: 100%;
+    max-width: 102px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+
+  @media (max-width: 860px) {
+    .fz-pantry {
+      grid-template-columns: repeat(4, 1fr);
+      row-gap: 20px;
+    }
+  }
+</style>

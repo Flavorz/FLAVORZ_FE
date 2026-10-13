@@ -1,0 +1,71 @@
+---
+import SectionHead from './SectionHead.astro';
+const makers = [
+  { name:'Lakshmi Amma', meta:'Madurai · 2.4k' },
+  { name:'Savitri Rao', meta:'Guntur · 1.9k' },
+  { name:'Ganesh K', meta:'Dharwad · 1.2k' },
+  { name:'Radha Devi', meta:'Mysore · 640' },
+];
+---
+
+<section class="fz-shell fz-section">
+  <SectionHead title="Meet the makers" />
+  <ul class="fz-makers">
+    {makers.map((m) => (
+      <li>
+        <span class="fz-makers__photo fz-media" aria-hidden="true"></span>
+        <p class="fz-makers__name">{m.name}</p>
+        <p class="fz-makers__meta">{m.meta}</p>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .fz-makers {
+    display: grid;
+    grid-template-columns: repeat(4, 160px);
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .fz-makers li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .fz-makers__photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+  }
+
+  .fz-makers__name {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    margin-top: 6px;
+  }
+
+  .fz-makers__meta {
+    font-size: 11px;
+    color: var(--fz-subheading);
+  }
+
+  @media (max-width: 860px) {
+    .fz-makers {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .fz-makers__photo {
+      width: 100%;
+      max-width: 120px;
+      height: auto;
+      aspect-ratio: 1;
+    }
+  }
+</style>

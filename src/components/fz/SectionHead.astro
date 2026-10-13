@@ -1,0 +1,42 @@
+---
+const { title, note, action } = Astro.props;
+---
+
+<div class="fz-head">
+  <h2>{title}</h2>
+  {note && <span class="fz-head__note">{note}</span>}
+  {action && <a class="fz-head__action" href="#">{action}</a>}
+</div>
+
+<style>
+  .fz-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .fz-head h2 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 0;
+  }
+
+  .fz-head__note {
+    font-size: 12px;
+    color: var(--fz-subheading);
+  }
+
+  .fz-head__action {
+    margin-inline-start: auto;
+    font-size: 12px;
+    color: var(--fz-subheading);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .fz-head__action:hover {
+    color: var(--fz-text);
+  }
+</style>

@@ -1,0 +1,93 @@
+<section class="fz-shell fz-section">
+  <div class="fz-comm">
+    <div class="fz-comm__left">
+      <p class="fz-comm__line">Zero commission. 100% of the price goes to the maker.</p>
+      <button type="button" class="fz-btn fz-btn--primary fz-btn--sm">See on Flavorz →</button>
+    </div>
+    <div class="fz-comm__right">
+      <span class="fz-comm__box">
+        <small>You pay</small>
+        <b>₹ 220</b>
+      </span>
+      <span class="fz-comm__arrow" aria-hidden="true">→</span>
+      <span class="fz-comm__box fz-comm__box--alt">
+        <small>Radha gets</small>
+        <b>₹ 220</b>
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fz-comm {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--fz-panel);
+    border-radius: var(--fz-radius-md);
+    padding: 20px 24px;
+  }
+
+  .fz-comm__left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .fz-comm__line {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h2-size);
+    line-height: var(--fz-h2-lh);
+  }
+
+  .fz-comm__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-inline-start: auto;
+  }
+
+  .fz-comm__box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
+    border-radius: var(--fz-radius-md);
+    padding: 10px 18px;
+    min-width: 96px;
+  }
+
+  .fz-comm__box--alt {
+    background: var(--fz-secondary);
+    color: var(--fz-secondary-text);
+  }
+
+  .fz-comm__box small {
+    font-size: 10px;
+    opacity: 0.85;
+  }
+
+  .fz-comm__box b {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .fz-comm__arrow {
+    color: var(--fz-panel-text);
+  }
+
+  @media (max-width: 860px) {
+    .fz-comm {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+    .fz-comm__right {
+      margin-inline-start: 0;
+      justify-content: center;
+    }
+  }
+</style>

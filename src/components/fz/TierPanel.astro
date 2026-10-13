@@ -1,0 +1,194 @@
+---
+/** Welcome panel: avatar, greeting, tier progress, perks box. */
+const tiers = [
+  { name: 'Silver', at: '₹1,000' },
+  { name: 'Gold', at: '₹5,000' },
+  { name: 'Platinum', at: '₹10,000' },
+];
+---
+
+<section class="fz-shell">
+  <div class="fz-tier">
+    <div class="fz-tier__who">
+      <span class="fz-tier__photo" aria-hidden="true">Your photo</span>
+      <span class="fz-tier__badge"><i aria-hidden="true"></i>Silver shopper</span>
+    </div>
+
+    <div class="fz-tier__main">
+      <h1>Welcome back, Sarath</h1>
+      <p class="fz-tier__sub">Super Shopper league · this month</p>
+      <p class="fz-tier__spend">You've shopped ₹3,420. Shop ₹1,580 more to reach Gold.</p>
+
+      <div class="fz-tier__track" role="img" aria-label="₹3,420 of ₹5,000 toward Gold">
+        <span class="fz-tier__fill"></span>
+        {tiers.map((_, i) => <span class="fz-tier__dot" style={`left:${(i / (tiers.length - 1)) * 100}%`}></span>)}
+      </div>
+
+      <ul class="fz-tier__scale">
+        {tiers.map((t) => (
+          <li><b>{t.name}</b><span>{t.at}</span></li>
+        ))}
+      </ul>
+    </div>
+
+    <aside class="fz-tier__perks">
+      <p class="fz-tier__perksHead">TIER PERKS &nbsp;PLACEHOLDER</p>
+      <p><b>Silver</b> delivery discount</p>
+      <p><b>Gold</b> free delivery</p>
+      <p><b>Platinum</b> free delivery + priority</p>
+      <p class="fz-tier__perksNote">Perks and amounts to be confirmed</p>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .fz-tier {
+    display: grid;
+    grid-template-columns: 150px 1fr 280px;
+    gap: 28px;
+    align-items: center;
+    border: 1px solid #e9e4e5;
+    border-radius: var(--fz-radius-lg);
+    padding: 22px 26px;
+    margin-top: 20px;
+  }
+
+  .fz-tier__who {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .fz-tier__photo {
+    display: grid;
+    place-items: center;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+    font-size: 12px;
+  }
+
+  .fz-tier__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: var(--fz-radius-pill);
+    white-space: nowrap;
+  }
+
+  .fz-tier__badge i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+  }
+
+  .fz-tier__main h1 {
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+  }
+
+  .fz-tier__sub {
+    color: var(--fz-subheading);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .fz-tier__spend {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    margin-top: 10px;
+  }
+
+  .fz-tier__track {
+    position: relative;
+    height: 4px;
+    border-radius: 2px;
+    background: #e4dcde;
+    margin-top: 16px;
+  }
+
+  .fz-tier__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 50%;
+    border-radius: 2px;
+    background: var(--fz-primary);
+  }
+
+  .fz-tier__dot {
+    position: absolute;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: var(--fz-primary);
+  }
+
+  .fz-tier__scale {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+
+  .fz-tier__scale li {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+  }
+
+  .fz-tier__scale li:nth-child(2) {
+    align-items: center;
+  }
+
+  .fz-tier__scale li:last-child {
+    align-items: flex-end;
+  }
+
+  .fz-tier__scale span {
+    color: var(--fz-subheading);
+  }
+
+  .fz-tier__perks {
+    background: var(--fz-panel);
+    border-radius: var(--fz-radius-md);
+    padding: 14px 16px;
+    font-size: 12px;
+    line-height: 19px;
+    color: var(--fz-panel-text);
+  }
+
+  .fz-tier__perksHead {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--fz-subheading);
+    margin-bottom: 6px;
+  }
+
+  .fz-tier__perksNote {
+    color: var(--fz-subheading);
+    margin-top: 6px;
+  }
+
+  @media (max-width: 860px) {
+    .fz-tier {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .fz-tier__who {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+  }
+</style>

@@ -1,0 +1,119 @@
+---
+import SectionHead from './SectionHead.astro';
+const reels = [
+  { kind: 'Making', maker: 'Lakshmi Amma', caption: 'Grinding idli podi', product: 'Idli podi', price: '₹ 120' },
+  { kind: 'Harvest', maker: 'Ganesh K', caption: 'Avarekalu this morning', product: 'Avarekalu', price: '₹ 160' },
+  { kind: 'Packing', maker: 'Savitri Rao', caption: 'Packing gongura pickle', product: 'Gongura', price: '₹ 210' },
+  { kind: 'Unboxing', maker: 'Rekha K', caption: 'Opening her jaggery order', product: 'Jaggery', price: '₹ 150' },
+];
+---
+
+<section class="fz-shell fz-section">
+  <SectionHead title="Reels" action="See all reels" />
+  <div class="fz-reels">
+    {reels.map((r) => (
+      <article class="fz-reel">
+        <div class="fz-reel__media fz-media">
+          <span class="fz-reel__kind">{r.kind}</span>
+          <div class="fz-reel__who">
+            <p class="fz-reel__maker">{r.maker}</p>
+            <p class="fz-reel__caption">{r.caption}</p>
+          </div>
+        </div>
+        <div class="fz-reel__buy">
+          <div>
+            <p class="fz-reel__product">{r.product}</p>
+            <p class="fz-reel__price">{r.price}</p>
+          </div>
+          <button type="button" class="fz-btn fz-btn--primary fz-btn--sm">Buy</button>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .fz-section {
+    margin-top: 34px;
+  }
+
+  .fz-reels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .fz-reel {
+    border: 1px solid #e9e4e5;
+    border-radius: var(--fz-radius-md);
+    overflow: hidden;
+  }
+
+  .fz-reel__media {
+    position: relative;
+    aspect-ratio: 282 / 240;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    color: var(--fz-panel-text);
+  }
+
+  .fz-reel__kind {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.78);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: var(--fz-radius-sm);
+  }
+
+  .fz-reel__who {
+    margin-top: auto;
+  }
+
+  .fz-reel__maker {
+    font-size: var(--fz-name-size);
+    line-height: var(--fz-name-lh);
+    font-weight: 600;
+  }
+
+  .fz-reel__caption {
+    font-size: 12px;
+    line-height: 16px;
+    opacity: 0.85;
+  }
+
+  .fz-reel__buy {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+  }
+
+  .fz-reel__buy > div {
+    min-width: 0;
+  }
+
+  .fz-reel__product {
+    font-size: 12px;
+    color: var(--fz-subheading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .fz-reel__price {
+    font-size: var(--fz-body-size);
+    font-weight: 600;
+  }
+
+  .fz-reel__buy .fz-btn {
+    margin-inline-start: auto;
+  }
+
+  @media (max-width: 860px) {
+    .fz-reels {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

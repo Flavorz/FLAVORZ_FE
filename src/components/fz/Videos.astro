@@ -1,0 +1,109 @@
+---
+import SectionHead from './SectionHead.astro';
+const videos = [
+  { kind:'Making', title:'How Lakshmi Amma stone-grinds idli podi', meta:'Lakshmi Amma . 2 min watch . 214 cheered', product:'Idli podi . 200g', price:'₹ 120' },
+  { kind:'Harvest', title:'A morning in the avarekalu fields', meta:'Ganesh K . 3 min watch . 141 cheered', product:'Avarekalu . 500g', price:'₹ 120' },
+  { kind:'Packing', title:'Gongura pickle, jar by jar', meta:'Savitri Rao . 2 min watch . 96 cheered', product:'Gongura . 300g', price:'₹ 210' },
+];
+---
+
+<section class="fz-shell fz-section">
+  <SectionHead title="Videos from the Kitchens" action="See all videos" />
+  <div class="fz-videos">
+    {videos.map((v) => (
+      <article class="fz-video">
+        <div class="fz-video__media fz-media">
+          <span class="fz-video__kind">{v.kind}</span>
+          <button type="button" class="fz-btn fz-btn--secondary fz-btn--sm fz-video__watch">Watch</button>
+        </div>
+        <div class="fz-video__body">
+          <p class="fz-video__title">{v.title}</p>
+          <p class="fz-video__meta">{v.meta}</p>
+          <div class="fz-video__buy">
+            <span class="fz-video__product">{v.product} &nbsp;{v.price}</span>
+            <button type="button" class="fz-btn fz-btn--primary fz-btn--sm">Buy</button>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .fz-videos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .fz-video {
+    border: 1px solid #e9e4e5;
+    border-radius: var(--fz-radius-md);
+    overflow: hidden;
+  }
+
+  .fz-video__media {
+    position: relative;
+    aspect-ratio: 384 / 230;
+    padding: 10px;
+  }
+
+  .fz-video__kind {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.82);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: var(--fz-radius-sm);
+  }
+
+  .fz-video__watch {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+  }
+
+  .fz-video__body {
+    padding: 11px 12px 12px;
+  }
+
+  .fz-video__title {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-video__meta {
+    font-size: 11px;
+    color: var(--fz-subheading);
+    margin-top: 4px;
+  }
+
+  .fz-video__buy {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    background: var(--fz-tag);
+    border-radius: var(--fz-radius-sm);
+    padding: 7px 9px;
+  }
+
+  .fz-video__product {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .fz-video__buy .fz-btn {
+    margin-inline-start: auto;
+  }
+
+  @media (max-width: 860px) {
+    .fz-videos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

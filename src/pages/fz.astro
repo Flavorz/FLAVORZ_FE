@@ -1,0 +1,52 @@
+---
+/**
+ * The pixel-faithful Flavorz build, straight from the Figma frames.
+ *
+ * Lives beside the existing / route so both can be compared until this one
+ * is signed off.
+ */
+import '../styles/flavorz.css';
+import Header from '../components/fz/Header.astro';
+import Ticker from '../components/fz/Ticker.astro';
+import TierPanel from '../components/fz/TierPanel.astro';
+import Promos from '../components/fz/Promos.astro';
+import Reels from '../components/fz/Reels.astro';
+import Pantry from '../components/fz/Pantry.astro';
+import Fresh from '../components/fz/Fresh.astro';
+import Videos from '../components/fz/Videos.astro';
+import Leaders from '../components/fz/Leaders.astro';
+import Makers from '../components/fz/Makers.astro';
+import Commission from '../components/fz/Commission.astro';
+import Footer from '../components/fz/Footer.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flavorz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap"
+    />
+  </head>
+  <body class="fz">
+    <Header />
+    <Ticker />
+    <main>
+      <TierPanel />
+      <Promos />
+      <Reels />
+      <Pantry />
+      <Fresh />
+      <Videos />
+      <Leaders />
+      <Makers />
+      <Commission />
+    </main>
+    <Footer />
+  </body>
+</html>
