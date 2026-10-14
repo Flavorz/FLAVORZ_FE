@@ -11,6 +11,15 @@
 :root {
   /* ---- Colour: General & Text ---- */
   --fz-text: #433139; /* General & Text/Black Text */
+  --fz-ink: #29231f; /* Accent Panel/Text, Icon — 49x web, 141x mobile */
+  --fz-muted-warm: #a29592; /* mobile only */
+  --fz-hairline: #d9d9d9;
+
+  /* Strokes present in the frames. */
+  --fz-stroke-secondary: #776870; /* 1px, 3x */
+  --fz-stroke-ink: #433139; /* 2px ring, 0.5px control */
+  --fz-stroke-muted: #94918f; /* 1px, 2x */
+  --fz-stroke-panel: #f2e1de; /* 2px */
   --fz-subheading: #94918f; /* General & Text/Subheading */
   --fz-site-bg: #ffffff; /* General & Text/Site bg & White text */
 
@@ -77,6 +86,7 @@
   --fz-gutter: 80px; /* Frame 158: pad=10,80,10,80 */
 
   /* ---- Radii: the design uses exactly these four ---- */
+  /* The frame uses 4px exactly once; chips and tags are 8px. */
   --fz-radius-sm: 4px;
   --fz-radius-md: 8px;
   --fz-radius-lg: 10px;
@@ -137,6 +147,23 @@
     --fz-gutter: 16px;
     --fz-content-width: 370px;
     --fz-card-grid-gap: 12px;
+
+    /* Mobile rows are single-height horizontal carousels, not stacked grids.
+       Frame 220 reels=223, 224 fresh=250, 228 videos=355, 226 makers=178. */
+    --fz-card-w: 179px;
+    --fz-reel-h: 223px;
+    --fz-prod-h: 250px;
+    --fz-video-h: 355px;
+    --fz-maker-row-h: 178px;
+    --fz-disc: 84px;
+
+    /* Mobile text is #29231f, not #433139. */
+    --fz-text: #29231f;
+
+    /* Mobile sections are tighter than desktop. Frame 211 tier=380,
+       Frame 219 promos=110, section gap ~40. */
+    --fz-section-gap: 40px;
+    --fz-head-gap: 46px;
   }
 }
 
@@ -167,6 +194,12 @@ body.fz {
   font-family: var(--fz-font-display);
   font-weight: 400;
   margin: 0;
+}
+
+/* The design never uses weight 700; b/strong default to it in the UA sheet. */
+.fz b,
+.fz strong {
+  font-weight: 600;
 }
 
 .fz h1 {
@@ -306,6 +339,105 @@ body.fz {
  */
 .fz-section {
   margin-top: var(--fz-section-gap);
+}
+
+/*
+ * Mobile card rows.
+ *
+ * The 402 frame lays these out as single-height horizontal carousels
+ * (Frames 219-228), not as wrapping grids. Rendering them as a 2-up grid made
+ * the page 5225 tall against the frame's 3333.
+ */
+@media (max-width: 860px) {
+  .fz-reels,
+  .fz-fresh,
+  .fz-videos,
+  .fz-makers {
+    display: flex;
+    gap: var(--fz-card-grid-gap);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .fz-reels::-webkit-scrollbar,
+  .fz-fresh::-webkit-scrollbar,
+  .fz-videos::-webkit-scrollbar,
+  .fz-makers::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fz-reels > *,
+  .fz-fresh > *,
+  .fz-videos > * {
+    flex: 0 0 var(--fz-card-w);
+    scroll-snap-align: start;
+  }
+
+  .fz-makers > * {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  /*
+   * Card internals at 179px wide.
+   *
+   * The desktop padding and buy-row layout were built for a 282px card; at
+   * mobile width they forced names onto three lines and clipped prices to
+   * "₹". Tighten the padding and let the buy row wrap.
+   */
+  .fz-reel__buy,
+  .fz-prod__body,
+  .fz-video__body {
+    padding: 8px 10px;
+  }
+
+  .fz-reel__buy {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .fz-reel__buy > div {
+    flex: 1 1 100%;
+  }
+
+  .fz-reel__buy .fz-btn {
+    margin-inline-start: 0;
+  }
+
+  .fz-video__buy {
+    flex-wrap: wrap;
+    row-gap: 6px;
+    padding: 6px 8px;
+  }
+
+  .fz-video__product {
+    flex: 1 1 100%;
+    white-space: normal;
+  }
+
+  /* Names wrap rather than clip at 179px. */
+  .fz-prod__name,
+  .fz-reel__product,
+  .fz-reel__maker {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  /* A discounted price is two values; at 179px they need to wrap. */
+  .fz-prod__price {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .fz-prod__maker,
+  .fz-prod__proof,
+  .fz-video__meta {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
 }
 
 /* A media placeholder until real photography lands. */

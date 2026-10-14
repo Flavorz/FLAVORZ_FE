@@ -91,8 +91,9 @@ const videos = [
   }
 
   .fz-video__meta {
-    font-size: var(--fz-body-size);
-    line-height: var(--fz-body-lh);
+    /* 16px/21 in the frame. */
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
     color: var(--fz-subheading);
     margin-top: 4px;
   }
@@ -110,6 +111,7 @@ const videos = [
   .fz-video__product {
     font-family: var(--fz-font-display);
     font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -119,9 +121,42 @@ const videos = [
     margin-inline-start: auto;
   }
 
+  /* Mobile layout lives in flavorz.css: a scoped rule here
+     outranks the global carousel and forced a 2-up grid. */
+
   @media (max-width: 860px) {
+    /* At the 179px mobile card width, text wraps instead of clipping. */
+    .fz-video__product,
+    .fz-video__meta,
+    .fz-video__title {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+  }
+
+  @media (max-width: 860px) {
+    /*
+     * The mobile frame lays this out as a single-height horizontal carousel.
+     * This must live in the component: Astro scopes component CSS, so the
+     * grid declaration above beats a global rule and squeezed each card to
+     * 84px regardless of its flex-basis.
+     */
     .fz-videos {
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      gap: var(--fz-card-grid-gap);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .fz-videos::-webkit-scrollbar {
+      display: none;
+    }
+
+    .fz-videos > .fz-video {
+      flex: 0 0 var(--fz-card-w);
+      scroll-snap-align: start;
     }
   }
 </style>

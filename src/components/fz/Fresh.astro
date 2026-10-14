@@ -127,10 +127,9 @@ const items = [
     display: flex;
     align-items: center;
     gap: 6px;
-    /* Maker names are Serif Display 16px/22 */
-    font-family: var(--fz-font-display);
-    font-size: var(--fz-product-size);
-    line-height: var(--fz-product-lh);
+    /* The maker line is Sans 16px/21; only product names are Serif. */
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
     margin-top: 2px;
   }
 
@@ -148,9 +147,46 @@ const items = [
     color: var(--fz-subheading);
   }
 
+  /* Mobile layout lives in flavorz.css: a scoped rule here
+     outranks the global carousel and forced a 2-up grid. */
+
   @media (max-width: 860px) {
+    /* At the 179px mobile card width, text wraps instead of clipping. */
+    .fz-prod__name,
+    .fz-prod__proof,
+    .fz-prod__maker,
+    .fz-prod__price {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+  }
+
+  @media (max-width: 860px) {
+    /*
+     * The mobile frame lays this out as a single-height horizontal carousel.
+     * This must live in the component: Astro scopes component CSS, so the
+     * grid declaration above beats a global rule and squeezed each card to
+     * 84px regardless of its flex-basis.
+     */
     .fz-fresh {
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      gap: var(--fz-card-grid-gap);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .fz-fresh::-webkit-scrollbar {
+      display: none;
+    }
+
+    .fz-fresh > .fz-prod {
+      flex: 0 0 var(--fz-card-w);
+      scroll-snap-align: start;
+      /* The frame's 250px assumes shorter copy; grow rather than clip. */
+      height: auto;
+      min-height: var(--fz-prod-h);
     }
   }
 </style>

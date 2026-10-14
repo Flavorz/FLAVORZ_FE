@@ -188,9 +188,15 @@ const tiers = [
   @media (max-width: 860px) {
     .fz-tier {
       grid-template-columns: 1fr;
-      /* Mobile Frame 211: pad=18,12 gap=14 */
+      /* Mobile Frame 211: 370x380, pad=18,12 gap=14 */
       gap: 14px;
       padding: 18px 12px;
+      margin-top: 40px;
+    }
+
+    .fz-tier__photo {
+      width: 64px;
+      height: 64px;
     }
     .fz-tier__who {
       flex-direction: row;

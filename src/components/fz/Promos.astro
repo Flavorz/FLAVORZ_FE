@@ -80,8 +80,23 @@ const promos = [
   }
 
   @media (max-width: 860px) {
+    /* Frame 219: a 110-tall horizontal row, not a 2-up grid. */
     .fz-promos {
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-top: 40px;
+    }
+
+    .fz-promos::-webkit-scrollbar {
+      display: none;
+    }
+
+    .fz-promo {
+      flex: 0 0 191px;
+      min-height: 110px;
+      padding: 12px 14px;
     }
   }
 </style>

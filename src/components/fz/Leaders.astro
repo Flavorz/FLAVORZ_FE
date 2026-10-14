@@ -76,8 +76,9 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     display: flex;
     align-items: center;
     gap: 7px;
-    font-size: var(--fz-body-size);
-    line-height: var(--fz-body-lh);
+    /* Leaderboard titles are 18px/23 w600 in the frame. */
+    font-size: var(--fz-name-size);
+    line-height: var(--fz-name-lh);
     font-weight: 600;
     margin-bottom: 18px;
   }
@@ -102,8 +103,9 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: var(--fz-body-size);
-    line-height: var(--fz-body-lh);
+    /* Rows are 16px/21 Sans 400. */
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
   }
 
   .fz-board__rank {
@@ -113,6 +115,8 @@ const boards: Array<{ title: string; rows: Row[] }> = [
 
   .fz-board__name {
     flex: 1 1 auto;
+    /* Leaderboard names are Sans 16/21, not Serif. */
+    font-family: var(--fz-font-body);
   }
 
   .fz-board__detail {

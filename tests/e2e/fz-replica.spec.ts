@@ -119,19 +119,53 @@ test.describe('mobile (402 frame)', () => {
     expect(size).toBe('16px');
   });
 
-  test('matches the mobile frame column counts', async ({ page }) => {
+  test('card rows are horizontal carousels, not grids', async ({ page }) => {
     await page.goto('/fz/');
-    const cols = (sel: string) =>
-      page.evaluate((s) => {
-        const el = document.querySelector(s);
-        return el ? getComputedStyle(el).gridTemplateColumns.split(' ').length : null;
-      }, sel);
+    // The 402 frame lays these out as single-height scrolling rows
+    // (Frames 219-228). Rendering them as a 2-up grid made the page 5225
+    // tall against the frame's 3333.
+    for (const row of ['.fz-reels', '.fz-fresh', '.fz-videos']) {
+      const info = await page.evaluate((sel) => {
+        const el = document.querySelector(sel);
+        if (!el) return null;
+        const card = el.firstElementChild;
+        return {
+          display: getComputedStyle(el).display,
+          scrolls: el.scrollWidth > el.clientWidth,
+          cardWidth: card ? Math.round(card.getBoundingClientRect().width) : null,
+        };
+      }, row);
+      expect(info?.display, row).toBe('flex');
+      expect(info?.scrolls, row).toBe(true);
+      expect(info?.cardWidth, row).toBe(179); // frame card width
+    }
+  });
 
-    expect(await cols('.fz-reels')).toBe(2);
-    expect(await cols('.fz-fresh')).toBe(2);
-    expect(await cols('.fz-videos')).toBe(2);
-    expect(await cols('.fz-pantry')).toBe(4);
-    expect(await cols('.fz-makers')).toBe(4);
+  test('card rows match the frame heights', async ({ page }) => {
+    await page.goto('/fz/');
+    const heights = await page.evaluate(() =>
+      Object.fromEntries(
+        ['.fz-reels', '.fz-fresh', '.fz-videos'].map((s) => [
+          s,
+          Math.round(document.querySelector(s)?.getBoundingClientRect().height ?? 0),
+        ]),
+      ),
+    );
+    // Frame 220 reels=223, 224 fresh=250, 228 videos=355.
+    expect(Math.abs(heights['.fz-reels'] - 223)).toBeLessThan(20);
+    expect(Math.abs(heights['.fz-fresh'] - 250)).toBeLessThan(40);
+    expect(Math.abs(heights['.fz-videos'] - 355)).toBeLessThan(20);
+  });
+
+  test('no card text is clipped at the mobile card width', async ({ page }) => {
+    await page.goto('/fz/');
+    await page.evaluate(() => document.fonts.ready);
+    const clipped = await page.evaluate(() =>
+      [...document.querySelectorAll('.fz-reel *, .fz-prod *, .fz-video *')]
+        .filter((e) => e.children.length === 0 && e.scrollWidth > e.clientWidth + 1)
+        .map((e) => e.textContent?.trim().slice(0, 20)),
+    );
+    expect(clipped).toEqual([]);
   });
 
   test('leaderboards become a carousel', async ({ page }) => {

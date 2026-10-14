@@ -116,6 +116,7 @@ const reels = [
   }
 
   .fz-reel__product {
+    /* Product names are Serif Display 16/22. */
     font-family: var(--fz-font-display);
     font-size: var(--fz-product-size);
     line-height: var(--fz-product-lh);
@@ -135,9 +136,42 @@ const reels = [
     margin-inline-start: auto;
   }
 
+  /* Mobile layout lives in flavorz.css: a scoped rule here
+     outranks the global carousel and forced a 2-up grid. */
+
   @media (max-width: 860px) {
+    /* At the 179px mobile card width, text wraps instead of clipping. */
+    .fz-reel__product,
+    .fz-reel__maker,
+    .fz-reel__caption {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+  }
+
+  @media (max-width: 860px) {
+    /*
+     * The mobile frame lays this out as a single-height horizontal carousel.
+     * This must live in the component: Astro scopes component CSS, so the
+     * grid declaration above beats a global rule and squeezed each card to
+     * 84px regardless of its flex-basis.
+     */
     .fz-reels {
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      gap: var(--fz-card-grid-gap);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .fz-reels::-webkit-scrollbar {
+      display: none;
+    }
+
+    .fz-reels > .fz-reel {
+      flex: 0 0 var(--fz-card-w);
+      scroll-snap-align: start;
     }
   }
 </style>

@@ -64,16 +64,31 @@ const makers = [
     color: var(--fz-subheading);
   }
 
+  /* Mobile layout lives in flavorz.css: a scoped rule here
+     outranks the global carousel and forced a 2-up grid. */
+
   @media (max-width: 860px) {
+    /*
+     * The mobile frame lays this out as a single-height horizontal carousel.
+     * This must live in the component: Astro scopes component CSS, so the
+     * grid declaration above beats a global rule and squeezed each card to
+     * 84px regardless of its flex-basis.
+     */
     .fz-makers {
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      display: flex;
+      gap: var(--fz-card-grid-gap);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
     }
-    .fz-makers__photo {
-      width: 100%;
-      max-width: 120px;
-      height: auto;
-      aspect-ratio: 1;
+
+    .fz-makers::-webkit-scrollbar {
+      display: none;
+    }
+
+    .fz-makers > li {
+      flex: 0 0 var(--fz-card-w);
+      scroll-snap-align: start;
     }
   }
 </style>

@@ -102,6 +102,7 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
   .fz-brand__mark {
     display: grid;
     place-items: center;
+    flex: 0 0 auto;
     width: 38px;
     height: 38px;
     border-radius: var(--fz-radius-md);
@@ -293,10 +294,10 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
 
   .fz-header__nav nav {
     display: flex;
-    /* Offers x=639, Community 719, Orders 842, Shop 928 — spacing ~32px,
-       starting after the location rather than flush right. */
+    /* Frame: Offers 639, Community 719, Orders 842, Shop 928 — the row begins
+       at 639 within a content column starting at 120, i.e. 519px in. */
     gap: 32px;
-    margin-inline-start: 150px;
+    margin-inline-start: 277px;
   }
 
   .fz-header__nav a {
