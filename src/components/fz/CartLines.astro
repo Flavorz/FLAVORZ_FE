@@ -1,38 +1,28 @@
 ---
 /**
- * Cart items, grouped by maker. The design shows a maker header with their
- * running total, then each line with a quantity stepper and remove link.
+ * Cart items, grouped by maker. Content comes from the data layer; see
+ * src/lib/data/.
  */
-const makers = [
-  {
-    name: 'Lakshmi Amma',
-    place: 'Madurai',
-    total: '₹ 320',
-    lines: [
-      { size: '200g', name: 'Idli podi', price: '₹ 160', was: '₹190', off: '15%', lineTotal: '₹ 320', qty: 2 },
-    ],
-  },
-  {
-    name: 'Savitri rAO',
-    place: 'Guntur',
-    total: '₹ 450',
-    lines: [
-      { size: '250g', name: 'Kodubale', price: '₹ 240', off: '15%', lineTotal: '₹ 240', qty: 1 },
-      { size: '300g', name: 'Gongura pickle', price: '₹ 210', was: '₹190', off: '15%', lineTotal: '₹ 210', qty: 1 },
-    ],
-  },
-];
+import type { CartGroup, Maker, Product } from '../../lib/data';
+
+interface Props {
+  groups: CartGroup[];
+  makersById: Record<string, Maker>;
+  productsById: Record<string, Product>;
+}
+
+const { groups, makersById, productsById }: Props = Astro.props;
 ---
 
 <div class="fz-cart-lines">
   {
-    makers.map((m) => (
+    groups.map((m) => (
       <article class="fz-mgroup">
         <header class="fz-mgroup__head">
           <span class="fz-mgroup__photo fz-media" aria-hidden="true" />
           <span class="fz-mgroup__who">
-            <b>{m.name}</b>
-            <small>{m.place} · packed fresh by her</small>
+            <b>{makersById[m.makerId]?.name}</b>
+            <small>{makersById[m.makerId]?.place} · {m.note}</small>
           </span>
           <span class="fz-mgroup__total">
             <small>Maker total</small>
@@ -47,16 +37,16 @@ const makers = [
             </span>
             <span class="fz-line__body">
               <small class="fz-line__size">{l.size}</small>
-              <b class="fz-line__name">{l.name}</b>
+              <b class="fz-line__name">{productsById[l.productId]?.name}</b>
               <span class="fz-line__price">
                 {l.price}
                 {l.was && <s>{l.was}</s>}
               </span>
               <span class="fz-line__ctrls">
                 <span class="fz-qty fz-qty--sm">
-                  <button type="button" aria-label={`Decrease ${l.name}`}>−</button>
+                  <button type="button" aria-label={`Decrease ${productsById[l.productId]?.name}`}>−</button>
                   <span>{l.qty}</span>
-                  <button type="button" aria-label={`Increase ${l.name}`}>+</button>
+                  <button type="button" aria-label={`Increase ${productsById[l.productId]?.name}`}>+</button>
                 </span>
                 <button type="button" class="fz-line__remove">
                   <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">

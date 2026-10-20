@@ -1,57 +1,57 @@
 ---
 /**
- * Product info column: title, rating, price, pack size, quantity, actions,
- * delivery note. `state` switches between the design's three variants.
+ * Product info column. Content comes from the data layer; `state` switches
+ * between the frame's variants.
  */
-const { state = 'default' } = Astro.props;
-const soldOut = state === 'sold-out';
+import type { ProductWithMaker } from '../../lib/data';
 
-const packs = [
-  { size: '100 g', price: '₹65' },
-  { size: '200 g', price: '₹120', selected: true },
-  { size: '500 g', price: '₹280' },
-];
+interface Props {
+  product: ProductWithMaker;
+  state?: 'default' | 'sold-out';
+}
+
+const { product, state = 'default' }: Props = Astro.props;
+const soldOut = state === 'sold-out' || product.soldOut;
+const inr = (n: number) => `₹${new Intl.NumberFormat('en-IN').format(n)}`;
 ---
 
 <div class="fz-pdp">
   <div class="fz-pdp__chips">
-    <span class="fz-chip">Home cooked</span>
-    <span class="fz-chip">Zero commission</span>
-    <span class="fz-chip">Small batch</span>
+    {product.chips.map((c) => <span class="fz-chip">{c}</span>)}
   </div>
 
-  <h1 class="fz-pdp__title">Idli podi</h1>
+  <h1 class="fz-pdp__title">{product.name}</h1>
 
   <p class="fz-pdp__rating">
     <span class="fz-stars" aria-hidden="true">★★★★★</span>
-    <b>4.6</b>
-    <span>128 reviews · 214 cheered</span>
+    <b>{product.rating}</b>
+    <span>{product.reviewCount} reviews · {product.cheers} cheered</span>
   </p>
 
-  <p class="fz-pdp__blurb">Stone-ground idli podi, made in small batches.</p>
+  <p class="fz-pdp__blurb">{product.blurb}</p>
 
   <p class="fz-pdp__price">
-    <b>₹120</b>
-    <s>₹140</s>
-    <span class="fz-pdp__off">15% off</span>
+    <b>{inr(product.priceInr)}</b>
+    {product.wasInr && <s>{inr(product.wasInr)}</s>}
+    {product.discountLabel && <span class="fz-pdp__off">{product.discountLabel}</span>}
   </p>
 
   <p class="fz-pdp__tax">
-    Inclusive of all taxes · 100% of the price goes to Lakshmi Amma
+    Inclusive of all taxes · 100% of the price goes to {product.maker.name}
   </p>
 
   <section class="fz-pdp__group">
     <h2 class="fz-pdp__label">Pack size</h2>
     <div class="fz-packs">
       {
-        packs.map((p) => (
+        product.packs.map((p) => (
           <button
             type="button"
             class:list={['fz-pack', p.selected && 'is-selected']}
             aria-pressed={p.selected ? 'true' : 'false'}
           >
             <span class="fz-pack__size">{p.size}</span>
-            <span class="fz-pack__price">{p.price}</span>
+            <span class="fz-pack__price">{inr(p.priceInr)}</span>
             {p.selected && (
               <svg class="fz-pack__tick" width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
                 <circle cx="10" cy="10" r="9" fill="currentColor" />
@@ -76,7 +76,7 @@ const packs = [
         soldOut ? (
           <span class="fz-pdp__stockout">Out of stock in this batch</span>
         ) : (
-          <span class="fz-pdp__stock">Only 14 left in this batch</span>
+          <span class="fz-pdp__stock">Only {product.stockLeft} left in this batch</span>
         )
       }
     </div>

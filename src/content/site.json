@@ -1,0 +1,35 @@
+{
+  "brand": "Flavorz",
+  "nav": ["Offers", "Community", "Orders", "Shop"],
+  "location": "Jp Nagar, Bangalore",
+  "onlineCount": 128,
+  "searchPlaceholder": "Search \"avarekalu\", \"podi\", \"Lakshmi Amma\"",
+  "languages": [
+    { "code": "en", "label": "EN" },
+    { "code": "kn", "label": "ಕನ್ನಡ" }
+  ],
+  "viewer": { "initials": "SR", "tier": "SILVER" },
+  "footer": {
+    "columns": [
+      {
+        "heading": "Registered Office:",
+        "lines": [
+          "CKGFlavorz FoodTech Pvt Ltd",
+          "112, 17th main road, MIG KHB Colony,",
+          "5th block, Koramangala,",
+          "Bangalore 560095"
+        ]
+      },
+      { "heading": "Contact Us:", "lines": ["info@theflavorz.com", "Call: +919742557770"] },
+      { "heading": "Quick Links:", "lines": ["Privacy Policy", "Terms and Conditions"] },
+      {
+        "heading": "Other Info:",
+        "lines": [
+          "GSTN: 29AALCC8084A1ZH",
+          "CIN: U56290KA2024PTC187789",
+          "fssai License: 11224999000767"
+        ]
+      }
+    ]
+  }
+}

@@ -1,14 +1,12 @@
 ---
-/** Maker strip under the product: avatar, bio, stats, link to their page. */
-const {
-  name = 'Lakshmi Amma',
-  place = 'Mysuru',
-  bio = 'Making podis and pickles for 12 years',
-  note = 'Stone-grinds every batch herself. Her kitchen passed both Flavorz checks.',
-  rating = '4.8',
-  cheers = '214',
-  products = '38',
-} = Astro.props;
+/** Maker strip under the product. Content comes from the data layer. */
+import type { Maker } from '../../lib/data';
+
+interface Props {
+  maker: Maker;
+}
+
+const { maker }: Props = Astro.props;
 ---
 
 <section class="fz-maker">
@@ -16,7 +14,8 @@ const {
 
   <div class="fz-maker__body">
     <p class="fz-maker__name">
-      {name}
+      {maker.name}
+      {maker.verified && (
       <span class="fz-verified">
         <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
           <circle cx="8" cy="8" r="7" fill="currentColor"></circle>
@@ -30,15 +29,16 @@ const {
         </svg>
         Verified maker
       </span>
+      )}
     </p>
-    <p class="fz-maker__bio">{place} · {bio}</p>
-    <p class="fz-maker__note">{note}</p>
+    <p class="fz-maker__bio">{maker.city} · {maker.bio}</p>
+    <p class="fz-maker__note">{maker.note}</p>
   </div>
 
   <dl class="fz-maker__stats">
-    <div><dt>{rating}</dt><dd>Maker rating</dd></div>
-    <div><dt>{cheers}</dt><dd>Cheers</dd></div>
-    <div><dt>{products}</dt><dd>Products</dd></div>
+    <div><dt>{maker.rating}</dt><dd>Maker rating</dd></div>
+    <div><dt>{maker.cheers}</dt><dd>Cheers</dd></div>
+    <div><dt>{maker.productCount}</dt><dd>Products</dd></div>
   </dl>
 
   <a class="fz-btn fz-btn--ghost fz-maker__cta" href="#">View maker page</a>

@@ -1,0 +1,68 @@
+{
+  "itemCount": 4,
+  "makerCount": 2,
+  "groups": [
+    {
+      "makerId": "lakshmi-amma",
+      "note": "packed fresh by her",
+      "total": "₹ 320",
+      "lines": [
+        {
+          "productId": "idli-podi",
+          "size": "200g",
+          "price": "₹ 160",
+          "was": "₹190",
+          "off": "15%",
+          "lineTotal": "₹ 320",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "makerId": "savitri-rao",
+      "note": "packed fresh by her",
+      "total": "₹ 450",
+      "lines": [
+        { "productId": "kodubale", "size": "250g", "price": "₹ 240", "off": "15%", "lineTotal": "₹ 240", "qty": 1 },
+        {
+          "productId": "gongura-pickle",
+          "size": "300g",
+          "price": "₹ 210",
+          "was": "₹190",
+          "off": "15%",
+          "lineTotal": "₹ 210",
+          "qty": 1
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "address": {
+      "label": "Home",
+      "line": "Jp Nagar, Bangalore",
+      "phone": "+91 98XXX XX123",
+      "verified": true,
+      "delivery": "Delivery by tomorrow · Sat 10 Oct"
+    },
+    "tier": {
+      "name": "Silver shopper",
+      "note": "This order takes you to ₹4,190.",
+      "progressPct": 42,
+      "toNext": "₹810 more to reach",
+      "nextTier": "Gold",
+      "topTier": "Platinum ₹10,000"
+    },
+    "rows": [
+      { "label": "Item total", "value": "₹830" },
+      { "label": "Offer discount", "value": "−₹60" },
+      { "label": "Delivery fee (placeholder)", "value": "−₹40" },
+      { "label": "Silver delivery perk (placeholder)", "value": "−₹20" }
+    ],
+    "toPay": "₹790",
+    "payment": { "label": "Pay on delivery", "note": "Cash or UPI at your door" },
+    "zeroCommission": "Zero commission. all ₹770 of item price goes to the makers: Lakshmi Amma ₹320 and Savitri Rao ₹450",
+    "cta": "Place Order",
+    "ctaNote": "Pay ₹790 on delivery"
+  },
+  "addOnProductIds": ["badami-mangoes", "kodubale"]
+}

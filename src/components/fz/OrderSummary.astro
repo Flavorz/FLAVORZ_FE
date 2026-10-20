@@ -1,13 +1,13 @@
 ---
-/** Right column of the cart: address, offer, tier, totals, payment, CTA. */
-const { cta = 'Place Order', ctaNote = 'Pay ₹790 on delivery' } = Astro.props;
+/** Right column of the cart. Content comes from the data layer. */
+import type { CartContent } from '../../lib/data';
 
-const rows = [
-  { label: 'Item total', value: '₹830' },
-  { label: 'Offer discount', value: '−₹60' },
-  { label: 'Delivery fee (placeholder)', value: '−₹40' },
-  { label: 'Silver delivery perk (placeholder)', value: '−₹20' },
-];
+interface Props {
+  summary: CartContent['summary'];
+}
+
+const { summary }: Props = Astro.props;
+const { address, tier, rows } = summary;
 ---
 
 <aside class="fz-summary">
@@ -22,12 +22,12 @@ const rows = [
           <circle cx="8" cy="6" r="1.5" fill="currentColor" />
         </svg>
       </span>
-      <b>Home</b>
+      <b>{address.label}</b>
       <a href="#">Change</a>
     </p>
-    <p class="fz-summary__addrLine">Jp Nagar, Bangalore</p>
+    <p class="fz-summary__addrLine">{address.line}</p>
     <p class="fz-summary__addrLine">
-      +91 98XXX XX123
+      {address.phone}
       <span class="fz-verified-sm">
         <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true">
           <circle cx="8" cy="8" r="7" fill="currentColor" />
@@ -37,7 +37,7 @@ const rows = [
         Verified
       </span>
     </p>
-    <p class="fz-summary__addrLine">Delivery by tomorrow · Sat 10 Oct</p>
+    <p class="fz-summary__addrLine">{address.delivery}</p>
   </div>
 
   <form class="fz-offer">
@@ -48,19 +48,19 @@ const rows = [
   <div class="fz-tier-note">
     <p class="fz-tier-note__head">
       <span class="fz-tier-note__dot" aria-hidden="true"></span>
-      <b>Silver shopper</b> · This order takes you to ₹4,190.
+      <b>{tier.name}</b> · {tier.note}
     </p>
-    <span class="fz-tier-note__track"><i></i></span>
+    <span class="fz-tier-note__track"><i style={`width:${tier.progressPct}%`}></i></span>
     <p class="fz-tier-note__scale">
-      <span>₹810 more to reach <b>Gold</b></span>
-      <span>Platinum ₹10,000</span>
+      <span>{tier.toNext} <b>{tier.nextTier}</b></span>
+      <span>{tier.topTier}</span>
     </p>
   </div>
 
   <dl class="fz-totals">
     {rows.map((r) => (<><dt>{r.label}</dt><dd>{r.value}</dd></>))}
     <dt class="fz-totals__pay">To pay</dt>
-    <dd class="fz-totals__pay">₹790</dd>
+    <dd class="fz-totals__pay">{summary.toPay}</dd>
   </dl>
 
   <label class="fz-pay">
@@ -73,19 +73,16 @@ const rows = [
       </svg>
     </span>
     <span class="fz-pay__body">
-      <b>Pay on delivery</b>
-      <small>Cash or UPI at your door</small>
+      <b>{summary.payment.label}</b>
+      <small>{summary.payment.note}</small>
     </span>
   </label>
 
-  <p class="fz-zero">
-    <b>Zero commission.</b> all ₹770 of item price goes to the makers: Lakshmi Amma ₹320 and
-    Savitri Rao ₹450
-  </p>
+  <p class="fz-zero">{summary.zeroCommission}</p>
 
   <a class="fz-btn fz-btn--primary fz-summary__cta" href="/payment">
-    <b>{cta}</b>
-    <small>{ctaNote}</small>
+    <b>{summary.cta}</b>
+    <small>{summary.ctaNote}</small>
   </a>
 </aside>
 
@@ -198,7 +195,6 @@ const rows = [
 
   .fz-tier-note__track i {
     display: block;
-    width: 42%;
     height: 100%;
     border-radius: var(--fz-radius-pill);
     background: var(--fz-primary);

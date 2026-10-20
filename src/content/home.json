@@ -1,0 +1,109 @@
+{
+  "ticker": [
+    "Meena in Mysuru just bought Sambar mix · 2 min ago",
+    "Super shopper · ₹1,580 to Gold",
+    "Leading comments · Meena shared 12 helpful tips",
+    "Delivery by tomorrow · Pay on delivery",
+    "Content leader · Lakshmi Amma posted 5 harvest stories",
+    "Welcome back, Saranya"
+  ],
+  "shopper": {
+    "name": "Sarath R",
+    "greeting": "Welcome back, Sarath",
+    "league": "Super Shopper league · this month",
+    "spentLabel": "You've shopped ₹3,420. Shop ₹1,580 more to reach Gold.",
+    "tier": "Silver",
+    "progressPct": 50,
+    "tiers": [
+      { "name": "Silver", "at": "₹1,000" },
+      { "name": "Gold", "at": "₹5,000" },
+      { "name": "Platinum", "at": "₹10,000" }
+    ],
+    "perks": {
+      "heading": "TIER PERKS  PLACEHOLDER",
+      "lines": [
+        { "tier": "Silver", "text": "delivery discount" },
+        { "tier": "Gold", "text": "free delivery" },
+        { "tier": "Platinum", "text": "free delivery + priority" }
+      ],
+      "note": "Perks and amounts to be confirmed"
+    }
+  },
+  "promos": [
+    { "tag": "IN SEASON", "title": "Mango season\nis here", "cta": "Shop Mangoes", "tone": "panel" },
+    {
+      "tag": "ZERO COMMISSION",
+      "title": "100% of the price\ngoes to the maker",
+      "body": "You pay ₹220, Radha gets ₹220",
+      "tone": "dark"
+    },
+    { "tag": "FESTIVE", "title": "Diwali boxes\npre-order now", "tone": "mid" }
+  ],
+  "reels": [
+    { "kind": "Making", "makerId": "lakshmi-amma", "caption": "Grinding idli podi", "productId": "idli-podi" },
+    { "kind": "Harvest", "makerId": "ganesh-k", "caption": "Avarekalu this morning", "productId": "avarekalu" },
+    { "kind": "Packing", "makerId": "savitri-rao", "caption": "Packing gongura pickle", "productId": "gongura-pickle" },
+    { "kind": "Unboxing", "makerId": "rekha-k", "caption": "Opening her jaggery order", "productId": "jaggery" }
+  ],
+  "categories": ["Podis", "Pickles", "Snacks", "Millets", "Produce", "Sweets", "Ready mixes", "Bundles"],
+  "freshProductIds": ["badami-mangoes", "kodubale", "avarekalu", "idli-podi"],
+  "videos": [
+    {
+      "kind": "Making",
+      "title": "How Lakshmi Amma stone-grinds idli podi",
+      "makerId": "lakshmi-amma",
+      "watchMinutes": 2,
+      "cheered": 214,
+      "productId": "idli-podi"
+    },
+    {
+      "kind": "Harvest",
+      "title": "A morning in the avarekalu fields",
+      "makerId": "ganesh-k",
+      "watchMinutes": 3,
+      "cheered": 141,
+      "productId": "avarekalu"
+    },
+    {
+      "kind": "Packing",
+      "title": "Gongura pickle, jar by jar",
+      "makerId": "savitri-rao",
+      "watchMinutes": 2,
+      "cheered": 96,
+      "productId": "gongura-pickle"
+    }
+  ],
+  "leaderboards": [
+    {
+      "title": "Super shoppers",
+      "rows": [
+        { "rank": "1", "name": "Meena", "detail": "Platinum", "isTier": true },
+        { "rank": "2", "name": "Rekha K", "detail": "Gold", "isTier": true },
+        { "rank": "3", "name": "You", "detail": "Silver", "isTier": true }
+      ]
+    },
+    {
+      "title": "Leading comments",
+      "rows": [
+        { "rank": "1", "name": "Meena", "detail": "48 comments" },
+        { "rank": "2", "name": "Ganesh M", "detail": "31 comments" },
+        { "rank": "3", "name": "Rekha K", "detail": "22 comments" }
+      ]
+    },
+    {
+      "title": "Content leaders",
+      "rows": [
+        { "rank": "1", "name": "Lakshmi amma", "detail": "12 posts" },
+        { "rank": "2", "name": "Savitri Rao", "detail": "9 posts" },
+        { "rank": "3", "name": "Radha Devi", "detail": "7 posts" }
+      ]
+    }
+  ],
+  "makerIds": ["lakshmi-amma", "savitri-rao", "ganesh-k", "radha-devi"],
+  "commission": {
+    "line": "Zero commission. 100% of the price goes to the maker.",
+    "cta": "See on Flavorz →",
+    "youPay": "₹ 220",
+    "makerGets": "₹ 220"
+  }
+}

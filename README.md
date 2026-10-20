@@ -88,6 +88,33 @@ Then drop in `public/brands/acme/logo.svg` and `favicon.svg`.
 
 ---
 
+## Content and the API seam
+
+No screen hardcodes content. Copy, prices and imagery metadata live in
+`src/content/*.json` and are read through `src/lib/data/`:
+
+```ts
+import { content } from '../lib/data';
+const home = await content.home();
+```
+
+Switching to a real backend is an environment change, not a code change:
+
+```bash
+PUBLIC_CONTENT_SOURCE=api
+PUBLIC_API_BASE_URL=https://api.theflavorz.com/v1
+```
+
+`src/lib/data/types.ts` is the contract both sources satisfy, and
+`tests/data-source.test.ts` enforces it — including that no product, cart line
+or home reference points at a missing maker or product. See
+[src/content/README.md](src/content/README.md) for the endpoint list.
+
+Routes come from the data too: adding a product to `products.json` generates
+its page.
+
+---
+
 ## Pulling tokens from Figma
 
 `scripts/figma-pull.mjs` reads a Figma file and maps its colour tokens onto a

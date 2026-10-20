@@ -1,0 +1,72 @@
+[
+  {
+    "id": "lakshmi-amma",
+    "name": "Lakshmi Amma",
+    "place": "Madurai",
+    "city": "Mysuru",
+    "followers": "2.4k",
+    "verified": true,
+    "bio": "Making podis and pickles for 12 years",
+    "note": "Stone-grinds every batch herself. Her kitchen passed both Flavorz checks.",
+    "rating": "4.8",
+    "cheers": "214",
+    "productCount": "38",
+    "image": "/img/makers/lakshmi-amma.jpg"
+  },
+  {
+    "id": "savitri-rao",
+    "name": "Savitri Rao",
+    "place": "Guntur",
+    "city": "Guntur",
+    "followers": "1.9k",
+    "verified": true,
+    "bio": "Pickles and preserves, four generations",
+    "note": "Sun-dries every batch on her terrace.",
+    "rating": "4.7",
+    "cheers": "186",
+    "productCount": "24",
+    "image": "/img/makers/savitri-rao.jpg"
+  },
+  {
+    "id": "ganesh-k",
+    "name": "Ganesh K",
+    "place": "Dharwad",
+    "city": "Dharwad",
+    "followers": "1.2k",
+    "verified": true,
+    "bio": "Avarekalu and seasonal produce",
+    "note": "Harvests at dawn, ships the same day.",
+    "rating": "4.6",
+    "cheers": "141",
+    "productCount": "16",
+    "image": "/img/makers/ganesh-k.jpg"
+  },
+  {
+    "id": "radha-devi",
+    "name": "Radha Devi",
+    "place": "Mysore",
+    "city": "Mysore",
+    "followers": "640",
+    "verified": true,
+    "bio": "Small-batch snacks",
+    "note": "Everything fried fresh to order.",
+    "rating": "4.9",
+    "cheers": "96",
+    "productCount": "11",
+    "image": "/img/makers/radha-devi.jpg"
+  },
+  {
+    "id": "rekha-k",
+    "name": "Rekha K",
+    "place": "Bengaluru",
+    "city": "Bengaluru",
+    "followers": "410",
+    "verified": false,
+    "bio": "Jaggery and sweeteners",
+    "note": "",
+    "rating": "4.5",
+    "cheers": "72",
+    "productCount": "7",
+    "image": "/img/makers/rekha-k.jpg"
+  }
+]

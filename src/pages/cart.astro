@@ -2,35 +2,42 @@
 import FzLayout from '../layouts/FzLayout.astro';
 import CartLines from '../components/fz/CartLines.astro';
 import OrderSummary from '../components/fz/OrderSummary.astro';
-import Fresh from '../components/fz/Fresh.astro';
+import { content } from '../lib/data';
+
+const cart = await content.cart();
+const allMakers = await content.makers();
+const allProducts = await content.products();
+const addOns = await content.productsByIds(cart.addOnProductIds);
+
+const makersById = Object.fromEntries(allMakers.map((m) => [m.id, m]));
+const productsById = Object.fromEntries(allProducts.map((p) => [p.id, p]));
 
 const crumbs = [{ label: 'Home', href: '/fz/' }, { label: 'Cart' }];
+const inr = (n: number) => `₹ ${new Intl.NumberFormat('en-IN').format(n)}`;
 ---
 
-<FzLayout title="Your cart · Flavorz" crumbs={crumbs} cartCount={4}>
+<FzLayout title="Your cart · Flavorz" crumbs={crumbs} cartCount={cart.itemCount}>
   <div class="fz-shell fz-cart-head">
     <div>
       <h1>Your cart</h1>
-      <p>4 items from 2 makers</p>
+      <p>{cart.itemCount} items from {cart.makerCount} makers</p>
     </div>
     <a class="fz-cart-head__back" href="/shop">← Continue shopping</a>
   </div>
 
   <div class="fz-shell fz-cart-grid">
     <div>
-      <CartLines />
+      <CartLines groups={cart.groups} makersById={makersById} productsById={productsById} />
+
       <section class="fz-cart-more">
         <h2>Fresh today, add to your order</h2>
         <p>Same delivery, no extra trip.</p>
         <div class="fz-cart-more__grid">
           {
-            [
-              { tag: 'Harvest', size: '3 kg', name: 'Badami mangoes', maker: 'Ganesh K', price: '₹ 899' },
-              { tag: 'Fresh batch', size: '250 g', name: 'Kodubale', maker: 'Radha Devi', price: '₹ 150' },
-            ].map((p) => (
+            addOns.map((p) => (
               <article class="fz-addcard">
                 <span class="fz-addcard__media fz-media">
-                  <span class="fz-tag">{p.tag}</span>
+                  {p.tag && <span class="fz-tag">{p.tag}</span>}
                   <button type="button" class="fz-btn fz-btn--primary fz-btn--sm">Buy</button>
                 </span>
                 <span class="fz-addcard__body">
@@ -38,10 +45,10 @@ const crumbs = [{ label: 'Home', href: '/fz/' }, { label: 'Cart' }];
                   <b>{p.name}</b>
                   <span class="fz-addcard__maker">
                     <span class="fz-addcard__dot" aria-hidden="true" />
-                    {p.maker}
+                    {p.maker.name}
                   </span>
                   <span class="fz-addcard__foot">
-                    <b>{p.price}</b>
+                    <b>{inr(p.priceInr)}</b>
                     <button type="button" class="fz-btn fz-btn--ghost fz-btn--sm">+ Add</button>
                   </span>
                 </span>
@@ -51,7 +58,8 @@ const crumbs = [{ label: 'Home', href: '/fz/' }, { label: 'Cart' }];
         </div>
       </section>
     </div>
-    <OrderSummary />
+
+    <OrderSummary summary={cart.summary} />
   </div>
 </FzLayout>
 
