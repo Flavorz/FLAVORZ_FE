@@ -329,6 +329,43 @@ body.fz {
   white-space: nowrap;
 }
 
+/*
+ * Totals grid and the zero-commission note.
+ *
+ * Global, not scoped to OrderSummary: the payment page uses both, and a
+ * component-scoped rule leaves every other component unstyled. This is the
+ * fourth time that has caught me on this project.
+ */
+.fz-totals {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 8px;
+  margin: 0;
+  font-size: var(--fz-body-size);
+  line-height: var(--fz-body-lh);
+}
+
+.fz-totals dd {
+  margin: 0;
+  text-align: end;
+}
+
+.fz-totals__pay {
+  font-size: var(--fz-para-size);
+  font-weight: 600;
+  padding-top: 10px;
+  border-top: 1px solid var(--fz-header-border);
+}
+
+.fz-zero {
+  background: var(--fz-panel);
+  border-radius: var(--fz-radius-md);
+  padding: 12px 14px;
+  font-size: var(--fz-body-size);
+  line-height: var(--fz-body-lh);
+  color: var(--fz-panel-text);
+}
+
 /* ---- Card ----
  * The frames give cards a drop shadow and NO border. */
 .fz-card {

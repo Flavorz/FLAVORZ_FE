@@ -102,3 +102,51 @@ test('the new screens render without console errors', async ({ page }) => {
   }
   expect(errors).toEqual([]);
 });
+
+test.describe('payment', () => {
+  test.use({ viewport: { width: 1440, height: 1000 } });
+
+  test('renders address, methods and summary', async ({ page }) => {
+    await page.goto('/payment/');
+    await expect(page.getByRole('heading', { name: 'Payment', level: 1 })).toBeVisible();
+    await expect(page.getByText('Deliver to')).toBeVisible();
+    await expect(page.locator('.fz-method')).toHaveCount(4);
+    await expect(page.getByRole('heading', { name: 'Order summary' })).toBeVisible();
+    // Exact: "Choose how you'd like to pay" also contains "to pay".
+    await expect(page.getByText('To pay', { exact: true })).toBeVisible();
+  });
+
+  test('marks one method as selected', async ({ page }) => {
+    await page.goto('/payment/');
+    const selected = page.locator('.fz-method.is-selected');
+    await expect(selected).toHaveCount(1);
+    await expect(selected).toContainText('Pay on delivery');
+    await expect(selected.locator('input')).toBeChecked();
+  });
+
+  test('lists every cart line', async ({ page }) => {
+    await page.goto('/payment/');
+    // Three lines across two makers, matching the cart.
+    await expect(page.locator('.fz-pay-lines li')).toHaveCount(3);
+  });
+
+  test('shares the totals styling with the cart', async ({ page }) => {
+    // .fz-totals and .fz-zero were scoped to OrderSummary and rendered
+    // unstyled here; both are global now.
+    await page.goto('/payment/');
+    const styles = await page.evaluate(() => ({
+      totals: getComputedStyle(document.querySelector('.fz-totals')!).display,
+      zeroBg: getComputedStyle(document.querySelector('.fz-zero')!).backgroundColor,
+    }));
+    expect(styles.totals).toBe('grid');
+    expect(styles.zeroBg).toBe('rgb(242, 225, 222)');
+  });
+});
+
+test('cart links through to payment', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/cart/');
+  await page.getByRole('link', { name: /Place Order/ }).click();
+  await expect(page).toHaveURL(/\/payment\/?$/);
+  await expect(page.getByRole('heading', { name: 'Payment', level: 1 })).toBeVisible();
+});

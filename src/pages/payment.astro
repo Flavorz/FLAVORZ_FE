@@ -1,0 +1,268 @@
+---
+import FzLayout from '../layouts/FzLayout.astro';
+import PaymentMethods from '../components/fz/PaymentMethods.astro';
+import { content } from '../lib/data';
+
+const cart = await content.cart();
+const makers = await content.makers();
+const products = await content.products();
+
+const makersById = Object.fromEntries(makers.map((m) => [m.id, m]));
+const productsById = Object.fromEntries(products.map((p) => [p.id, p]));
+
+const { payment, summary } = cart;
+const lines = cart.groups.flatMap((g) =>
+  g.lines.map((l) => ({ ...l, maker: makersById[g.makerId], product: productsById[l.productId] })),
+);
+
+const crumbs = [
+  { label: 'Home', href: '/fz/' },
+  { label: 'Cart', href: '/cart' },
+  { label: 'Payment' },
+];
+---
+
+<FzLayout title="Payment · Flavorz" crumbs={crumbs} cartCount={cart.itemCount}>
+  <div class="fz-shell fz-pay-head">
+    <div>
+      <h1>{payment.heading}</h1>
+      <p>{payment.subheading}</p>
+    </div>
+    <a class="fz-pay-head__back" href="/cart">← Back to cart</a>
+  </div>
+
+  <div class="fz-shell fz-pay-grid">
+    <div class="fz-pay-main">
+      <section class="fz-pay-block">
+        <h2 class="fz-pay-block__title">Deliver to</h2>
+        <div class="fz-pay-addr">
+          <span class="fz-pay-addr__pin" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 16 16">
+              <path d="M8 1.5a4.5 4.5 0 0 1 4.5 4.5c0 3.2-4.5 8.5-4.5 8.5S3.5 9.2 3.5 6A4.5 4.5 0 0 1 8 1.5Z"
+                fill="none" stroke="currentColor" stroke-width="1.3" />
+              <circle cx="8" cy="6" r="1.5" fill="currentColor" />
+            </svg>
+          </span>
+          <span class="fz-pay-addr__body">
+            <b>{summary.address.label} · {summary.address.line}</b>
+            <small>{summary.address.phone} · {summary.address.delivery}</small>
+          </span>
+          <a href="/cart">Change</a>
+        </div>
+      </section>
+
+      <section class="fz-pay-block">
+        <h2 class="fz-pay-block__title">Payment method</h2>
+        <PaymentMethods methods={payment.methods} secureNote={payment.secureNote} />
+      </section>
+    </div>
+
+    <aside class="fz-pay-side">
+      <h2 class="fz-pay-side__title">Order summary</h2>
+
+      <ul class="fz-pay-lines">
+        {
+          lines.map((l) => (
+            <li>
+              <span class="fz-pay-lines__thumb fz-media" aria-hidden="true" />
+              <span class="fz-pay-lines__body">
+                <b>{l.product?.name}</b>
+                <small>{l.size} · {l.maker?.name} · Qty {l.qty}</small>
+              </span>
+              <span class="fz-pay-lines__total">{l.lineTotal}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <dl class="fz-totals">
+        {summary.rows.map((r) => (<><dt>{r.label}</dt><dd>{r.value}</dd></>))}
+        <dt class="fz-totals__pay">To pay</dt>
+        <dd class="fz-totals__pay">{summary.toPay}</dd>
+      </dl>
+
+      <p class="fz-zero">{summary.zeroCommission}</p>
+
+      <a class="fz-btn fz-btn--primary fz-pay-side__cta" href="/cart">
+        <b>{payment.cta}</b>
+        <small>{payment.ctaNote}</small>
+      </a>
+    </aside>
+  </div>
+</FzLayout>
+
+<style>
+  .fz-pay-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 22px;
+  }
+
+  .fz-pay-head h1 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 0;
+  }
+
+  .fz-pay-head p {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+    margin-top: 2px;
+  }
+
+  .fz-pay-head__back {
+    margin-inline-start: auto;
+    color: var(--fz-text);
+    text-decoration: none;
+    font-size: var(--fz-body-size);
+    font-weight: 600;
+  }
+
+  .fz-pay-grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 26px;
+    margin-top: 20px;
+    align-items: start;
+  }
+
+  .fz-pay-main {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .fz-pay-block__title {
+    font-family: var(--fz-font-body);
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+
+  .fz-pay-addr {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--fz-panel);
+    border-radius: var(--fz-radius-md);
+    padding: 15px 18px;
+    color: var(--fz-panel-text);
+  }
+
+  .fz-pay-addr__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-pay-addr__body b {
+    display: block;
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+  }
+
+  .fz-pay-addr__body small {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-pay-addr a {
+    color: inherit;
+    font-size: var(--fz-body-size);
+    font-weight: 600;
+    flex: 0 0 auto;
+  }
+
+  .fz-pay-side {
+    border: 1px solid var(--fz-header-border);
+    border-radius: var(--fz-radius-lg);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .fz-pay-side__title {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 0;
+  }
+
+  .fz-pay-lines {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .fz-pay-lines li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .fz-pay-lines__thumb {
+    width: 46px;
+    height: 46px;
+    border-radius: var(--fz-radius-md);
+    flex: 0 0 auto;
+  }
+
+  .fz-pay-lines__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-pay-lines__body b {
+    display: block;
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    font-weight: 400;
+  }
+
+  .fz-pay-lines__body small {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-pay-lines__total {
+    font-size: var(--fz-para-size);
+    font-weight: 600;
+    flex: 0 0 auto;
+  }
+
+  .fz-pay-side__cta {
+    flex-direction: column;
+    gap: 1px;
+    padding-block: 12px;
+    text-decoration: none;
+  }
+
+  .fz-pay-side__cta b {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+  }
+
+  .fz-pay-side__cta small {
+    font-size: var(--fz-body-size);
+    opacity: 0.88;
+  }
+
+  @media (max-width: 1000px) {
+    .fz-pay-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,192 @@
+---
+/** Payment method chooser. Options come from the data layer. */
+import type { PaymentMethod } from '../../lib/data';
+
+interface Props {
+  methods: PaymentMethod[];
+  secureNote: string;
+}
+
+const { methods, secureNote }: Props = Astro.props;
+
+const icons: Record<string, string> = {
+  cod: 'truck',
+  upi: 'phone',
+  card: 'card',
+  netbanking: 'bank',
+};
+---
+
+<div class="fz-methods">
+  {
+    methods.map((m) => (
+      <label class:list={['fz-method', m.selected && 'is-selected']}>
+        <input type="radio" name="payment-method" value={m.id} checked={m.selected} />
+
+        <span class="fz-method__icon" aria-hidden="true">
+          {icons[m.id] === 'truck' && (
+            <svg width="20" height="16" viewBox="0 0 24 20">
+              <path d="M1 4h12v10H1zM13 7h5l4 4v3h-9z" fill="none" stroke="currentColor"
+                stroke-width="1.5" stroke-linejoin="round" />
+              <circle cx="6" cy="16" r="2" fill="none" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="17" cy="16" r="2" fill="none" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+          )}
+          {icons[m.id] === 'phone' && (
+            <svg width="16" height="20" viewBox="0 0 16 20">
+              <rect x="2" y="1" width="12" height="18" rx="2.5" fill="none" stroke="currentColor"
+                stroke-width="1.5" />
+              <path d="M6.5 16h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          )}
+          {icons[m.id] === 'card' && (
+            <svg width="20" height="16" viewBox="0 0 20 16">
+              <rect x="1" y="2" width="18" height="12" rx="2" fill="none" stroke="currentColor"
+                stroke-width="1.5" />
+              <path d="M1 6h18" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+          )}
+          {icons[m.id] === 'bank' && (
+            <svg width="20" height="18" viewBox="0 0 20 18">
+              <path d="M2 7l8-5 8 5z" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linejoin="round" />
+              <path d="M4 8v6M8 8v6M12 8v6M16 8v6M2 16h16" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" />
+            </svg>
+          )}
+        </span>
+
+        <span class="fz-method__body">
+          <span class="fz-method__top">
+            <b>{m.label}</b>
+            {m.badge && <span class="fz-method__badge">{m.badge}</span>}
+          </span>
+          <small>{m.note}</small>
+        </span>
+
+        <span class="fz-method__tick" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 20 20">
+            <circle cx="10" cy="10" r="9" fill="currentColor" />
+            <path d="M6 10.5l2.6 2.5L14 7.5" fill="none" stroke="var(--fz-site-bg)"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+      </label>
+    ))
+  }
+</div>
+
+<p class="fz-secure">
+  <svg width="14" height="16" viewBox="0 0 16 18" aria-hidden="true">
+    <rect x="2" y="7" width="12" height="9" rx="2" fill="none" stroke="currentColor"
+      stroke-width="1.5"></rect>
+    <path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+  </svg>
+  {secureNote}
+</p>
+
+<style>
+  .fz-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .fz-method {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    padding: 15px 18px;
+    cursor: pointer;
+    transition: border-color 160ms ease;
+  }
+
+  .fz-method:hover {
+    border-color: var(--fz-stroke-ink);
+  }
+
+  .fz-method.is-selected {
+    border-color: var(--fz-primary);
+    border-width: 2px;
+    padding: 14px 17px;
+  }
+
+  /* The radio is the accessible control; the card is its visual treatment. */
+  .fz-method input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .fz-method:focus-within {
+    outline: 2px solid var(--fz-primary-focus);
+    outline-offset: 2px;
+  }
+
+  .fz-method__icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--fz-radius-md);
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+    flex: 0 0 auto;
+  }
+
+  .fz-method__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-method__top {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .fz-method__top b {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+  }
+
+  .fz-method__badge {
+    background: var(--fz-tag);
+    color: var(--fz-tag-text);
+    border-radius: var(--fz-radius-sm);
+    padding: 2px 8px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-method__body small {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+    margin-top: 2px;
+  }
+
+  .fz-method__tick {
+    flex: 0 0 auto;
+    color: var(--fz-primary);
+    opacity: 0;
+  }
+
+  .fz-method.is-selected .fz-method__tick {
+    opacity: 1;
+  }
+
+  .fz-secure {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+</style>

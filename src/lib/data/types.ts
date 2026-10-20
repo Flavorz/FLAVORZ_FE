@@ -149,6 +149,24 @@ export interface CartGroup {
   lines: CartLine[];
 }
 
+export interface PaymentMethod {
+  id: string;
+  label: string;
+  note: string;
+  /** Optional pill shown beside the label, e.g. "Instant". */
+  badge?: string;
+  selected?: boolean;
+}
+
+export interface PaymentContent {
+  heading: string;
+  subheading: string;
+  methods: PaymentMethod[];
+  cta: string;
+  ctaNote: string;
+  secureNote: string;
+}
+
 export interface CartContent {
   itemCount: number;
   makerCount: number;
@@ -177,6 +195,7 @@ export interface CartContent {
     ctaNote: string;
   };
   addOnProductIds: string[];
+  payment: PaymentContent;
 }
 
 export interface SiteContent {
