@@ -1,0 +1,144 @@
+---
+/** Maker strip under the product: avatar, bio, stats, link to their page. */
+const {
+  name = 'Lakshmi Amma',
+  place = 'Mysuru',
+  bio = 'Making podis and pickles for 12 years',
+  note = 'Stone-grinds every batch herself. Her kitchen passed both Flavorz checks.',
+  rating = '4.8',
+  cheers = '214',
+  products = '38',
+} = Astro.props;
+---
+
+<section class="fz-maker">
+  <span class="fz-maker__photo fz-media" aria-hidden="true"></span>
+
+  <div class="fz-maker__body">
+    <p class="fz-maker__name">
+      {name}
+      <span class="fz-verified">
+        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="8" cy="8" r="7" fill="currentColor"></circle>
+          <path
+            d="M5 8.4l2 2L11 6"
+            fill="none"
+            stroke="var(--fz-site-bg)"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        Verified maker
+      </span>
+    </p>
+    <p class="fz-maker__bio">{place} · {bio}</p>
+    <p class="fz-maker__note">{note}</p>
+  </div>
+
+  <dl class="fz-maker__stats">
+    <div><dt>{rating}</dt><dd>Maker rating</dd></div>
+    <div><dt>{cheers}</dt><dd>Cheers</dd></div>
+    <div><dt>{products}</dt><dd>Products</dd></div>
+  </dl>
+
+  <a class="fz-btn fz-btn--ghost fz-maker__cta" href="#">View maker page</a>
+</section>
+
+<style>
+  .fz-maker {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid var(--fz-header-border);
+    border-radius: var(--fz-radius-lg);
+    padding: 20px 24px;
+    margin-top: var(--fz-section-gap);
+  }
+
+  .fz-maker__photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+
+  .fz-maker__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-maker__name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+  }
+
+  .fz-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--fz-font-body);
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-secondary);
+  }
+
+  .fz-maker__bio,
+  .fz-maker__note {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+    margin-top: 2px;
+  }
+
+  .fz-maker__stats {
+    display: flex;
+    gap: 28px;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+
+  .fz-maker__stats div {
+    text-align: center;
+  }
+
+  .fz-maker__stats dt {
+    font-family: var(--fz-font-display);
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .fz-maker__stats dd {
+    margin: 0;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-maker__cta {
+    flex: 0 0 auto;
+    text-decoration: none;
+  }
+
+  @media (max-width: 860px) {
+    .fz-maker {
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .fz-maker__stats {
+      gap: 20px;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .fz-maker__cta {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

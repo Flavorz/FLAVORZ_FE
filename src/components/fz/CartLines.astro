@@ -1,0 +1,244 @@
+---
+/**
+ * Cart items, grouped by maker. The design shows a maker header with their
+ * running total, then each line with a quantity stepper and remove link.
+ */
+const makers = [
+  {
+    name: 'Lakshmi Amma',
+    place: 'Madurai',
+    total: '₹ 320',
+    lines: [
+      { size: '200g', name: 'Idli podi', price: '₹ 160', was: '₹190', off: '15%', lineTotal: '₹ 320', qty: 2 },
+    ],
+  },
+  {
+    name: 'Savitri rAO',
+    place: 'Guntur',
+    total: '₹ 450',
+    lines: [
+      { size: '250g', name: 'Kodubale', price: '₹ 240', off: '15%', lineTotal: '₹ 240', qty: 1 },
+      { size: '300g', name: 'Gongura pickle', price: '₹ 210', was: '₹190', off: '15%', lineTotal: '₹ 210', qty: 1 },
+    ],
+  },
+];
+---
+
+<div class="fz-cart-lines">
+  {
+    makers.map((m) => (
+      <article class="fz-mgroup">
+        <header class="fz-mgroup__head">
+          <span class="fz-mgroup__photo fz-media" aria-hidden="true" />
+          <span class="fz-mgroup__who">
+            <b>{m.name}</b>
+            <small>{m.place} · packed fresh by her</small>
+          </span>
+          <span class="fz-mgroup__total">
+            <small>Maker total</small>
+            <b>{m.total}</b>
+          </span>
+        </header>
+
+        {m.lines.map((l) => (
+          <div class="fz-line">
+            <span class="fz-line__thumb fz-media" aria-hidden="true">
+              {l.off && <span class="fz-line__off">{l.off}</span>}
+            </span>
+            <span class="fz-line__body">
+              <small class="fz-line__size">{l.size}</small>
+              <b class="fz-line__name">{l.name}</b>
+              <span class="fz-line__price">
+                {l.price}
+                {l.was && <s>{l.was}</s>}
+              </span>
+              <span class="fz-line__ctrls">
+                <span class="fz-qty fz-qty--sm">
+                  <button type="button" aria-label={`Decrease ${l.name}`}>−</button>
+                  <span>{l.qty}</span>
+                  <button type="button" aria-label={`Increase ${l.name}`}>+</button>
+                </span>
+                <button type="button" class="fz-line__remove">
+                  <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M3 4h10M6.5 4V2.8h3V4M5 4l.7 9h4.6L11 4" fill="none"
+                      stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                  Remove
+                </button>
+              </span>
+            </span>
+            <span class="fz-line__total">{l.lineTotal}</span>
+          </div>
+        ))}
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .fz-cart-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .fz-mgroup {
+    border: 1px solid var(--fz-header-border);
+    border-radius: var(--fz-radius-lg);
+    overflow: hidden;
+  }
+
+  .fz-mgroup__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--fz-header-border);
+  }
+
+  .fz-mgroup__photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+
+  .fz-mgroup__who {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-mgroup__who b {
+    display: block;
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    font-weight: 400;
+  }
+
+  .fz-mgroup__who small {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-mgroup__total {
+    text-align: end;
+    flex: 0 0 auto;
+  }
+
+  .fz-mgroup__total small {
+    display: block;
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-mgroup__total b {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+  }
+
+  .fz-line {
+    display: flex;
+    gap: 14px;
+    padding: 16px 18px;
+  }
+
+  .fz-line + .fz-line {
+    border-top: 1px solid var(--fz-header-border);
+  }
+
+  .fz-line__thumb {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    border-radius: var(--fz-radius-md);
+    flex: 0 0 auto;
+  }
+
+  .fz-line__off {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: var(--fz-site-bg);
+    border-radius: var(--fz-radius-sm);
+    padding: 1px 4px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .fz-line__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-line__size {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-line__name {
+    display: block;
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    font-weight: 400;
+  }
+
+  .fz-line__price {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-line__price s {
+    color: var(--fz-subheading);
+  }
+
+  .fz-line__ctrls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .fz-qty--sm button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .fz-line__remove {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: var(--fz-subheading);
+    font: inherit;
+    font-size: var(--fz-body-size);
+    padding: 0;
+  }
+
+  .fz-line__remove:hover {
+    color: var(--fz-text);
+  }
+
+  .fz-line__total {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 860px) {
+    .fz-line__ctrls {
+      gap: 10px;
+    }
+  }
+</style>

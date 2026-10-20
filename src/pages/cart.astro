@@ -1,0 +1,195 @@
+---
+import FzLayout from '../layouts/FzLayout.astro';
+import CartLines from '../components/fz/CartLines.astro';
+import OrderSummary from '../components/fz/OrderSummary.astro';
+import Fresh from '../components/fz/Fresh.astro';
+
+const crumbs = [{ label: 'Home', href: '/fz/' }, { label: 'Cart' }];
+---
+
+<FzLayout title="Your cart · Flavorz" crumbs={crumbs} cartCount={4}>
+  <div class="fz-shell fz-cart-head">
+    <div>
+      <h1>Your cart</h1>
+      <p>4 items from 2 makers</p>
+    </div>
+    <a class="fz-cart-head__back" href="/shop">← Continue shopping</a>
+  </div>
+
+  <div class="fz-shell fz-cart-grid">
+    <div>
+      <CartLines />
+      <section class="fz-cart-more">
+        <h2>Fresh today, add to your order</h2>
+        <p>Same delivery, no extra trip.</p>
+        <div class="fz-cart-more__grid">
+          {
+            [
+              { tag: 'Harvest', size: '3 kg', name: 'Badami mangoes', maker: 'Ganesh K', price: '₹ 899' },
+              { tag: 'Fresh batch', size: '250 g', name: 'Kodubale', maker: 'Radha Devi', price: '₹ 150' },
+            ].map((p) => (
+              <article class="fz-addcard">
+                <span class="fz-addcard__media fz-media">
+                  <span class="fz-tag">{p.tag}</span>
+                  <button type="button" class="fz-btn fz-btn--primary fz-btn--sm">Buy</button>
+                </span>
+                <span class="fz-addcard__body">
+                  <small>{p.size}</small>
+                  <b>{p.name}</b>
+                  <span class="fz-addcard__maker">
+                    <span class="fz-addcard__dot" aria-hidden="true" />
+                    {p.maker}
+                  </span>
+                  <span class="fz-addcard__foot">
+                    <b>{p.price}</b>
+                    <button type="button" class="fz-btn fz-btn--ghost fz-btn--sm">+ Add</button>
+                  </span>
+                </span>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+    </div>
+    <OrderSummary />
+  </div>
+</FzLayout>
+
+<style>
+  .fz-cart-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 22px;
+  }
+
+  .fz-cart-head h1 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 0;
+  }
+
+  .fz-cart-head p {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+    margin-top: 2px;
+  }
+
+  .fz-cart-head__back {
+    margin-inline-start: auto;
+    color: var(--fz-text);
+    text-decoration: none;
+    font-size: var(--fz-body-size);
+    font-weight: 600;
+  }
+
+  .fz-cart-grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 26px;
+    margin-top: 20px;
+    align-items: start;
+  }
+
+  .fz-cart-more {
+    margin-top: 30px;
+  }
+
+  .fz-cart-more h2 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 0;
+  }
+
+  .fz-cart-more p {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+    margin-top: 2px;
+  }
+
+  .fz-cart-more__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--fz-card-grid-gap);
+    margin-top: 16px;
+  }
+
+  .fz-addcard {
+    border-radius: var(--fz-radius-lg);
+    box-shadow: var(--fz-card-shadow);
+    background: var(--fz-site-bg);
+    overflow: hidden;
+  }
+
+  .fz-addcard__media {
+    position: relative;
+    display: block;
+    height: 125px;
+  }
+
+  .fz-addcard__media .fz-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .fz-addcard__media .fz-btn {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .fz-addcard__body {
+    display: block;
+    padding: 12px 14px 14px;
+  }
+
+  .fz-addcard__body > small {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-addcard__body > b {
+    display: block;
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    font-weight: 400;
+  }
+
+  .fz-addcard__maker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--fz-body-size);
+    margin-top: 4px;
+  }
+
+  .fz-addcard__dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--fz-panel-footer);
+  }
+
+  .fz-addcard__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .fz-addcard__foot b {
+    font-size: var(--fz-para-size);
+    font-weight: 600;
+  }
+
+  @media (max-width: 1000px) {
+    .fz-cart-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -296,6 +296,18 @@ body.fz {
   outline-offset: 2px;
 }
 
+/* Outlined variant, used by the product and maker cards. Global, not scoped:
+   a component-scoped declaration leaves other components unstyled. */
+.fz-btn--ghost {
+  background: var(--fz-site-bg);
+  color: var(--fz-text);
+  border: 1px solid var(--fz-stroke-ink);
+}
+
+.fz-btn--ghost:hover {
+  background: var(--fz-tag);
+}
+
 .fz-btn--sm {
   /* Button text is 16px/21 w600 in the frames regardless of size. */
   padding: 4px 12px;

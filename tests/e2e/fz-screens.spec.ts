@@ -1,0 +1,104 @@
+import { expect, test } from '@playwright/test';
+
+/**
+ * The new screens from the Figma file: product detail and cart.
+ * Phase 1 of the purchase flow, sharing one header and footer.
+ */
+
+test.describe('shared header', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('carries the elements the new screens added', async ({ page }) => {
+    await page.goto('/cart/');
+    // Social links, a cart with a count badge, and breadcrumbs are all new.
+    await expect(page.locator('.fz-social')).toHaveCount(2);
+    await expect(page.locator('.fz-cart')).toBeVisible();
+    await expect(page.locator('.fz-cart__count')).toHaveText('4');
+    await expect(page.locator('.fz-crumbs')).toBeVisible();
+  });
+
+  test('is 88px tall, matching the frame', async ({ page }) => {
+    await page.goto('/product/idli-podi/');
+    const h = await page.evaluate(
+      () => Math.round(document.querySelector('.fz-header')!.getBoundingClientRect().height),
+    );
+    // 88 in the frame; the breadcrumb row adds its own height below.
+    expect(Math.abs(h - 88)).toBeLessThan(40);
+  });
+});
+
+test.describe('product detail', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('renders every block from the frame', async ({ page }) => {
+    await page.goto('/product/idli-podi/');
+    await expect(page.getByRole('heading', { name: 'Idli podi', level: 1 })).toBeVisible();
+    await expect(page.locator('.fz-gal__main')).toBeVisible();
+    await expect(page.locator('.fz-gal__thumb')).toHaveCount(5);
+    await expect(page.locator('.fz-pack')).toHaveCount(3);
+    await expect(page.locator('.fz-qty')).toBeVisible();
+    await expect(page.getByText('Delivery by tomorrow · Pay on delivery')).toBeVisible();
+    await expect(page.locator('.fz-maker')).toBeVisible();
+  });
+
+  test('marks the selected pack size', async ({ page }) => {
+    await page.goto('/product/idli-podi/');
+    const selected = page.locator('.fz-pack.is-selected');
+    await expect(selected).toHaveCount(1);
+    await expect(selected).toContainText('200 g');
+    await expect(selected).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('shows the maker stats', async ({ page }) => {
+    await page.goto('/product/idli-podi/');
+    await expect(page.getByText('Verified maker')).toBeVisible();
+    for (const stat of ['Maker rating', 'Cheers', 'Products']) {
+      await expect(page.getByText(stat, { exact: true })).toBeVisible();
+    }
+  });
+});
+
+test.describe('cart', () => {
+  test.use({ viewport: { width: 1440, height: 1000 } });
+
+  test('groups lines by maker with their totals', async ({ page }) => {
+    await page.goto('/cart/');
+    await expect(page.locator('.fz-mgroup')).toHaveCount(2);
+    await expect(page.locator('.fz-line')).toHaveCount(3);
+    await expect(page.getByText('Maker total').first()).toBeVisible();
+  });
+
+  test('renders the order summary blocks', async ({ page }) => {
+    await page.goto('/cart/');
+    await expect(page.getByRole('heading', { name: 'Order summary' })).toBeVisible();
+    await expect(page.getByPlaceholder('Have an offer code?')).toBeVisible();
+    await expect(page.getByText('To pay')).toBeVisible();
+    await expect(page.getByText('Pay on delivery')).toBeVisible();
+    await expect(page.getByRole('link', { name: /Place Order/ })).toBeVisible();
+  });
+
+  test('offers more products to add', async ({ page }) => {
+    await page.goto('/cart/');
+    await expect(page.getByRole('heading', { name: 'Fresh today, add to your order' })).toBeVisible();
+    await expect(page.locator('.fz-addcard')).toHaveCount(2);
+  });
+});
+
+test('the purchase flow links together', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/product/idli-podi/');
+  await page.getByRole('link', { name: 'Add to cart' }).click();
+  await expect(page).toHaveURL(/\/cart\/?$/);
+  await expect(page.getByRole('heading', { name: 'Your cart' })).toBeVisible();
+});
+
+test('the new screens render without console errors', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  page.on('pageerror', (e) => errors.push(e.message));
+  for (const url of ['/product/idli-podi/', '/cart/']) {
+    await page.goto(url);
+    await page.waitForLoadState('networkidle');
+  }
+  expect(errors).toEqual([]);
+});

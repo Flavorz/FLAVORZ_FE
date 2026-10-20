@@ -18,3 +18,4 @@ src/generated/
 public/themes/
 .figma-cache.json
 .figma-frames.json
+.figma-pages/

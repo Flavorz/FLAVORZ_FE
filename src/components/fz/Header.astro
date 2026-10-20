@@ -7,8 +7,26 @@
  *   2. location · primary nav
  *   3. live activity ticker (its own component)
  */
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  online?: number;
+  location?: string;
+  cartCount?: number;
+  crumbs?: Crumb[];
+}
+
 const nav = ['Offers', 'Community', 'Orders', 'Shop'];
-const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
+const {
+  online = 128,
+  location = 'Jp Nagar, Bangalore',
+  cartCount = 0,
+  /** Breadcrumb trail, e.g. [{label:'Home',href:'/'}, {label:'Cart'}] */
+  crumbs = [],
+}: Props = Astro.props;
 ---
 
 <header class="fz-header">
@@ -43,7 +61,33 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     </form>
 
     <div class="fz-header__meta">
+      <a class="fz-social" href="#" aria-label="YouTube">
+        <svg width="18" height="13" viewBox="0 0 20 14" aria-hidden="true">
+          <rect width="20" height="14" rx="4" fill="currentColor"></rect>
+          <path d="M8 4l5 3-5 3z" fill="var(--fz-site-bg)"></path>
+        </svg>
+      </a>
+      <a class="fz-social" href="#" aria-label="Instagram">
+        <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true">
+          <rect x="1" y="1" width="16" height="16" rx="5" fill="none" stroke="currentColor"
+            stroke-width="1.6"></rect>
+          <circle cx="9" cy="9" r="3.4" fill="none" stroke="currentColor" stroke-width="1.6"
+          ></circle>
+          <circle cx="13.4" cy="4.6" r="1" fill="currentColor"></circle>
+        </svg>
+      </a>
+
       <span class="fz-online"><i aria-hidden="true"></i>{online} online now</span>
+
+      <a class="fz-cart" href="/cart" aria-label={`Cart, ${cartCount} items`}>
+        <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M3 4h2l2 9h9l2-6H6" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="9" cy="16" r="1.3" fill="currentColor"></circle>
+          <circle cx="15" cy="16" r="1.3" fill="currentColor"></circle>
+        </svg>
+        {cartCount > 0 && <span class="fz-cart__count">{cartCount}</span>}
+      </a>
 
       <div class="fz-lang" role="group" aria-label="Language">
         <button type="button" class="is-active">EN</button>
@@ -74,6 +118,18 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
       {nav.map((item) => <a href={`#${item.toLowerCase()}`}>{item}</a>)}
     </nav>
   </div>
+  {
+    crumbs.length > 0 && (
+      <nav class="fz-shell fz-crumbs" aria-label="Breadcrumb">
+        {crumbs.map((c, i) => (
+          <>
+            {i > 0 && <span class="fz-crumbs__sep" aria-hidden="true">›</span>}
+            {c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}
+          </>
+        ))}
+      </nav>
+    )
+  }
 </header>
 
 <style>
@@ -175,6 +231,65 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
     color: var(--fz-text);
     cursor: pointer;
     padding: 4px;
+  }
+
+  .fz-social {
+    display: inline-grid;
+    place-items: center;
+    color: var(--fz-text);
+    flex: 0 0 auto;
+  }
+
+  .fz-cart {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--fz-radius-lg);
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+    flex: 0 0 auto;
+  }
+
+  .fz-cart__count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--fz-radius-pill);
+    background: #e8384f;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .fz-crumbs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-block: 14px 0;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-crumbs a {
+    color: var(--fz-subheading);
+    text-decoration: none;
+  }
+
+  .fz-crumbs a:hover {
+    color: var(--fz-text);
+  }
+
+  .fz-crumbs [aria-current='page'] {
+    color: var(--fz-text);
   }
 
   .fz-header__meta {
@@ -323,10 +438,70 @@ const { online = 128, location = 'Jp Nagar, Bangalore' } = Astro.props;
       flex: 1 1 100%;
       max-width: none;
     }
-    .fz-header__meta {
+    .fz-social {
+    display: inline-grid;
+    place-items: center;
+    color: var(--fz-text);
+    flex: 0 0 auto;
+  }
+
+  .fz-cart {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--fz-radius-lg);
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+    flex: 0 0 auto;
+  }
+
+  .fz-cart__count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--fz-radius-pill);
+    background: #e8384f;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .fz-crumbs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-block: 14px 0;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-crumbs a {
+    color: var(--fz-subheading);
+    text-decoration: none;
+  }
+
+  .fz-crumbs a:hover {
+    color: var(--fz-text);
+  }
+
+  .fz-crumbs [aria-current='page'] {
+    color: var(--fz-text);
+  }
+
+  .fz-header__meta {
       margin-inline-start: auto;
     }
-    .fz-online {
+    .fz-online,
+    .fz-social {
       display: none;
     }
     .fz-header__nav {

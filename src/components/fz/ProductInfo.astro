@@ -1,0 +1,354 @@
+---
+/**
+ * Product info column: title, rating, price, pack size, quantity, actions,
+ * delivery note. `state` switches between the design's three variants.
+ */
+const { state = 'default' } = Astro.props;
+const soldOut = state === 'sold-out';
+
+const packs = [
+  { size: '100 g', price: '₹65' },
+  { size: '200 g', price: '₹120', selected: true },
+  { size: '500 g', price: '₹280' },
+];
+---
+
+<div class="fz-pdp">
+  <div class="fz-pdp__chips">
+    <span class="fz-chip">Home cooked</span>
+    <span class="fz-chip">Zero commission</span>
+    <span class="fz-chip">Small batch</span>
+  </div>
+
+  <h1 class="fz-pdp__title">Idli podi</h1>
+
+  <p class="fz-pdp__rating">
+    <span class="fz-stars" aria-hidden="true">★★★★★</span>
+    <b>4.6</b>
+    <span>128 reviews · 214 cheered</span>
+  </p>
+
+  <p class="fz-pdp__blurb">Stone-ground idli podi, made in small batches.</p>
+
+  <p class="fz-pdp__price">
+    <b>₹120</b>
+    <s>₹140</s>
+    <span class="fz-pdp__off">15% off</span>
+  </p>
+
+  <p class="fz-pdp__tax">
+    Inclusive of all taxes · 100% of the price goes to Lakshmi Amma
+  </p>
+
+  <section class="fz-pdp__group">
+    <h2 class="fz-pdp__label">Pack size</h2>
+    <div class="fz-packs">
+      {
+        packs.map((p) => (
+          <button
+            type="button"
+            class:list={['fz-pack', p.selected && 'is-selected']}
+            aria-pressed={p.selected ? 'true' : 'false'}
+          >
+            <span class="fz-pack__size">{p.size}</span>
+            <span class="fz-pack__price">{p.price}</span>
+            {p.selected && (
+              <svg class="fz-pack__tick" width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="9" fill="currentColor" />
+                <path d="M6 10.5l2.6 2.5L14 7.5" fill="none" stroke="var(--fz-site-bg)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            )}
+          </button>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="fz-pdp__group">
+    <h2 class="fz-pdp__label">Quantity</h2>
+    <div class="fz-qty-row">
+      <div class="fz-qty">
+        <button type="button" aria-label="Decrease quantity">−</button>
+        <span>1</span>
+        <button type="button" aria-label="Increase quantity">+</button>
+      </div>
+      {
+        soldOut ? (
+          <span class="fz-pdp__stockout">Out of stock in this batch</span>
+        ) : (
+          <span class="fz-pdp__stock">Only 14 left in this batch</span>
+        )
+      }
+    </div>
+  </section>
+
+  <div class="fz-pdp__actions">
+    {
+      soldOut ? (
+        <>
+          <button type="button" class="fz-btn fz-btn--primary" disabled>Sold out</button>
+          <button type="button" class="fz-btn fz-btn--ghost">Notify me</button>
+        </>
+      ) : (
+        <>
+          <a class="fz-btn fz-btn--primary" href="/payment">Buy</a>
+          <a class="fz-btn fz-btn--ghost" href="/cart">Add to cart</a>
+        </>
+      )
+    }
+  </div>
+
+  <div class="fz-pdp__ship">
+    <svg width="22" height="18" viewBox="0 0 24 20" aria-hidden="true">
+      <path d="M1 4h12v10H1zM13 7h5l4 4v3h-9z" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linejoin="round"></path>
+      <circle cx="6" cy="16" r="2" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+      <circle cx="17" cy="16" r="2" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+    </svg>
+    <span>
+      <b>Delivery by tomorrow · Pay on delivery</b>
+      <small>to Jp Nagar, 560078 · <a href="#">Change</a></small>
+    </span>
+  </div>
+</div>
+
+<style>
+  .fz-pdp {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fz-pdp__chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .fz-chip {
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    padding: 4px 10px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    white-space: nowrap;
+  }
+
+  .fz-pdp__title {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 0;
+  }
+
+  .fz-pdp__rating {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 8px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-stars {
+    color: #e2a33c;
+    letter-spacing: 1px;
+  }
+
+  .fz-pdp__rating b {
+    color: var(--fz-text);
+  }
+
+  .fz-pdp__blurb {
+    margin-top: 8px;
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+  }
+
+  .fz-pdp__price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .fz-pdp__price b {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  .fz-pdp__price s {
+    color: var(--fz-subheading);
+    font-size: var(--fz-para-size);
+  }
+
+  .fz-pdp__off {
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
+    border-radius: var(--fz-radius-pill);
+    padding: 3px 10px;
+    font-size: var(--fz-body-size);
+    font-weight: 500;
+  }
+
+  .fz-pdp__tax {
+    margin-top: 6px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-pdp__group {
+    margin-top: 24px;
+  }
+
+  .fz-pdp__label {
+    font-family: var(--fz-font-body);
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+
+  .fz-packs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .fz-pack {
+    position: relative;
+    text-align: start;
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    background: var(--fz-site-bg);
+    padding: 10px 14px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .fz-pack.is-selected {
+    border-color: var(--fz-primary);
+    border-width: 2px;
+    padding: 9px 13px;
+  }
+
+  .fz-pack__size {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 500;
+  }
+
+  .fz-pack__price {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-pack__tick {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    color: var(--fz-primary);
+  }
+
+  .fz-qty-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .fz-qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    overflow: hidden;
+  }
+
+  .fz-qty button {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--fz-text);
+  }
+
+  .fz-qty span {
+    min-width: 30px;
+    text-align: center;
+    font-size: var(--fz-para-size);
+  }
+
+  .fz-pdp__stock {
+    font-size: var(--fz-body-size);
+    color: #b4621f;
+  }
+
+  .fz-pdp__stockout {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-pdp__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .fz-pdp__actions .fz-btn {
+    justify-content: center;
+    padding-block: 11px;
+    text-decoration: none;
+  }
+
+  .fz-btn--primary:disabled {
+    background: var(--fz-primary-disabled);
+    color: var(--fz-subheading);
+    cursor: not-allowed;
+  }
+
+  .fz-pdp__ship {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    background: var(--fz-panel);
+    border-radius: var(--fz-radius-md);
+    padding: 14px 16px;
+    color: var(--fz-panel-text);
+  }
+
+  .fz-pdp__ship b {
+    display: block;
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+  }
+
+  .fz-pdp__ship small {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-pdp__ship a {
+    color: inherit;
+  }
+
+  @media (max-width: 860px) {
+    .fz-pdp__chips {
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .fz-pdp__actions {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

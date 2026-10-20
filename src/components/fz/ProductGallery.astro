@@ -1,0 +1,154 @@
+---
+/**
+ * Product gallery: a large square image with a thumbnail strip beneath.
+ * The design shows 6 photos — 4 thumbs, a video, and a "+3" overflow tile.
+ */
+const { tag = 'Fresh batch', count = 6 } = Astro.props;
+---
+
+<div class="fz-gal">
+  <div class="fz-gal__main fz-media">
+    <span class="fz-tag fz-gal__tag">{tag}</span>
+    <div class="fz-gal__actions">
+      <button type="button" class="fz-gal__icon" aria-label="Save">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            d="M10 17s-6-4-6-8a3.5 3.5 0 0 1 6-2.3A3.5 3.5 0 0 1 16 9c0 4-6 8-6 8Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"></path>
+        </svg>
+      </button>
+      <button type="button" class="fz-gal__icon" aria-label="Share">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="15" cy="5" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"
+          ></circle>
+          <circle cx="5" cy="10" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"
+          ></circle>
+          <circle cx="15" cy="15" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"
+          ></circle>
+          <path d="M7 9l6-3M7 11l6 3" stroke="currentColor" stroke-width="1.5"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <p class="fz-gal__count">Photo 1 of {count}</p>
+
+  <div class="fz-gal__thumbs">
+    <button type="button" class="fz-gal__thumb is-active fz-media" aria-label="Photo 1"></button>
+    <button type="button" class="fz-gal__thumb fz-media" aria-label="Photo 2"></button>
+    <button type="button" class="fz-gal__thumb fz-media" aria-label="Photo 3"></button>
+    <button type="button" class="fz-gal__thumb fz-gal__thumb--video" aria-label="Play video">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.5"
+        ></circle>
+        <path d="M10 8l6 4-6 4z" fill="currentColor"></path>
+      </svg>
+    </button>
+    <button type="button" class="fz-gal__thumb fz-gal__thumb--more" aria-label="3 more photos">
+      +3
+    </button>
+  </div>
+</div>
+
+<style>
+  .fz-gal {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fz-gal__main {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--fz-radius-lg);
+    padding: 16px;
+  }
+
+  .fz-gal__tag {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+  }
+
+  .fz-tag {
+    display: inline-flex;
+    align-items: center;
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
+    border-radius: var(--fz-radius-md);
+    padding: 4px 6px;
+    font-size: var(--fz-capital-size);
+    line-height: var(--fz-capital-lh);
+    font-weight: 500;
+    text-transform: none;
+  }
+
+  .fz-gal__actions {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .fz-gal__icon {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.86);
+    color: var(--fz-text);
+    cursor: pointer;
+  }
+
+  .fz-gal__count {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+    margin-block: 14px 8px;
+  }
+
+  .fz-gal__thumbs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+
+  .fz-gal__thumb {
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: var(--fz-radius-md);
+    background: var(--fz-panel);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    color: var(--fz-panel-text);
+  }
+
+  .fz-gal__thumb.is-active {
+    outline: 2px solid var(--fz-primary);
+    outline-offset: 1px;
+  }
+
+  .fz-gal__thumb--video {
+    background: var(--fz-primary);
+    color: var(--fz-primary-text);
+  }
+
+  .fz-gal__thumb--more {
+    background: var(--fz-secondary);
+    color: var(--fz-secondary-text);
+    font-size: var(--fz-body-size);
+    font-weight: 600;
+  }
+
+  @media (max-width: 860px) {
+    .fz-gal__thumbs {
+      gap: 6px;
+    }
+  }
+</style>

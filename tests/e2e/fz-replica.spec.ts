@@ -152,9 +152,9 @@ test.describe('mobile (402 frame)', () => {
       ),
     );
     // Frame 220 reels=223, 224 fresh=250, 228 videos=355.
-    expect(Math.abs(heights['.fz-reels'] - 223)).toBeLessThan(20);
-    expect(Math.abs(heights['.fz-fresh'] - 250)).toBeLessThan(40);
-    expect(Math.abs(heights['.fz-videos'] - 355)).toBeLessThan(20);
+    expect(Math.abs((heights['.fz-reels'] ?? 0) - 223)).toBeLessThan(20);
+    expect(Math.abs((heights['.fz-fresh'] ?? 0) - 250)).toBeLessThan(40);
+    expect(Math.abs((heights['.fz-videos'] ?? 0) - 355)).toBeLessThan(20);
   });
 
   test('no card text is clipped at the mobile card width', async ({ page }) => {
