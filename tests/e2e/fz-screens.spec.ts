@@ -215,3 +215,84 @@ test.describe('shop listing', () => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   });
 });
+
+test.describe('sign in', () => {
+  test.use({ viewport: { width: 1440, height: 1000 } });
+
+  test('every step from the content has a route', async ({ page }) => {
+    const steps = [
+      ['customer/phone', 'Sign in or create an account'],
+      ['customer/otp', 'Enter the code'],
+      ['customer/profile', 'Tell us your name'],
+      ['maker/phone', 'Start selling on Flavorz'],
+      ['maker/otp', 'Enter the code'],
+      ['maker/kitchen', 'Tell us about your kitchen'],
+      ['maker/documents', 'Upload your documents'],
+      ['maker/review', "We're checking your kitchen"],
+    ] as const;
+
+    for (const [slug, heading] of steps) {
+      await page.goto(`/signin/${slug}/`);
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
+    }
+  });
+
+  test('the split panel shows the brand aside and progress', async ({ page }) => {
+    await page.goto('/signin/customer/phone/');
+    await expect(page.locator('.fz-auth__aside')).toBeVisible();
+    await expect(page.locator('.fz-auth__points li')).toHaveCount(3);
+    await expect(page.getByText('Step 1 of 3')).toBeVisible();
+  });
+
+  test('the phone field carries a +91 prefix', async ({ page }) => {
+    await page.goto('/signin/customer/phone/');
+    await expect(page.locator('.fz-field__prefix')).toHaveText('+91');
+    await expect(page.locator('#phone')).toHaveAttribute('type', 'tel');
+  });
+
+  test('the code step renders six labelled boxes', async ({ page }) => {
+    await page.goto('/signin/customer/otp/');
+    const boxes = page.locator('.fz-otp__boxes input');
+    await expect(boxes).toHaveCount(6);
+    await expect(boxes.first()).toHaveAttribute('aria-label', 'Digit 1');
+    await expect(boxes.first()).toHaveAttribute('inputmode', 'numeric');
+  });
+
+  test('the kitchen step is the wide form, not the split panel', async ({ page }) => {
+    await page.goto('/signin/maker/kitchen/');
+    await expect(page.locator('.fz-auth__aside')).toHaveCount(0);
+    await expect(page.locator('.fz-kitchen__section')).toHaveCount(3);
+    await expect(page.locator('.fz-field')).toHaveCount(11);
+  });
+
+  test('the documents step offers three uploads', async ({ page }) => {
+    await page.goto('/signin/maker/documents/');
+    await expect(page.locator('.fz-upload')).toHaveCount(3);
+    await expect(page.getByText('Optional').first()).toBeVisible();
+  });
+
+  test('the review step shows progress through the checks', async ({ page }) => {
+    await page.goto('/signin/maker/review/');
+    const steps = page.locator('.fz-status__steps li');
+    await expect(steps).toHaveCount(3);
+    await expect(page.locator('.fz-status__steps li.is-done')).toHaveCount(1);
+  });
+
+  test('customer and maker flows cross-link', async ({ page }) => {
+    await page.goto('/signin/customer/phone/');
+    await page.getByRole('link', { name: 'Sign in as a maker' }).click();
+    await expect(page).toHaveURL(/\/signin\/maker\/phone\/?$/);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Start selling on Flavorz');
+  });
+
+  test('the auth screens render without console errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+    page.on('pageerror', (e) => errors.push(e.message));
+    for (const slug of ['customer/phone', 'maker/kitchen', 'maker/review']) {
+      await page.goto(`/signin/${slug}/`);
+      await page.waitForLoadState('networkidle');
+    }
+    expect(errors).toEqual([]);
+  });
+});

@@ -1,0 +1,243 @@
+---
+/**
+ * The sign-in split panel: a 555px brand aside beside a 557px form card.
+ * Seven of the eight auth screens use it; the kitchen-details step is wide
+ * and renders its own layout.
+ */
+import type { AuthContent, AuthStep } from '../../lib/data';
+
+interface Props {
+  aside: AuthContent['aside'];
+  step: AuthStep;
+}
+
+const { aside, step }: Props = Astro.props;
+---
+
+<div class="fz-shell fz-auth">
+  <aside class="fz-auth__aside">
+    <p class="fz-auth__eyebrow">{aside.eyebrow}</p>
+    <h2 class="fz-auth__asideHead">{aside.heading}</h2>
+    <p class="fz-auth__asideBody">{aside.body}</p>
+
+    <ul class="fz-auth__points">
+      {
+        aside.points.map((pt) => (
+          <li>
+            <span class="fz-auth__tick" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 16 16">
+                <circle cx="8" cy="8" r="7" fill="currentColor" />
+                <path d="M5 8.4l2 2L11 6" fill="none" stroke="var(--fz-panel)" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            {pt}
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="fz-auth__footnote">{aside.footnote}</p>
+  </aside>
+
+  <section class="fz-auth__card">
+    <p class="fz-auth__steps">
+      Step {step.step} of {step.of}
+      <span class="fz-auth__bar" aria-hidden="true">
+        <i style={`width:${(step.step / step.of) * 100}%`}></i>
+      </span>
+    </p>
+
+    <h1 class="fz-auth__head">{step.heading}</h1>
+    <p class="fz-auth__sub">{step.sub}</p>
+
+    <form class="fz-auth__form">
+      <slot />
+
+      <button type="button" class="fz-btn fz-btn--primary fz-auth__cta">{step.cta}</button>
+
+      {
+        step.back && (
+          <a class="fz-auth__back" href={step.back.href}>
+            {step.back.label}
+          </a>
+        )
+      }
+
+      {
+        step.alt && (
+          <p class="fz-auth__alt">
+            {step.alt.text} <a href={step.alt.href}>{step.alt.label}</a>
+          </p>
+        )
+      }
+
+      {step.legal && <p class="fz-auth__legal">{step.legal}</p>}
+    </form>
+  </section>
+</div>
+
+<style>
+  .fz-auth {
+    display: grid;
+    grid-template-columns: 555px 557px;
+    gap: 88px;
+    justify-content: center;
+    margin-top: 40px;
+    align-items: start;
+  }
+
+  .fz-auth__aside {
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+    border-radius: var(--fz-radius-lg);
+    padding: 44px 48px;
+    min-height: 616px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fz-auth__eyebrow {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h2-size);
+    line-height: var(--fz-h2-lh);
+  }
+
+  .fz-auth__asideHead {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 20px 0 0;
+  }
+
+  .fz-auth__asideBody {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    margin-top: 10px;
+  }
+
+  .fz-auth__points {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .fz-auth__points li {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+  }
+
+  .fz-auth__tick {
+    color: var(--fz-primary);
+    flex: 0 0 auto;
+    display: inline-grid;
+  }
+
+  .fz-auth__footnote {
+    margin-top: auto;
+    padding-top: 28px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    opacity: 0.8;
+  }
+
+  .fz-auth__card {
+    border: 1px solid var(--fz-header-border);
+    border-radius: var(--fz-radius-lg);
+    padding: 40px 44px;
+  }
+
+  .fz-auth__steps {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-auth__bar {
+    flex: 1 1 auto;
+    height: 4px;
+    border-radius: var(--fz-radius-pill);
+    background: var(--fz-tag);
+    overflow: hidden;
+  }
+
+  .fz-auth__bar i {
+    display: block;
+    height: 100%;
+    border-radius: var(--fz-radius-pill);
+    background: var(--fz-primary);
+  }
+
+  .fz-auth__head {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 22px 0 0;
+  }
+
+  .fz-auth__sub {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    color: var(--fz-subheading);
+    margin-top: 6px;
+  }
+
+  .fz-auth__form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 28px;
+  }
+
+  .fz-auth__cta {
+    justify-content: center;
+    padding-block: 12px;
+  }
+
+  .fz-auth__back {
+    text-align: center;
+    color: var(--fz-subheading);
+    font-size: var(--fz-body-size);
+  }
+
+  .fz-auth__alt {
+    text-align: center;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-auth__alt a {
+    color: var(--fz-text);
+    font-weight: 600;
+  }
+
+  .fz-auth__legal {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+    text-align: center;
+  }
+
+  @media (max-width: 1180px) {
+    .fz-auth {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 557px;
+    }
+
+    .fz-auth__aside {
+      min-height: 0;
+      padding: 28px;
+    }
+  }
+</style>

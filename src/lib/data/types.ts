@@ -237,6 +237,61 @@ export interface CartContent {
   payment: PaymentContent;
 }
 
+export interface AuthField {
+  id: string;
+  label: string;
+  type: 'text' | 'tel' | 'email' | 'textarea';
+  placeholder?: string;
+  /** Fixed prefix shown inside the control, e.g. "+91". */
+  prefix?: string;
+  autocomplete?: string;
+  optional?: boolean;
+}
+
+export interface AuthUpload {
+  id: string;
+  label: string;
+  note: string;
+  optional?: boolean;
+}
+
+export interface AuthStep {
+  slug: string;
+  step: number;
+  of: number;
+  heading: string;
+  sub: string;
+  /** The kitchen-details step is a full-width form, not the split panel. */
+  wide?: boolean;
+  fields?: AuthField[];
+  sections?: Array<{ title: string; fields: AuthField[] }>;
+  uploads?: AuthUpload[];
+  otp?: { length: number; resendIn: string };
+  status?: {
+    state: string;
+    title: string;
+    body: string;
+    steps: Array<{ label: string; done: boolean }>;
+  };
+  cta: string;
+  ctaHref?: string;
+  back?: { label: string; href: string };
+  alt?: { text: string; label: string; href: string };
+  legal: string;
+}
+
+export interface AuthContent {
+  aside: {
+    eyebrow: string;
+    heading: string;
+    body: string;
+    points: string[];
+    footnote: string;
+  };
+  customer: AuthStep[];
+  maker: AuthStep[];
+}
+
 export interface SiteContent {
   brand: string;
   nav: string[];
@@ -254,6 +309,7 @@ export interface SiteContent {
  */
 export interface ContentSource {
   site(): Promise<SiteContent>;
+  auth(): Promise<AuthContent>;
   home(): Promise<HomeContent>;
   cart(): Promise<CartContent>;
   makers(): Promise<Maker[]>;

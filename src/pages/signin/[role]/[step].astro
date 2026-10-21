@@ -1,0 +1,324 @@
+---
+import FzLayout from '../../../layouts/FzLayout.astro';
+import AuthShell from '../../../components/fz/AuthShell.astro';
+import AuthField from '../../../components/fz/AuthField.astro';
+import { content } from '../../../lib/data';
+
+/** All eight auth screens come from auth.json. */
+export async function getStaticPaths() {
+  const auth = await content.auth();
+  return (['customer', 'maker'] as const).flatMap((role) =>
+    auth[role].map((step) => ({
+      params: { role, step: step.slug },
+      props: { role, step, aside: auth.aside },
+    })),
+  );
+}
+
+const { role, step, aside } = Astro.props;
+const title = `${step.heading} · Flavorz`;
+---
+
+<FzLayout title={title}>
+  {
+    step.wide ? (
+      <div class="fz-shell fz-kitchen">
+        <header class="fz-kitchen__head">
+          <p class="fz-kitchen__steps">Step {step.step} of {step.of}</p>
+          <h1>{step.heading}</h1>
+          <p class="fz-kitchen__sub">{step.sub}</p>
+        </header>
+
+        <form class="fz-kitchen__form">
+          {step.sections?.map((section) => (
+            <section class="fz-kitchen__section">
+              <h2>{section.title}</h2>
+              <div class="fz-kitchen__fields">
+                {section.fields.map((f) => <AuthField field={f} />)}
+              </div>
+            </section>
+          ))}
+
+          <div class="fz-kitchen__foot">
+            <a class="fz-btn fz-btn--ghost" href={`/signin/${role}/otp`}>Back</a>
+            <a class="fz-btn fz-btn--primary" href={`/signin/${role}/documents`}>{step.cta}</a>
+          </div>
+        </form>
+      </div>
+    ) : (
+      <AuthShell aside={aside} step={step}>
+        {step.fields?.map((f) => <AuthField field={f} />)}
+
+        {step.otp && (
+          <div class="fz-otp">
+            <span class="fz-field__label">Code</span>
+            <div class="fz-otp__boxes">
+              {Array.from({ length: step.otp.length }).map((_, i) => (
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="1"
+                  aria-label={`Digit ${i + 1}`}
+                />
+              ))}
+            </div>
+            <p class="fz-otp__resend">{step.otp.resendIn}</p>
+          </div>
+        )}
+
+        {step.uploads && (
+          <div class="fz-uploads">
+            {step.uploads.map((u) => (
+              <label class="fz-upload">
+                <input type="file" />
+                <span class="fz-upload__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 20 20">
+                    <path d="M10 14V4m0 0L6 8m4-4l4 4M3 15v2h14v-2" fill="none"
+                      stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span class="fz-upload__body">
+                  <b>
+                    {u.label}
+                    {u.optional && <small>Optional</small>}
+                  </b>
+                  <small>{u.note}</small>
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+
+        {step.status && (
+          <div class="fz-status">
+            <p class="fz-status__title">{step.status.title}</p>
+            <p class="fz-status__body">{step.status.body}</p>
+            <ol class="fz-status__steps">
+              {step.status.steps.map((s) => (
+                <li class:list={[s.done && 'is-done']}>
+                  <span class="fz-status__dot" aria-hidden="true" />
+                  {s.label}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </AuthShell>
+    )
+  }
+</FzLayout>
+
+<style>
+  .fz-otp {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .fz-otp__boxes {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+
+  .fz-otp__boxes input {
+    aspect-ratio: 1;
+    text-align: center;
+    font: inherit;
+    font-size: 20px;
+    color: var(--fz-text);
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    background: var(--fz-site-bg);
+  }
+
+  .fz-otp__boxes input:focus-visible {
+    outline: 2px solid var(--fz-primary-focus);
+    outline-offset: 1px;
+  }
+
+  .fz-otp__resend {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-uploads {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .fz-upload {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px dashed var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    padding: 15px 18px;
+    cursor: pointer;
+  }
+
+  .fz-upload:hover {
+    border-color: var(--fz-stroke-ink);
+  }
+
+  .fz-upload input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .fz-upload:focus-within {
+    outline: 2px solid var(--fz-primary-focus);
+    outline-offset: 2px;
+  }
+
+  .fz-upload__icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--fz-radius-md);
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+    flex: 0 0 auto;
+  }
+
+  .fz-upload__body b {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+  }
+
+  .fz-upload__body b small,
+  .fz-upload__body > small {
+    font-weight: 400;
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-upload__body > small {
+    display: block;
+  }
+
+  .fz-status {
+    background: var(--fz-panel);
+    border-radius: var(--fz-radius-md);
+    padding: 20px 22px;
+    color: var(--fz-panel-text);
+  }
+
+  .fz-status__title {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h2-size);
+    line-height: var(--fz-h2-lh);
+  }
+
+  .fz-status__body {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    margin-top: 4px;
+  }
+
+  .fz-status__steps {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .fz-status__steps li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-status__steps li.is-done {
+    color: var(--fz-panel-text);
+  }
+
+  .fz-status__dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    flex: 0 0 auto;
+  }
+
+  .fz-status__steps li.is-done .fz-status__dot {
+    background: var(--fz-primary);
+    border-color: var(--fz-primary);
+  }
+
+  .fz-kitchen {
+    max-width: 1200px;
+    margin-top: 36px;
+  }
+
+  .fz-kitchen__steps {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-kitchen__head h1 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 6px 0 0;
+  }
+
+  .fz-kitchen__sub {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    color: var(--fz-subheading);
+    margin-top: 4px;
+  }
+
+  .fz-kitchen__form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 30px;
+  }
+
+  .fz-kitchen__section h2 {
+    font-family: var(--fz-font-body);
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+    margin: 0 0 14px;
+  }
+
+  .fz-kitchen__fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 24px;
+  }
+
+  .fz-kitchen__foot {
+    display: flex;
+    gap: 14px;
+    justify-content: flex-end;
+    border-top: 1px solid var(--fz-header-border);
+    padding-top: 22px;
+  }
+
+  .fz-kitchen__foot .fz-btn {
+    text-decoration: none;
+  }
+
+  @media (max-width: 860px) {
+    .fz-kitchen__fields {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

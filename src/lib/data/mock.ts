@@ -9,7 +9,9 @@ import productsJson from '../../content/products.json';
 import homeJson from '../../content/home.json';
 import cartJson from '../../content/cart.json';
 import siteJson from '../../content/site.json';
+import authJson from '../../content/auth.json';
 import type {
+  AuthContent,
   CartContent,
   ContentSource,
   HomeContent,
@@ -36,6 +38,10 @@ function withMaker(product: Product): ProductWithMaker {
 export const mockSource: ContentSource = {
   async site(): Promise<SiteContent> {
     return siteJson as SiteContent;
+  },
+
+  async auth(): Promise<AuthContent> {
+    return authJson as AuthContent;
   },
 
   async home(): Promise<HomeContent> {

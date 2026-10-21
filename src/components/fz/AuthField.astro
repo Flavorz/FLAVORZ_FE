@@ -1,0 +1,112 @@
+---
+/** A labelled form control, with an optional fixed prefix such as "+91". */
+import type { AuthField } from '../../lib/data';
+
+interface Props {
+  field: AuthField;
+}
+
+const { field }: Props = Astro.props;
+---
+
+<label class="fz-field">
+  <span class="fz-field__label">
+    {field.label}
+    {field.optional && <small>Optional</small>}
+  </span>
+
+  {
+    field.type === 'textarea' ? (
+      <textarea
+        id={field.id}
+        rows="4"
+        placeholder={field.placeholder}
+        autocomplete={field.autocomplete}
+      />
+    ) : (
+      <span class:list={['fz-field__control', field.prefix && 'has-prefix']}>
+        {field.prefix && <span class="fz-field__prefix">{field.prefix}</span>}
+        <input
+          id={field.id}
+          type={field.type}
+          placeholder={field.placeholder}
+          autocomplete={field.autocomplete}
+        />
+      </span>
+    )
+  }
+</label>
+
+<style>
+  .fz-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .fz-field__label {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    font-weight: 600;
+  }
+
+  .fz-field__label small {
+    font-weight: 400;
+    color: var(--fz-subheading);
+  }
+
+  .fz-field__control {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    overflow: hidden;
+  }
+
+  .fz-field__prefix {
+    padding-inline: 14px;
+    align-self: stretch;
+    display: grid;
+    place-items: center;
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+    font-size: var(--fz-para-size);
+    border-inline-end: 1px solid var(--fz-stroke-muted);
+  }
+
+  .fz-field input,
+  .fz-field textarea {
+    width: 100%;
+    font: inherit;
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    color: var(--fz-text);
+    border: 0;
+    background: none;
+    padding: 11px 14px;
+  }
+
+  .fz-field textarea {
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    resize: vertical;
+  }
+
+  .fz-field input::placeholder,
+  .fz-field textarea::placeholder {
+    color: var(--fz-subheading);
+  }
+
+  .fz-field__control:focus-within,
+  .fz-field textarea:focus-visible {
+    outline: 2px solid var(--fz-primary-focus);
+    outline-offset: 1px;
+  }
+
+  .fz-field input:focus-visible {
+    outline: none;
+  }
+</style>

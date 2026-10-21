@@ -9,6 +9,7 @@
  * differs, map it HERE rather than changing components.
  */
 import type {
+  AuthContent,
   CartContent,
   ContentSource,
   HomeContent,
@@ -33,6 +34,7 @@ async function get<T>(path: string): Promise<T> {
 
 export const apiSource: ContentSource = {
   site: () => get<SiteContent>('/site'),
+  auth: () => get<AuthContent>('/auth'),
   home: () => get<HomeContent>('/home'),
   cart: () => get<CartContent>('/cart'),
   makers: () => get<Maker[]>('/makers'),
