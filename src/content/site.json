@@ -1,14 +1,28 @@
 {
   "brand": "Flavorz",
-  "nav": ["Offers", "Community", "Orders", "Shop"],
+  "nav": [
+    "Offers",
+    "Community",
+    "Orders",
+    "Shop"
+  ],
   "location": "Jp Nagar, Bangalore",
   "onlineCount": 128,
   "searchPlaceholder": "Search \"avarekalu\", \"podi\", \"Lakshmi Amma\"",
   "languages": [
-    { "code": "en", "label": "EN" },
-    { "code": "kn", "label": "ಕನ್ನಡ" }
+    {
+      "code": "en",
+      "label": "EN"
+    },
+    {
+      "code": "kn",
+      "label": "ಕನ್ನಡ"
+    }
   ],
-  "viewer": { "initials": "SR", "tier": "SILVER" },
+  "viewer": {
+    "initials": "SR",
+    "tier": "SILVER"
+  },
   "footer": {
     "columns": [
       {
@@ -20,8 +34,20 @@
           "Bangalore 560095"
         ]
       },
-      { "heading": "Contact Us:", "lines": ["info@theflavorz.com", "Call: +919742557770"] },
-      { "heading": "Quick Links:", "lines": ["Privacy Policy", "Terms and Conditions"] },
+      {
+        "heading": "Contact Us:",
+        "lines": [
+          "info@theflavorz.com",
+          "Call: +919742557770"
+        ]
+      },
+      {
+        "heading": "Quick Links:",
+        "lines": [
+          "Privacy Policy",
+          "Terms and Conditions"
+        ]
+      },
       {
         "heading": "Other Info:",
         "lines": [
@@ -31,5 +57,22 @@
         ]
       }
     ]
+  },
+  "comingSoon": {
+    "nav": [
+      "Home",
+      "Our Community",
+      "How it works?",
+      "Blog",
+      "About Us",
+      "More"
+    ],
+    "eyebrow": "SOMETHING NEW IS COMING",
+    "heading": "We're reimagining Flavorz — watch this space.",
+    "body": "A new home for the farmers and home cooks who feed us, with everything they earn going straight to them.",
+    "primaryCta": "Notify me",
+    "secondaryCta": "See the old site",
+    "imageCaption": "Discover the real flavorz of HomeMade",
+    "imageEyebrow": "FOR A HEALTHY YOU"
   }
 }

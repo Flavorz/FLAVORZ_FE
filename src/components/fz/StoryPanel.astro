@@ -1,0 +1,232 @@
+---
+/**
+ * The 588px panel that opens over the page when a reel is tapped.
+ * The page stays behind it, as the frame's name says.
+ */
+import type { PanelContent, ProductWithMaker } from '../../lib/data';
+
+interface Props {
+  panel: PanelContent;
+  product: ProductWithMaker;
+  open?: boolean;
+}
+
+const { panel, product, open = true }: Props = Astro.props;
+const inr = (n: number) => `₹${new Intl.NumberFormat('en-IN').format(n)}`;
+---
+
+<div class:list={['fz-panelwrap', open && 'is-open']}>
+  <a class="fz-panel__scrim" href="/fz/" aria-label="Close"></a>
+
+  <aside class="fz-panel" role="dialog" aria-label={panel.title}>
+    <a class="fz-panel__close" href="/fz/" aria-label="Close">×</a>
+
+    <header class="fz-panel__maker">
+      <span class="fz-panel__photo fz-media" aria-hidden="true"></span>
+      <span class="fz-panel__who">
+        <b>{product.maker.name}</b>
+        <small>{product.maker.place} · {panel.makerFollowers}</small>
+      </span>
+      <button type="button" class="fz-btn fz-btn--ghost fz-btn--sm">{panel.followCta}</button>
+    </header>
+
+    <div class="fz-panel__media fz-media"></div>
+
+    <div class="fz-panel__body">
+      <h2 class="fz-panel__title">{panel.title}</h2>
+      <p class="fz-panel__text">{panel.body}</p>
+
+      <p class="fz-panel__inside">{panel.insideHeading}</p>
+      <ul class="fz-panel__chips">
+        {panel.ingredients.map((i) => <li>{i}</li>)}
+      </ul>
+
+      <p class="fz-panel__social">
+        <span>♥ {panel.cheerCount}</span>
+        <span>{panel.commentCount}</span>
+      </p>
+    </div>
+
+    <footer class="fz-panel__buy">
+      <span class="fz-panel__product">
+        <b>{product.name}</b>
+        <small>{product.size}</small>
+      </span>
+      <span class="fz-panel__price">{inr(product.priceInr)}</span>
+      <a class="fz-btn fz-btn--primary" href={`/product/${product.slug}/added`}>Buy</a>
+    </footer>
+  </aside>
+</div>
+
+<style>
+  .fz-panelwrap {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: none;
+  }
+
+  .fz-panelwrap.is-open {
+    display: block;
+  }
+
+  .fz-panel__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(41, 35, 31, 0.42);
+  }
+
+  .fz-panel {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 588px;
+    max-width: 100vw;
+    background: var(--fz-site-bg);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .fz-panel__close {
+    position: absolute;
+    top: 14px;
+    inset-inline-end: 18px;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--fz-text);
+    text-decoration: none;
+  }
+
+  .fz-panel__maker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--fz-header-border);
+  }
+
+  .fz-panel__photo {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+
+  .fz-panel__who {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-panel__who b {
+    display: block;
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    font-weight: 400;
+  }
+
+  .fz-panel__who small {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-panel__media {
+    aspect-ratio: 588 / 326;
+    flex: 0 0 auto;
+  }
+
+  .fz-panel__body {
+    padding: 22px 24px;
+    flex: 1 1 auto;
+  }
+
+  .fz-panel__title {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h2-size);
+    line-height: var(--fz-h2-lh);
+    margin: 0;
+  }
+
+  .fz-panel__text {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+    margin-top: 6px;
+  }
+
+  .fz-panel__inside {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--fz-subheading);
+    margin-top: 22px;
+  }
+
+  .fz-panel__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+
+  .fz-panel__chips li {
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    padding: 5px 12px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-panel__social {
+    display: flex;
+    gap: 18px;
+    margin-top: 22px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-panel__buy {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 24px;
+    background: var(--fz-site-bg);
+    border-top: 1px solid var(--fz-header-border);
+  }
+
+  .fz-panel__product {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-panel__product b {
+    display: block;
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    font-weight: 400;
+  }
+
+  .fz-panel__product small {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-panel__price {
+    font-size: var(--fz-para-size);
+    font-weight: 600;
+  }
+
+  .fz-panel__buy .fz-btn {
+    text-decoration: none;
+  }
+</style>

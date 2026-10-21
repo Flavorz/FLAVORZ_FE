@@ -157,6 +157,26 @@ export interface ShopContent {
   };
 }
 
+export interface PanelContent {
+  productId: string;
+  makerFollowers: string;
+  followCta: string;
+  title: string;
+  body: string;
+  insideHeading: string;
+  ingredients: string[];
+  cheerCount: string;
+  commentCount: string;
+}
+
+export interface AddedToCartContent {
+  heading: string;
+  lineNote: string;
+  viewCart: string;
+  checkout: string;
+  footnote: string;
+}
+
 export interface HomeContent {
   ticker: string[];
   shopper: Shopper;
@@ -169,6 +189,8 @@ export interface HomeContent {
   makerIds: string[];
   commission: { line: string; cta: string; youPay: string; makerGets: string };
   shop: ShopContent;
+  panel: PanelContent;
+  addedToCart: AddedToCartContent;
 }
 
 export interface CartLine {
@@ -301,6 +323,16 @@ export interface SiteContent {
   languages: Array<{ code: string; label: string }>;
   viewer: { initials: string; tier: string };
   footer: { columns: Array<{ heading: string; lines: string[] }> };
+  comingSoon: {
+    nav: string[];
+    eyebrow: string;
+    heading: string;
+    body: string;
+    primaryCta: string;
+    secondaryCta: string;
+    imageCaption: string;
+    imageEyebrow: string;
+  };
 }
 
 /**

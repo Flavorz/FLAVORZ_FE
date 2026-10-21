@@ -24,7 +24,9 @@ const { title = 'Flavorz', crumbs = [], cartCount = 0 } = Astro.props;
     />
   </head>
   <body class="fz">
-    <Header crumbs={crumbs} cartCount={cartCount} />
+    <Header crumbs={crumbs} cartCount={cartCount}>
+      <slot name="cart-popover" slot="cart-popover" />
+    </Header>
     <main>
       <slot />
     </main>

@@ -89,6 +89,9 @@ const {
         {cartCount > 0 && <span class="fz-cart__count">{cartCount}</span>}
       </a>
 
+      {/* The "added to cart" confirmation drops from here. */}
+      <slot name="cart-popover" />
+
       <div class="fz-lang" role="group" aria-label="Language">
         <button type="button" class="is-active">EN</button>
         <span aria-hidden="true">|</span>
@@ -293,6 +296,7 @@ const {
   }
 
   .fz-header__meta {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 16px;

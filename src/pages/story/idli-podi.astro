@@ -1,0 +1,25 @@
+---
+/**
+ * The reel panel open over the home page — the "After tapping" frame.
+ * The page renders behind it exactly as it does at /fz.
+ */
+import FzLayout from '../../layouts/FzLayout.astro';
+import StoryPanel from '../../components/fz/StoryPanel.astro';
+import Ticker from '../../components/fz/Ticker.astro';
+import TierPanel from '../../components/fz/TierPanel.astro';
+import Promos from '../../components/fz/Promos.astro';
+import Reels from '../../components/fz/Reels.astro';
+import { content } from '../../lib/data';
+
+const home = await content.home();
+const cart = await content.cart();
+const product = await content.product(home.panel.productId);
+---
+
+<FzLayout title="Idli podi · Flavorz" cartCount={cart.itemCount}>
+  <Ticker />
+  <TierPanel />
+  <Promos />
+  <Reels />
+  {product && <StoryPanel panel={home.panel} product={product} />}
+</FzLayout>

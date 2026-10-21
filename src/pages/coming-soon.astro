@@ -1,0 +1,241 @@
+---
+/**
+ * The holding page for the old site. It has its own simple nav rather than
+ * the shop header, matching the frame.
+ */
+import '../styles/flavorz.css';
+import { content } from '../lib/data';
+
+const site = await content.site();
+const c = site.comingSoon;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Something new is coming · Flavorz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap"
+    />
+  </head>
+
+  <body class="fz fz-soon-body">
+    <header class="fz-soon-head">
+      <div class="fz-shell fz-soon-head__row">
+        <a class="fz-brand" href="/fz/">
+          <span class="fz-brand__mark" aria-hidden="true">f</span>
+          <span class="fz-brand__name">Flavorz</span>
+        </a>
+        <nav aria-label="Primary">
+          {c.nav.map((item) => <a href="#">{item}</a>)}
+        </nav>
+      </div>
+    </header>
+
+    <main class="fz-shell fz-soon">
+      <div class="fz-soon__copy">
+        <p class="fz-soon__eyebrow">{c.eyebrow}</p>
+        <h1 class="fz-soon__head">{c.heading}</h1>
+        <p class="fz-soon__body">{c.body}</p>
+
+        <form class="fz-soon__form">
+          <input type="email" aria-label="Email address" placeholder="you@example.com" />
+          <button type="button" class="fz-btn fz-btn--primary">{c.primaryCta}</button>
+        </form>
+
+        <a class="fz-soon__alt" href="/fz/">{c.secondaryCta} →</a>
+      </div>
+
+      <div class="fz-soon__art">
+        <div class="fz-soon__image fz-media">
+          <p class="fz-soon__imageEyebrow">{c.imageEyebrow}</p>
+          <p class="fz-soon__imageCaption">{c.imageCaption}</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="fz-soon-foot">
+      <div class="fz-shell">
+        <p>© {new Date().getFullYear()} CKGFlavorz FoodTech Pvt Ltd</p>
+      </div>
+    </footer>
+
+    <style>
+      .fz-soon-body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100dvh;
+      }
+
+      .fz-soon-head {
+        border-bottom: 1px solid var(--fz-header-border);
+      }
+
+      .fz-soon-head__row {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        padding-block: 16px;
+      }
+
+      .fz-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: var(--fz-text);
+      }
+
+      .fz-brand__mark {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: var(--fz-radius-md);
+        background: #e8384f;
+        color: #fff;
+        font-family: var(--fz-font-display);
+        font-size: 24px;
+      }
+
+      .fz-brand__name {
+        font-family: var(--fz-font-display);
+        font-size: var(--fz-logo-size);
+        line-height: 1;
+      }
+
+      .fz-soon-head__row nav {
+        display: flex;
+        gap: 26px;
+        margin-inline-start: auto;
+      }
+
+      .fz-soon-head__row nav a {
+        color: var(--fz-text);
+        text-decoration: none;
+        font-size: var(--fz-para-size);
+        font-weight: 600;
+      }
+
+      .fz-soon {
+        flex: 1 1 auto;
+        display: grid;
+        grid-template-columns: 1fr 406px;
+        gap: 64px;
+        align-items: center;
+        padding-block: 64px;
+      }
+
+      .fz-soon__eyebrow {
+        font-size: var(--fz-para-size);
+        line-height: var(--fz-para-lh);
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: var(--fz-secondary);
+      }
+
+      .fz-soon__head {
+        font-family: var(--fz-font-display);
+        font-size: 44px;
+        line-height: 56px;
+        margin: 18px 0 0;
+        max-width: 14ch;
+      }
+
+      .fz-soon__body {
+        font-size: var(--fz-para-size);
+        line-height: var(--fz-para-lh);
+        color: var(--fz-subheading);
+        margin-top: 16px;
+        max-width: 52ch;
+      }
+
+      .fz-soon__form {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+        max-width: 440px;
+      }
+
+      .fz-soon__form input {
+        flex: 1 1 auto;
+        font: inherit;
+        font-size: var(--fz-para-size);
+        color: var(--fz-text);
+        border: 1px solid var(--fz-stroke-muted);
+        border-radius: var(--fz-radius-md);
+        padding: 11px 14px;
+        background: var(--fz-site-bg);
+      }
+
+      .fz-soon__form input::placeholder {
+        color: var(--fz-subheading);
+      }
+
+      .fz-soon__alt {
+        display: inline-block;
+        margin-top: 18px;
+        color: var(--fz-text);
+        font-size: var(--fz-body-size);
+        font-weight: 600;
+      }
+
+      .fz-soon__image {
+        aspect-ratio: 406 / 556;
+        border-radius: var(--fz-radius-lg);
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .fz-soon__imageEyebrow {
+        font-size: var(--fz-body-size);
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        color: var(--fz-panel-text);
+      }
+
+      .fz-soon__imageCaption {
+        font-family: var(--fz-font-display);
+        font-size: var(--fz-h1-size);
+        line-height: var(--fz-h1-lh);
+        color: var(--fz-panel-text);
+      }
+
+      .fz-soon-foot {
+        border-top: 1px solid var(--fz-header-border);
+        padding-block: 20px;
+      }
+
+      .fz-soon-foot p {
+        font-size: var(--fz-body-size);
+        color: var(--fz-subheading);
+      }
+
+      @media (max-width: 960px) {
+        .fz-soon {
+          grid-template-columns: 1fr;
+          gap: 32px;
+          padding-block: 36px;
+        }
+
+        .fz-soon__head {
+          font-size: 30px;
+          line-height: 38px;
+          max-width: none;
+        }
+
+        .fz-soon-head__row nav {
+          display: none;
+        }
+      }
+    </style>
+  </body>
+</html>

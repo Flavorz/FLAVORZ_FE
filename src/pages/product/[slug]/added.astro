@@ -1,0 +1,60 @@
+---
+import FzLayout from '../../../layouts/FzLayout.astro';
+import ProductGallery from '../../../components/fz/ProductGallery.astro';
+import ProductInfo from '../../../components/fz/ProductInfo.astro';
+import MakerCard from '../../../components/fz/MakerCard.astro';
+import AddedToCart from '../../../components/fz/AddedToCart.astro';
+import { content } from '../../../lib/data';
+
+/**
+ * The product page with the "added to cart" confirmation open — a state in
+ * the design rather than a separate page, so the body is identical.
+ */
+export async function getStaticPaths() {
+  const products = await content.products();
+  const resolved = await Promise.all(products.map((p) => content.product(p.slug)));
+  return resolved
+    .filter((p) => p !== null)
+    .map((product) => ({ params: { slug: product!.slug }, props: { product: product! } }));
+}
+
+const { product } = Astro.props;
+const home = await content.home();
+const cart = await content.cart();
+
+const crumbs = [
+  { label: 'Home', href: '/fz/' },
+  { label: 'Shop', href: '/shop' },
+  { label: product.category, href: '/shop' },
+  { label: product.name },
+];
+---
+
+<FzLayout title={`${product.name} · Flavorz`} crumbs={crumbs} cartCount={cart.itemCount}>
+  <AddedToCart slot="cart-popover" content={home.addedToCart} product={product} />
+
+  <div class="fz-shell fz-pdp-grid">
+    <ProductGallery tag={product.tag} count={product.photoCount} />
+    <ProductInfo product={product} />
+  </div>
+  <div class="fz-shell">
+    <MakerCard maker={product.maker} />
+  </div>
+</FzLayout>
+
+<style>
+  .fz-pdp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 28px;
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .fz-pdp-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+</style>

@@ -296,3 +296,61 @@ test.describe('sign in', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('remaining states', () => {
+  test.use({ viewport: { width: 1440, height: 1000 } });
+
+  test('the added-to-cart dropdown opens over the product page', async ({ page }) => {
+    await page.goto('/product/idli-podi/added/');
+    const popover = page.locator('.fz-added');
+    await expect(popover).toBeVisible();
+    // 384px in the frame.
+    expect(Math.round((await popover.boundingBox())!.width)).toBe(384);
+    await expect(popover.getByText('Added to cart')).toBeVisible();
+    // The product page is still rendered behind it.
+    await expect(page.getByRole('heading', { name: 'Idli podi', level: 1 })).toBeVisible();
+  });
+
+  test('the dropdown links to cart and checkout', async ({ page }) => {
+    await page.goto('/product/idli-podi/added/');
+    await page.locator('.fz-added').getByRole('link', { name: 'View cart' }).click();
+    await expect(page).toHaveURL(/\/cart\/?$/);
+  });
+
+  test('the story panel opens in place with the page behind it', async ({ page }) => {
+    await page.goto('/story/idli-podi/');
+    const panel = page.locator('.fz-panel');
+    await expect(panel).toBeVisible();
+    // 588px in the frame.
+    expect(Math.round((await panel.boundingBox())!.width)).toBe(588);
+    // The frame's name is explicit that the page stays behind.
+    await expect(page.locator('.fz-reels')).toBeVisible();
+    await expect(page.locator('.fz-panel__chips li')).toHaveCount(5);
+  });
+
+  test('the story panel closes back to the home page', async ({ page }) => {
+    await page.goto('/story/idli-podi/');
+    await page.getByRole('link', { name: 'Close' }).first().click();
+    await expect(page).toHaveURL(/\/fz\/?$/);
+  });
+
+  test('coming soon renders its own nav and signup', async ({ page }) => {
+    await page.goto('/coming-soon/');
+    await expect(page.getByText('SOMETHING NEW IS COMING')).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expect(page.getByLabel('Email address')).toBeVisible();
+    // It uses its own simple nav, not the shop header.
+    await expect(page.locator('.fz-header')).toHaveCount(0);
+  });
+
+  test('the final screens render without console errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+    page.on('pageerror', (e) => errors.push(e.message));
+    for (const url of ['/product/idli-podi/added/', '/story/idli-podi/', '/coming-soon/']) {
+      await page.goto(url);
+      await page.waitForLoadState('networkidle');
+    }
+    expect(errors).toEqual([]);
+  });
+});

@@ -1,0 +1,142 @@
+---
+/**
+ * The confirmation that drops from the cart button after adding an item.
+ * 384x253 in the frame, anchored under the header's cart icon.
+ */
+import type { AddedToCartContent, ProductWithMaker } from '../../lib/data';
+
+interface Props {
+  content: AddedToCartContent;
+  product: ProductWithMaker;
+}
+
+const { content: c, product }: Props = Astro.props;
+const inr = (n: number) => `₹${new Intl.NumberFormat('en-IN').format(n)}`;
+---
+
+<div class="fz-added" role="status">
+  <p class="fz-added__head">
+    <span class="fz-added__tick" aria-hidden="true">
+      <svg width="17" height="17" viewBox="0 0 20 20">
+        <circle cx="10" cy="10" r="9" fill="currentColor"></circle>
+        <path
+          d="M6 10.5l2.6 2.5L14 7.5"
+          fill="none"
+          stroke="var(--fz-site-bg)"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </span>
+    {c.heading}
+  </p>
+
+  <div class="fz-added__line">
+    <span class="fz-added__thumb fz-media" aria-hidden="true"></span>
+    <span class="fz-added__body">
+      <b>{product.name} · {product.size}</b>
+      <small>{product.maker.name}</small>
+      <small>{c.lineNote}</small>
+    </span>
+    <span class="fz-added__price">{inr(product.priceInr)}</span>
+  </div>
+
+  <div class="fz-added__actions">
+    <a class="fz-btn fz-btn--ghost fz-btn--sm" href="/cart">{c.viewCart}</a>
+    <a class="fz-btn fz-btn--primary fz-btn--sm" href="/payment">{c.checkout}</a>
+  </div>
+
+  <p class="fz-added__foot">{c.footnote}</p>
+</div>
+
+<style>
+  .fz-added {
+    position: absolute;
+    top: calc(100% + 10px);
+    inset-inline-end: 0;
+    z-index: 20;
+    width: 384px;
+    background: var(--fz-site-bg);
+    border-radius: var(--fz-radius-lg);
+    box-shadow: var(--fz-card-shadow);
+    padding: 18px 20px;
+  }
+
+  .fz-added__head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+  }
+
+  .fz-added__tick {
+    color: var(--fz-primary);
+    display: inline-grid;
+  }
+
+  .fz-added__line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .fz-added__thumb {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--fz-radius-md);
+    flex: 0 0 auto;
+  }
+
+  .fz-added__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-added__body b {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    font-weight: 600;
+  }
+
+  .fz-added__body small {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-added__price {
+    font-size: var(--fz-para-size);
+    font-weight: 600;
+    flex: 0 0 auto;
+  }
+
+  .fz-added__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .fz-added__actions .fz-btn {
+    justify-content: center;
+    text-decoration: none;
+  }
+
+  .fz-added__foot {
+    margin-top: 12px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  @media (max-width: 860px) {
+    .fz-added {
+      width: min(384px, calc(100vw - 32px));
+    }
+  }
+</style>

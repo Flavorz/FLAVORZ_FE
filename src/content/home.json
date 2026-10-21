@@ -358,5 +358,29 @@
       "cta": "Browse the pantry",
       "suggestionsHeading": "You might like"
     }
+  },
+  "panel": {
+    "productId": "idli-podi",
+    "makerFollowers": "24k followers",
+    "followCta": "Follow",
+    "title": "Idli podi, ground fresh this morning",
+    "body": "Stone-ground in a small weekly batch.",
+    "insideHeading": "WHAT'S INSIDE",
+    "ingredients": [
+      "Urad dal",
+      "Chana dal",
+      "Red chilli",
+      "Sesame",
+      "Salt"
+    ],
+    "cheerCount": "214 cheered",
+    "commentCount": "18 comments"
+  },
+  "addedToCart": {
+    "heading": "Added to cart",
+    "lineNote": "Qty 1",
+    "viewCart": "View cart",
+    "checkout": "Checkout",
+    "footnote": "Cart has 3 items · Pay on delivery available"
   }
 }
