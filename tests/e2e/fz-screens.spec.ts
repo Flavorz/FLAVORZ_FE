@@ -150,3 +150,68 @@ test('cart links through to payment', async ({ page }) => {
   await expect(page).toHaveURL(/\/payment\/?$/);
   await expect(page.getByRole('heading', { name: 'Payment', level: 1 })).toBeVisible();
 });
+
+test.describe('shop listing', () => {
+  test.use({ viewport: { width: 1440, height: 1000 } });
+
+  test('default view shows categories, filters and a grid', async ({ page }) => {
+    await page.goto('/shop/');
+    await expect(page.getByRole('heading', { name: 'Shop the pantry', level: 1 })).toBeVisible();
+    await expect(page.locator('.fz-catstrip li')).toHaveCount(8);
+    await expect(page.locator('.fz-filtergroup')).toHaveCount(4);
+    await expect(page.locator('.fz-shopcard').first()).toBeVisible();
+  });
+
+  test('shows applied filter chips and checked options', async ({ page }) => {
+    await page.goto('/shop/');
+    await expect(page.locator('.fz-filterchip')).toHaveCount(2);
+    // Podis and the ₹100-₹250 band are pre-checked in the content.
+    const checked = page.locator('.fz-filtergroup input:checked');
+    await expect(checked).toHaveCount(2);
+  });
+
+  test('results view adds maker chips', async ({ page }) => {
+    await page.goto('/shop/results/');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Results for');
+    await expect(page.locator('.fz-makerchip')).toHaveCount(5);
+  });
+
+  test('suggestions view lists searches', async ({ page }) => {
+    await page.goto('/shop/suggestions/');
+    await expect(page.locator('.fz-suggest')).toBeVisible();
+    // Five suggestions plus three recent searches.
+    await expect(page.locator('.fz-suggest a')).toHaveCount(8);
+  });
+
+  test('no-results view shows the empty state with alternatives', async ({ page }) => {
+    await page.goto('/shop/no-results/');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('No results');
+    await expect(page.getByRole('link', { name: 'Browse the pantry' })).toBeVisible();
+    // The empty state still suggests three products.
+    await expect(page.locator('.fz-shopcard')).toHaveCount(3);
+  });
+
+  test('marks a sold-out product and disables its button', async ({ page }) => {
+    await page.goto('/shop/');
+    const soldOut = page.locator('.fz-shopcard.is-soldout');
+    await expect(soldOut).toHaveCount(1);
+    await expect(soldOut.locator('.fz-shopcard__out')).toHaveText('Sold out');
+    await expect(soldOut.locator('button')).toBeDisabled();
+  });
+
+  test('tags read in sentence case, as the frames do', async ({ page }) => {
+    await page.goto('/shop/');
+    const tags = await page.evaluate(() =>
+      [...document.querySelectorAll('.fz-shopcard .fz-tag')].map((e) => e.textContent?.trim()),
+    );
+    expect(tags).toContain('Fresh batch');
+    expect(tags).not.toContain('FRESH BATCH');
+  });
+
+  test('cards link to their product page', async ({ page }) => {
+    await page.goto('/shop/');
+    await page.locator('.fz-shopcard__name a').first().click();
+    await expect(page).toHaveURL(/\/product\/[a-z-]+\/?$/);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  });
+});

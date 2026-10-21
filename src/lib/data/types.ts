@@ -119,6 +119,44 @@ export interface Promo {
   tone: 'panel' | 'dark' | 'mid';
 }
 
+export interface FilterOption {
+  label: string;
+  count: number;
+  checked?: boolean;
+}
+
+export interface FilterGroup {
+  id: string;
+  label: string;
+  options: FilterOption[];
+}
+
+export interface ShopContent {
+  heading: string;
+  deliverTo: string;
+  promise: string;
+  categories: string[];
+  sorts: string[];
+  filters: FilterGroup[];
+  appliedChips: string[];
+  search: {
+    query: string;
+    resultsHeading: string;
+    resultsCount: string;
+    makersHeading: string;
+    suggestionHeading: string;
+    suggestions: string[];
+    recentHeading: string;
+    recent: string[];
+  };
+  empty: {
+    heading: string;
+    body: string;
+    cta: string;
+    suggestionsHeading: string;
+  };
+}
+
 export interface HomeContent {
   ticker: string[];
   shopper: Shopper;
@@ -130,6 +168,7 @@ export interface HomeContent {
   leaderboards: Leaderboard[];
   makerIds: string[];
   commission: { line: string; cta: string; youPay: string; makerGets: string };
+  shop: ShopContent;
 }
 
 export interface CartLine {

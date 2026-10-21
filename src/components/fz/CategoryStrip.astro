@@ -1,0 +1,62 @@
+---
+/** Round category tiles, as on the home page. */
+interface Props {
+  categories: string[];
+  active?: string;
+}
+const { categories, active }: Props = Astro.props;
+---
+
+<ul class="fz-catstrip">
+  {
+    categories.map((c) => (
+      <li>
+        <a href={`/shop?category=${encodeURIComponent(c)}`} class:list={[c === active && 'is-active']}>
+          <span class="fz-catstrip__disc fz-media" aria-hidden="true" />
+          {c}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .fz-catstrip {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .fz-catstrip a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--fz-text);
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-catstrip__disc {
+    width: 100%;
+    max-width: var(--fz-disc);
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+
+  .fz-catstrip a.is-active .fz-catstrip__disc {
+    outline: 2px solid var(--fz-primary);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 860px) {
+    .fz-catstrip {
+      grid-template-columns: repeat(4, 1fr);
+      row-gap: 20px;
+    }
+  }
+</style>

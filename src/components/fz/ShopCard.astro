@@ -1,0 +1,175 @@
+---
+/** Product card for the shop grid. Links through to the product page. */
+import type { ProductWithMaker } from '../../lib/data';
+
+interface Props {
+  product: ProductWithMaker;
+}
+
+const { product }: Props = Astro.props;
+const inr = (n: number) => `₹${new Intl.NumberFormat('en-IN').format(n)}`;
+---
+
+<article class:list={['fz-shopcard', 'fz-lift', product.soldOut && 'is-soldout']}>
+  <a class="fz-shopcard__media fz-media" href={`/product/${product.slug}`}>
+    {product.tag && <span class="fz-tag">{product.tag}</span>}
+    {product.soldOut && <span class="fz-shopcard__out">Sold out</span>}
+  </a>
+
+  <div class="fz-shopcard__body">
+    <p class="fz-shopcard__size">{product.size}</p>
+    <h3 class="fz-shopcard__name">
+      <a href={`/product/${product.slug}`}>{product.name}</a>
+    </h3>
+
+    <p class="fz-shopcard__price">
+      <b>{inr(product.priceInr)}</b>
+      {product.wasInr && <s>{inr(product.wasInr)}</s>}
+    </p>
+
+    <p class="fz-shopcard__maker">
+      <span class="fz-shopcard__dot" aria-hidden="true"></span>
+      {product.maker.name}
+    </p>
+
+    <p class="fz-shopcard__meta">
+      <span class="fz-shopcard__star" aria-hidden="true">★</span>
+      {product.rating} · {product.reviewCount} reviews
+    </p>
+
+    <div class="fz-shopcard__foot">
+      {
+        product.soldOut ? (
+          <button type="button" class="fz-btn fz-btn--ghost fz-btn--sm" disabled>
+            Sold out
+          </button>
+        ) : (
+          <a class="fz-btn fz-btn--primary fz-btn--sm" href="/cart">+ Add</a>
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .fz-shopcard {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--fz-radius-lg);
+    box-shadow: var(--fz-card-shadow);
+    background: var(--fz-site-bg);
+    overflow: hidden;
+  }
+
+  .fz-shopcard__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 282 / 180;
+  }
+
+  .fz-shopcard__media .fz-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .fz-shopcard__out {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(41, 35, 31, 0.52);
+    color: var(--fz-primary-text);
+    font-size: var(--fz-para-size);
+    font-weight: 600;
+  }
+
+  .fz-shopcard__body {
+    padding: 12px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1 1 auto;
+  }
+
+  .fz-shopcard__size {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-shopcard__name {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-product-size);
+    line-height: var(--fz-product-lh);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .fz-shopcard__name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .fz-shopcard__name a:hover {
+    text-decoration: underline;
+  }
+
+  .fz-shopcard__price {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+  }
+
+  .fz-shopcard__price b {
+    font-weight: 600;
+  }
+
+  .fz-shopcard__price s {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-shopcard__maker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-shopcard__dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--fz-panel-footer);
+    flex: 0 0 auto;
+  }
+
+  .fz-shopcard__meta {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+  }
+
+  .fz-shopcard__star {
+    color: #e2a33c;
+  }
+
+  .fz-shopcard__foot {
+    margin-top: auto;
+    padding-top: 10px;
+  }
+
+  .fz-shopcard__foot .fz-btn {
+    width: 100%;
+    justify-content: center;
+    text-decoration: none;
+  }
+
+  .fz-shopcard.is-soldout .fz-shopcard__body {
+    opacity: 0.72;
+  }
+</style>

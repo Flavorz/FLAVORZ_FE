@@ -1,0 +1,404 @@
+---
+interface Props {
+  view?: 'filters' | 'results' | 'suggestions' | 'empty';
+}
+
+import FzLayout from '../../layouts/FzLayout.astro';
+import ShopCard from './ShopCard.astro';
+import ShopFilters from './ShopFilters.astro';
+import CategoryStrip from './CategoryStrip.astro';
+import { content } from '../../lib/data';
+
+/**
+ * The shop listing, in the four states the design shows.
+ *
+ * `?view=` picks one: filters (default), results, suggestions, empty.
+ * Static pages, so the state comes from the URL rather than from JS.
+ */
+const home = await content.home();
+const cart = await content.cart();
+const shop = home.shop;
+
+const all = await content.products();
+const resolved = await content.productsByIds(all.map((p) => p.id));
+const makers = await content.makers();
+
+const view = Astro.props.view ?? 'filters';
+const isResults = view === 'results';
+const isSuggest = view === 'suggestions';
+const isEmpty = view === 'empty';
+
+const items = isEmpty ? [] : resolved;
+
+const crumbs = [
+  { label: 'Home', href: '/fz/' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Podi' },
+];
+---
+
+<FzLayout title="Shop · Flavorz" crumbs={crumbs} cartCount={cart.itemCount}>
+  <div class="fz-shell fz-shop-head">
+    {
+      isResults || isEmpty ? (
+        <>
+          <h1>{isEmpty ? shop.empty.heading : shop.search.resultsHeading}</h1>
+          <p>{isEmpty ? shop.empty.body : shop.search.resultsCount}</p>
+        </>
+      ) : (
+        <>
+          <h1>{shop.heading}</h1>
+          <p>{shop.deliverTo}</p>
+          <p class="fz-shop-head__promise">{shop.promise}</p>
+        </>
+      )
+    }
+  </div>
+
+  {
+    isSuggest && (
+      <div class="fz-shell fz-suggest">
+        <section>
+          <h2>{shop.search.suggestionHeading}</h2>
+          <ul>
+            {shop.search.suggestions.map((s) => (
+              <li>
+                <a href="/shop?view=results">
+                  <span class="fz-suggest__icon" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 16 16">
+                      <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5" />
+                      <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                  {s}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h2>{shop.search.recentHeading}</h2>
+          <ul>
+            {shop.search.recent.map((s) => (
+              <li>
+                <a href="/shop?view=results">
+                  <span class="fz-suggest__icon" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 16 16">
+                      <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5" />
+                      <path d="M8 5v3.3l2 1.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                  {s}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    )
+  }
+
+  {
+    !isResults && !isEmpty && (
+      <div class="fz-shell fz-shop-cats">
+        <CategoryStrip categories={shop.categories} active="Podis" />
+      </div>
+    )
+  }
+
+  {
+    isResults && (
+      <div class="fz-shell fz-shop-makers">
+        <h2>{shop.search.makersHeading}</h2>
+        <div class="fz-makerchips">
+          {makers.map((m) => (
+            <a class="fz-makerchip" href="#">
+              <span class="fz-makerchip__photo fz-media" aria-hidden="true" />
+              <span>
+                <b>{m.name}</b>
+                <small>{m.productCount} products</small>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <div class="fz-shell fz-shop-grid">
+    <ShopFilters filters={shop.filters} applied={shop.appliedChips} />
+
+    <div class="fz-shop-main">
+      <div class="fz-shop-bar">
+        <span class="fz-shop-bar__count">
+          {isEmpty ? 'No items' : `${items.length} items`}
+        </span>
+        <label class="fz-shop-bar__sort">
+          Sort
+          <select>
+            {shop.sorts.map((s) => <option>{s}</option>)}
+          </select>
+        </label>
+      </div>
+
+      {
+        isEmpty ? (
+          <div class="fz-empty">
+            <p class="fz-empty__mark" aria-hidden="true">🔍</p>
+            <h2>{shop.empty.heading}</h2>
+            <p>{shop.empty.body}</p>
+            <a class="fz-btn fz-btn--primary" href="/shop">{shop.empty.cta}</a>
+            <h3>{shop.empty.suggestionsHeading}</h3>
+            <div class="fz-empty__grid">
+              {resolved.slice(0, 3).map((p) => <ShopCard product={p} />)}
+            </div>
+          </div>
+        ) : (
+          <div class="fz-shop-items">
+            {items.map((p) => <ShopCard product={p} />)}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</FzLayout>
+
+<style>
+  .fz-shop-head {
+    margin-top: 22px;
+  }
+
+  .fz-shop-head h1 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 0;
+  }
+
+  .fz-shop-head p {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    color: var(--fz-subheading);
+    margin-top: 3px;
+  }
+
+  .fz-shop-head__promise {
+    color: var(--fz-text);
+  }
+
+  .fz-shop-cats {
+    margin-top: 24px;
+  }
+
+  .fz-shop-makers {
+    margin-top: 24px;
+  }
+
+  .fz-shop-makers h2 {
+    font-family: var(--fz-font-body);
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--fz-subheading);
+    margin: 0 0 12px;
+  }
+
+  .fz-makerchips {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .fz-makerchips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fz-makerchip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 0 0 205px;
+    border: 1px solid var(--fz-header-border);
+    border-radius: var(--fz-radius-md);
+    padding: 10px 12px;
+    text-decoration: none;
+    color: var(--fz-text);
+  }
+
+  .fz-makerchip:hover {
+    border-color: var(--fz-stroke-ink);
+  }
+
+  .fz-makerchip__photo {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+
+  .fz-makerchip b {
+    display: block;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+    font-weight: 600;
+  }
+
+  .fz-makerchip small {
+    display: block;
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-shop-grid {
+    display: flex;
+    gap: 32px;
+    margin-top: 28px;
+    align-items: start;
+  }
+
+  .fz-shop-main {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fz-shop-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--fz-header-border);
+    margin-bottom: 20px;
+  }
+
+  .fz-shop-bar__count {
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-shop-bar__sort {
+    margin-inline-start: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+  }
+
+  .fz-shop-bar__sort select {
+    font: inherit;
+    font-size: var(--fz-body-size);
+    color: var(--fz-text);
+    border: 1px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-md);
+    padding: 6px 10px;
+    background: var(--fz-site-bg);
+  }
+
+  .fz-shop-items {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--fz-card-grid-gap);
+  }
+
+  .fz-suggest {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 20px;
+    background: var(--fz-panel);
+    border-radius: var(--fz-radius-lg);
+    padding: 20px 24px;
+  }
+
+  .fz-suggest h2 {
+    font-family: var(--fz-font-body);
+    font-size: var(--fz-body-size);
+    font-weight: 600;
+    color: var(--fz-panel-text);
+    margin: 0 0 10px;
+  }
+
+  .fz-suggest ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .fz-suggest a {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--fz-panel-text);
+    text-decoration: none;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-suggest a:hover {
+    text-decoration: underline;
+  }
+
+  .fz-empty {
+    text-align: center;
+    padding-block: 30px 10px;
+  }
+
+  .fz-empty__mark {
+    font-size: 30px;
+  }
+
+  .fz-empty h2 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h1-size);
+    line-height: var(--fz-h1-lh);
+    margin: 10px 0 0;
+  }
+
+  .fz-empty > p {
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    color: var(--fz-subheading);
+    max-width: 440px;
+    margin: 6px auto 18px;
+  }
+
+  .fz-empty .fz-btn {
+    text-decoration: none;
+  }
+
+  .fz-empty h3 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h2-size);
+    line-height: var(--fz-h2-lh);
+    margin: 40px 0 16px;
+    text-align: start;
+  }
+
+  .fz-empty__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--fz-card-grid-gap);
+    text-align: start;
+  }
+
+  @media (max-width: 1000px) {
+    .fz-shop-grid {
+      flex-direction: column;
+    }
+
+    .fz-shop-items,
+    .fz-empty__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .fz-suggest {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+</style>

@@ -1,0 +1,197 @@
+---
+/** Filter sidebar. 272px in the frame. */
+import type { FilterGroup } from '../../lib/data';
+
+interface Props {
+  filters: FilterGroup[];
+  applied: string[];
+}
+
+const { filters, applied }: Props = Astro.props;
+---
+
+<aside class="fz-filters">
+  <div class="fz-filters__head">
+    <h2>Filters</h2>
+    <button type="button" class="fz-filters__clear">Clear all</button>
+  </div>
+
+  {
+    applied.length > 0 && (
+      <div class="fz-filters__applied">
+        {applied.map((a) => (
+          <span class="fz-filterchip">
+            {a}
+            <button type="button" aria-label={`Remove ${a}`}>×</button>
+          </span>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    filters.map((group) => (
+      <section class="fz-filtergroup">
+        <h3>{group.label}</h3>
+        <ul>
+          {group.options.map((o) => (
+            <li>
+              <label>
+                <input type="checkbox" checked={o.checked} />
+                <span class="fz-filtergroup__box" aria-hidden="true" />
+                <span class="fz-filtergroup__label">{o.label}</span>
+                <span class="fz-filtergroup__count">{o.count}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</aside>
+
+<style>
+  .fz-filters {
+    width: 272px;
+    flex: 0 0 272px;
+  }
+
+  .fz-filters__head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .fz-filters__head h2 {
+    font-family: var(--fz-font-display);
+    font-size: var(--fz-h2-size);
+    line-height: var(--fz-h2-lh);
+    margin: 0;
+  }
+
+  .fz-filters__clear {
+    margin-inline-start: auto;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    font-size: var(--fz-body-size);
+    color: var(--fz-subheading);
+    padding: 0;
+  }
+
+  .fz-filters__clear:hover {
+    color: var(--fz-text);
+  }
+
+  .fz-filters__applied {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .fz-filterchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--fz-panel);
+    color: var(--fz-panel-text);
+    border-radius: var(--fz-radius-pill);
+    padding: 4px 6px 4px 12px;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  .fz-filterchip button {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0 4px;
+  }
+
+  .fz-filtergroup {
+    border-top: 1px solid var(--fz-header-border);
+    padding-block: 16px;
+  }
+
+  .fz-filtergroup h3 {
+    font-family: var(--fz-font-body);
+    font-size: var(--fz-para-size);
+    line-height: var(--fz-para-lh);
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+
+  .fz-filtergroup ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .fz-filtergroup label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
+  }
+
+  /* The checkbox stays the accessible control; the box is its visual. */
+  .fz-filtergroup input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .fz-filtergroup__box {
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid var(--fz-stroke-muted);
+    border-radius: var(--fz-radius-sm);
+    flex: 0 0 auto;
+    position: relative;
+  }
+
+  .fz-filtergroup input:checked + .fz-filtergroup__box {
+    background: var(--fz-primary);
+    border-color: var(--fz-primary);
+  }
+
+  .fz-filtergroup input:checked + .fz-filtergroup__box::after {
+    content: '';
+    position: absolute;
+    inset: 3px 3px 4px 3px;
+    border-inline-start: 2px solid var(--fz-primary-text);
+    border-block-end: 2px solid var(--fz-primary-text);
+    transform: rotate(-45deg);
+  }
+
+  .fz-filtergroup label:focus-within .fz-filtergroup__box {
+    outline: 2px solid var(--fz-primary-focus);
+    outline-offset: 2px;
+  }
+
+  .fz-filtergroup__label {
+    flex: 1 1 auto;
+  }
+
+  .fz-filtergroup__count {
+    color: var(--fz-subheading);
+  }
+
+  @media (max-width: 1000px) {
+    .fz-filters {
+      width: 100%;
+      flex: 1 1 auto;
+    }
+  }
+</style>
