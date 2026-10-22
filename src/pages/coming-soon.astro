@@ -125,7 +125,8 @@ const c = site.comingSoon;
       .fz-soon {
         flex: 1 1 auto;
         display: grid;
-        grid-template-columns: 1fr 406px;
+        /* 406 image column, from "old website home image" in the frame. */
+        grid-template-columns: minmax(0, 786px) 406px;
         gap: 64px;
         align-items: center;
         padding-block: 64px;
@@ -144,7 +145,8 @@ const c = site.comingSoon;
         font-size: 44px;
         line-height: 56px;
         margin: 18px 0 0;
-        max-width: 14ch;
+        /* 786 wide in the frame; a ch-based clamp cut it to ~309. */
+        max-width: 786px;
       }
 
       .fz-soon__body {
