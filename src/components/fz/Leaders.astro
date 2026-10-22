@@ -103,9 +103,14 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     display: flex;
     align-items: center;
     gap: 8px;
-    /* Rows are 16px/21 Sans 400. */
+    /* Names are 16px/21; the metric beside them is 14px/18. */
     font-size: var(--fz-para-size);
     line-height: var(--fz-para-lh);
+  }
+
+  .fz-board__detail {
+    font-size: var(--fz-body-size);
+    line-height: var(--fz-body-lh);
   }
 
   .fz-board__rank {
@@ -143,6 +148,16 @@ const boards: Array<{ title: string; rows: Row[] }> = [
     .fz-board {
       flex: 0 0 82%;
       scroll-snap-align: start;
+    }
+  }
+
+  @media (max-width: 860px) {
+    /* Mobile frame y=2256: board titles are 16px/22 Serif Display. */
+    .fz-board__title {
+      font-family: var(--fz-font-display);
+      font-size: 16px;
+      line-height: 22px;
+      font-weight: 400;
     }
   }
 </style>

@@ -115,8 +115,9 @@ test.describe('mobile (402 frame)', () => {
     const size = await page.evaluate(
       () => getComputedStyle(document.querySelector('h1')!).fontSize,
     );
-    // Mobile/H2 is 16px/22; the welcome heading uses it on the 402 frame.
-    expect(size).toBe('16px');
+    // The welcome heading is 18px/25 Serif in BOTH frames — it does not
+    // scale down, which the mobile H2 token would have done.
+    expect(size).toBe('18px');
   });
 
   test('card rows are horizontal carousels, not grids', async ({ page }) => {
@@ -372,4 +373,55 @@ test('section rhythm matches the frame', async ({ page }) => {
   for (const [name, y] of Object.entries(want)) {
     expect(Math.abs((tops[name] ?? 0) - y), `${name} at ${tops[name]} want ~${y}`).toBeLessThan(20);
   }
+});
+
+/**
+ * Per-element typography, read from the frames' own text nodes.
+ *
+ * The same name appears in several places with different styling, which is
+ * exactly where this drifted before: reel makers are 18/600, product card
+ * makers 16/400, leaderboard names 16/400, and only "Meet the makers" is
+ * Serif.
+ */
+test.describe('typography matches the frames element by element', () => {
+  const spec = (page: import('@playwright/test').Page, sel: string) =>
+    page.evaluate((s) => {
+      const el = document.querySelector(s);
+      if (!el) return null;
+      const cs = getComputedStyle(el);
+      return [
+        `${parseFloat(cs.fontSize)}px`,
+        `${Math.round(parseFloat(cs.lineHeight))}`,
+        `w${cs.fontWeight}`,
+        cs.fontFamily.split(',')[0].replace(/"/g, ''),
+      ].join('/');
+    }, sel);
+
+  test('web frame', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/fz/');
+    await page.evaluate(() => document.fonts.ready);
+
+    expect(await spec(page, '.fz-reel__maker')).toBe('18px/23/w600/DM Sans');
+    expect(await spec(page, '.fz-prod__maker')).toBe('16px/21/w400/DM Sans');
+    expect(await spec(page, '.fz-board__name')).toBe('16px/21/w400/DM Sans');
+    expect(await spec(page, '.fz-board__detail')).toBe('14px/18/w400/DM Sans');
+    expect(await spec(page, '.fz-makers__name')).toBe('16px/22/w400/DM Serif Display');
+    expect(await spec(page, '.fz-tier__main h1')).toBe('18px/25/w400/DM Serif Display');
+  });
+
+  test('mobile frame', async ({ page }) => {
+    await page.setViewportSize({ width: 402, height: 900 });
+    await page.goto('/fz/');
+    await page.evaluate(() => document.fonts.ready);
+
+    // These two keep their size on mobile rather than scaling with the tokens.
+    expect(await spec(page, '.fz-reel__maker')).toBe('18px/23/w600/DM Sans');
+    expect(await spec(page, '.fz-tier__main h1')).toBe('18px/25/w400/DM Serif Display');
+
+    // Tags drop to the Mobile/Body size.
+    expect(await spec(page, '.fz-prod__tag')).toBe('13px/17/w500/DM Sans');
+    expect(await spec(page, '.fz-board__title')).toBe('16px/22/w400/DM Serif Display');
+    expect(await spec(page, '.fz-footer__h')).toBe('14px/18/w500/DM Sans');
+  });
 });

@@ -432,6 +432,15 @@ const {
     color: var(--fz-primary-hover);
   }
 
+  @media (max-width: 860px) {
+    /* Mobile frame y=134: nav items are 14px/18 w500. */
+    .fz-header__nav a {
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 500;
+    }
+  }
+
   @media (max-width: 640px) {
     .fz-header__top {
       flex-wrap: wrap;

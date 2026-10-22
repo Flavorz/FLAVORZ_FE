@@ -73,7 +73,15 @@ const rows = [];
 for (const f of figma) {
   const key = norm(f.text);
   if (key.length < 4) continue;
-  const i = dom.findIndex((d, idx) => !used.has(idx) && norm(d.text) === key);
+  let i = -1;
+  let best = Infinity;
+  dom.forEach((d, idx) => {
+    if (used.has(idx) || norm(d.text) !== key) return;
+    // The same string can appear several times with different styling, so
+    // pair it with the nearest candidate vertically rather than the first.
+    const dist = Math.abs(d.y - f.y);
+    if (dist < best) { best = dist; i = idx; }
+  });
   if (i === -1) {
     rows.push({ text: f.text.slice(0, 30), status: 'MISSING' });
     continue;

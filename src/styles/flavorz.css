@@ -143,6 +143,10 @@
     --fz-button-lh: 17px;
     --fz-name-size: 13px;
     --fz-name-lh: 17px;
+    /* Tags and capital text drop to 13px/17 on mobile, like body text. */
+    --fz-capital-size: 13px;
+    --fz-capital-lh: 17px;
+
     /* Mobile frame is 402 wide with a 370 content column. */
     --fz-gutter: 16px;
     --fz-content-width: 370px;
