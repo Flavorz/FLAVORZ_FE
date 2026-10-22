@@ -19,3 +19,9 @@ public/themes/
 .figma-cache.json
 .figma-frames.json
 .figma-pages/
+
+# Figma API caches — these embed presigned S3 URLs with AWS keys.
+.figma-root.json
+.figma-frames.json
+.figma-cache.json
+.figma-pages/
